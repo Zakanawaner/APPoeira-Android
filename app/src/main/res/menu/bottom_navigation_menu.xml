@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/groups_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_bottom_groups"
+        android:title="@string/navMenuGroups"/>
+    <item
+        android:id="@+id/rodas_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_bottom_rodas"
+        android:title="@string/navMenuRodas"/>
+    <item
+        android:id="@+id/addItem"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_plus"
+        android:title="@string/navMenuAdd"/>
+    <item
+        android:id="@+id/events_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_bottom_event"
+        android:title="@string/navMenuEvents"/>
+    <item
+        android:id="@+id/onlines_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_bottom_online"
+        android:title="@string/navMenuOnline"/>
+</menu>

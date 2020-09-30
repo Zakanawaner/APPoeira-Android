@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".groupListView.GroupListActivity">
+
+    <include layout="@layout/common_top_navigation"/>
+
+    <include layout="@layout/common_swipe_list"
+        android:id="@+id/swipeRefreshList"/>
+
+    <include layout="@layout/common_distance_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/swipeRefreshList" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        app:itemIconTint="@drawable/ic_menu_bottm_color_selector"
+        app:itemTextColor="@drawable/ic_menu_bottm_color_selector"
+        app:menu="@menu/bottom_navigation_menu" >
+
+        <include layout="@layout/common_add_button"/>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</RelativeLayout>

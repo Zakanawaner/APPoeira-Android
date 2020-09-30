@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".userModificationView.ProfileModificationActivity">
+
+    <include
+        android:id="@+id/include3"
+        layout="@layout/common_top_navigation"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <include layout="@layout/common_swipe_list"
+        android:id="@+id/swipeRefreshList"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userProfileAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include3"
+        tools:src="@android:mipmap/sym_def_app_icon" />
+
+    <TextView
+        android:id="@+id/userModifyAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ModifyAvatar"
+        android:background="@color/colorWhite"
+        android:alpha="0.7"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/userProfileAvatar"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileAvatar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:id="@+id/userProfileNames"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileAvatar"
+        app:layout_constraintStart_toStartOf="@+id/userProfileAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileAvatar">
+
+        <Spinner
+            android:id="@+id/userProfileRank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/userProfileApelhido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/userDetailName"
+            android:textColor="#000000"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/userProfileEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="9"
+        android:layout_marginTop="10dp"
+        android:hint="@string/signupEmail"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileNames"
+        app:layout_constraintStart_toStartOf="@+id/userProfileNames"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileNames"/>
+
+    <EditText
+        android:id="@+id/userProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="9"
+        android:layout_marginTop="10dp"
+        android:hint="@string/signupName"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileEmail"
+        app:layout_constraintStart_toStartOf="@+id/userProfileEmail"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileEmail" />
+
+    <EditText
+        android:id="@+id/userProfileApellido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="9"
+        android:layout_marginTop="10dp"
+        android:hint="@string/signupLastname"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileName"
+        app:layout_constraintStart_toStartOf="@+id/userProfileName"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileName" />
+
+    <TextView
+        android:id="@+id/userProfileChangePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="9"
+        android:layout_marginTop="10dp"
+        android:text="@string/changePassword"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileApellido"
+        app:layout_constraintStart_toStartOf="@+id/userProfileApellido"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileApellido"/>
+
+    <Button
+        android:id="@+id/modifyProfileSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ModifyProfile"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileChangePassword"
+        app:layout_constraintEnd_toEndOf="@+id/userProfileChangePassword"
+        app:layout_constraintStart_toStartOf="@+id/userProfileChangePassword" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/modifyAvatarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileChangePassword"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/modifyPasswordFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileChangePassword"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        app:itemIconTint="@drawable/ic_menu_bottm_color_selector"
+        app:itemTextColor="@drawable/ic_menu_bottm_color_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" >
+
+        <include layout="@layout/common_add_button"/>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

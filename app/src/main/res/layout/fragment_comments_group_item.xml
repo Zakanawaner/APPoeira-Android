@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingHorizontal="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/groupUserCommentAvatar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/groupUserCommentApelhido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/userGroupListApelhido"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/groupUserCommentAvatar"
+        app:layout_constraintTop_toTopOf="@+id/groupUserCommentAvatar" />
+
+    <TextView
+        android:id="@+id/groupUserCommentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginStart="3dp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/groupUserCommentApelhido"
+        app:layout_constraintTop_toTopOf="@+id/groupUserCommentApelhido"
+        app:layout_constraintBottom_toBottomOf="@+id/groupUserCommentApelhido"/>
+
+    <TextView
+        android:id="@+id/groupUserCommentContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/groupUserCommentApelhido"
+        app:layout_constraintTop_toBottomOf="@+id/groupUserCommentApelhido" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/groupUserCommentContent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

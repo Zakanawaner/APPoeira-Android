@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="3dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingHorizontal="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userDetailAvatar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/userDetailName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/groupUserListName"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/userDetailAvatar"
+        app:layout_constraintStart_toEndOf="@+id/userDetailAvatar"
+        app:layout_constraintTop_toTopOf="@+id/userDetailAvatar" />
+
+    <TextView
+        android:id="@+id/userDetailRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/userGroupListRole"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="55dp"
+        app:layout_constraintTop_toBottomOf="@+id/userDetailAvatar"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

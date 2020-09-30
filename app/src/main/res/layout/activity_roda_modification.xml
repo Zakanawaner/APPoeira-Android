@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".rodaModificationView.RodaModificationActivity">
+
+    <include layout="@layout/common_top_navigation"/>
+
+    <androidx.core.widget.NestedScrollView
+    android:id="@+id/modifScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/topMenuLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@android:mipmap/sym_def_app_icon" />
+
+            <TextView
+                android:id="@+id/modifyAvatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ModifyAvatar"
+                android:background="@color/colorWhite"
+                android:alpha="0.7"
+                android:textColor="#000000"
+                app:layout_constraintBottom_toBottomOf="@+id/avatar"
+                app:layout_constraintEnd_toEndOf="@+id/avatar" />
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rodaDetailName"
+                android:ems="9"
+                android:layout_marginTop="10dp"
+                android:hint="@string/rodaModifName"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="@+id/avatar"
+                app:layout_constraintStart_toStartOf="@+id/avatar"
+                app:layout_constraintTop_toBottomOf="@+id/avatar"/>
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="9"
+                android:layout_marginTop="10dp"
+                android:hint="@string/rodaModifDescription"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="@+id/name"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name"/>
+
+            <DatePicker
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                app:layout_constraintTop_toBottomOf="@+id/description" />
+
+            <TimePicker
+                android:id="@+id/hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
+
+            <TextView
+                android:id="@+id/searchTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/serchTitle"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@+id/hour"
+                app:layout_constraintEnd_toEndOf="@+id/hour"
+                app:layout_constraintStart_toStartOf="@+id/hour"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchUserLayout"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/searchTitle"
+                app:layout_constraintEnd_toEndOf="@+id/searchTitle"
+                app:layout_constraintStart_toStartOf="@+id/searchTitle">
+
+                <SearchView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchUsers"
+                    android:autofillHints="@string/searchUsersHint"/>
+
+                <RelativeLayout
+                    android:id="@+id/ListLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/locationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/locationTitle"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@+id/searchUserLayout"
+                app:layout_constraintEnd_toEndOf="@+id/searchUserLayout"
+                app:layout_constraintStart_toStartOf="@+id/searchUserLayout"/>
+
+            <fragment
+                android:id="@+id/detailMap"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationTitle" />
+
+            <TextView
+                android:id="@+id/locationAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@+id/detailMap"
+                app:layout_constraintEnd_toEndOf="@+id/detailMap"
+                app:layout_constraintStart_toStartOf="@+id/detailMap"/>
+
+            <Button
+                android:id="@+id/modifySave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ModifyProfile"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/locationAddress"
+                app:layout_constraintEnd_toEndOf="@+id/locationAddress"
+                app:layout_constraintStart_toStartOf="@+id/locationAddress" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/modifyAvatarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite"
+        app:itemIconTint="@drawable/ic_menu_bottm_color_selector"
+        app:itemTextColor="@drawable/ic_menu_bottm_color_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu"
+        tools:layout_editor_absoluteX="10dp" >
+
+        <include layout="@layout/common_add_button"/>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

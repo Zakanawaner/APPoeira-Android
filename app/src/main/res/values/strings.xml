@@ -1,0 +1,204 @@
+<resources>
+    <string name="app_name">APPoeira</string>
+    <!--Common Strings -->
+    <string name="failed">Algo fue mal</string>
+    <string name="openParent">(</string>
+    <string name="closeParent">)</string>
+    <!--activity_welcome -->
+    <string name="tvStringWelcomeMessage">¡Hola, Capoeirista!</string>
+    <string name="tvStringEducationalPermission">Para ver los grupos, rodas, eventos cercanos, necesitamos que nos permitas acceder a la funcionalidad de geolocalización de tu dispositivo.</string>
+    <string name="btnStringGrantAccess">Permitir Acceso</string>
+    <!--fragment_group_item -->
+    <string name="groupName" />
+    <string name="groupDistance" />
+    <string name="groupDistanceKm">Km</string>
+    <string name="groupPhone" />
+    <!--activity_group_detail -->
+    <string name="groupDetailMore">Más información</string>
+    <!--activity_group_detail_more -->
+    <string name="groupDetailMoreName" />
+    <string name="groupDetailMoreVerified">The group is verified by the community</string>
+    <string name="groupDetailMoreVerification">¿Has estado aquí?</string>
+    <string name="groupDetailMoreVotes" />
+    <string name="groupDetailMoreJoinGroup">Unirse a este grupo</string>
+    <string name="groupDetailMoreNumberOfComments">Ver comentarios</string>
+    <string name="groupDetailMoreNumberOfCommentsNum" />
+    <string name="groupDetailMoreCommentGroup">Dejar un comentario</string>
+    <string name="groupDetailMoreNumberOfMembers">Ver miembros</string>
+    <string name="groupDetailMoreNumberOfMembersNum" />
+    <string name="groupDetailMoreOwnersTitle"><u>Responsables</u></string>
+    <string name="groupDetailMoreFrontLineTitle"><u>Línea de frente</u></string>
+    <string name="groupDetailMoreStudentsTitle"><u>Alumnos</u></string>
+    <string name="groupDetailMoreFriendsTitle"><u>Amigos</u></string>
+    <!--top_navigation_menu -->
+    <string name="page_title_group_list">Lista De Grupos</string>
+    <string name="page_title_group_detail">Grupo</string>
+    <string name="page_title_roda_list">Lista De Rodas</string>
+    <string name="page_title_event_list">Lista De Eventos</string>
+    <string name="page_title_online_list">Lista De Online</string>
+    <string name="page_title_user_detail">Capoeirista</string>
+    <string name="page_title_roda_detail">Roda</string>
+    <string name="page_title_event_detail">Evento</string>
+    <string name="page_title_online_detail">Online</string>
+    <!--bottom_navigation_menu -->
+    <string name="navMenuGroups">Groups</string>
+    <string name="navMenuOnline">Online</string>
+    <string name="navMenuRodas">Rodas</string>
+    <string name="navMenuEvents">Eventos</string>
+    <!--activity_login/activity_auth-->
+    <string name="signupApelhido">Apelhido</string>
+    <string name="signupName">Nombre</string>
+    <string name="signupLastname">Apellido</string>
+    <string name="signupEmail">Email</string>
+    <string name="signupPassword">Contraseña</string>
+    <string name="signupPassword2">Repite la contraseña</string>
+    <string name="buttonSignup">SignUp</string>
+    <string name="buttonLogin">Login</string>
+    <string name="goToSignUp">¿No tienes cuenta? ¡Regístrate!</string>
+    <string name="signupEmailExists">Ya existe un usuario con este Email</string>
+    <string name="signupSelectYourRank">Selecciona tu rango</string>
+    <string name="signupIncorrectPassword">La contraseña no coincide o no debe estar vacía</string>
+    <string name="signupValidEmail">Debes introducir un email válido</string>
+    <string name="signupValidApelhido">Debes introducir un apelhido</string>
+    <!--activity_user_detail-->
+    <string name="userDetailRank" />
+    <string name="userDetailName" />
+    <string name="userDetailJoined">"Miembro desde "</string>
+    <string name="userDetailDateJoin" />
+    <string name="userDetailNumberOfFollowers" />
+    <string name="userDetailFollowers">Followers</string>
+    <string name="userDetailNumberOfFollowed" />
+    <string name="userDetailFollowed">Followed</string>
+    <string name="userDetailGroupsTitle"><u>Grupos</u></string>
+    <string name="userDetailEventsTitle"><u>Eventos</u></string>
+    <string name="userDetailRodasTitle"><u>Rodas</u></string>
+    <string name="userDetailOnlinesTitle"><u>Clases online</u></string>
+    <!--fragment_group_detail_item -->
+    <string name="userGroupListApelhido" />
+    <string name="userGroupListRank" />
+    <string name="userGroupListPremium" />
+    <!--fragment_join_group -->
+    <string name="groupSpinner">Papel en este grupo</string>
+    <string name="joinGroupExplanation">Selecciona tu posición dentro de este grupo</string>
+    <string name="joinGroupRoleVerification">Para acceder a este rol en el grupo, es necesarion que verifiquemos antes la veracidad de los datos. Tu solicitud se enviará, y la contrastaremos con la comunidad. Te avisaremos cuando la solicitud se resuelva.</string>
+    <string name="joinGroup">Unirse</string>
+    <string name="rankGroupSpinner">Rango</string>
+    <string-array name="group_rank_array">
+        <item>Selecciona una opción</item>
+        <item>Responsable</item>
+        <item>Línea de frente</item>
+        <item>Aluno</item>
+        <item>Amigo</item>
+    </string-array>
+    <!--fragment_new_comment -->
+    <string name="rankSpinner">Rango</string>
+    <string name="rankSpinner1">Iniciante</string>
+    <string name="rankSpinner2">Aluno</string>
+    <string name="rankSpinner3">Aluna</string>
+    <string name="rankSpinner4">Graduado</string>
+    <string name="rankSpinner5">Graduada</string>
+    <string name="rankSpinner6">Instrutor</string>
+    <string name="rankSpinner7">Instrutora</string>
+    <string name="rankSpinner8">Formado</string>
+    <string name="rankSpinner9">Formada</string>
+    <string name="rankSpinner10">Professor</string>
+    <string name="rankSpinner11">Professora</string>
+    <string name="rankSpinner12">Treinel</string>
+    <string name="rankSpinner13">Contra Mestre</string>
+    <string name="rankSpinner14">Contra Mestra</string>
+    <string name="rankSpinner15">Mestre</string>
+    <string name="rankSpinner16">Mestra</string>
+    <string-array name="ranks_array">
+        <item>Selecciona una opción</item>
+        <item>@string/rankSpinner1</item>
+        <item>@string/rankSpinner2</item>
+        <item>@string/rankSpinner3</item>
+        <item>@string/rankSpinner4</item>
+        <item>@string/rankSpinner5</item>
+        <item>@string/rankSpinner6</item>
+        <item>@string/rankSpinner7</item>
+        <item>@string/rankSpinner8</item>
+        <item>@string/rankSpinner9</item>
+        <item>@string/rankSpinner10</item>
+        <item>@string/rankSpinner11</item>
+        <item>@string/rankSpinner12</item>
+        <item>@string/rankSpinner13</item>
+        <item>@string/rankSpinner14</item>
+        <item>@string/rankSpinner15</item>
+        <item>@string/rankSpinner16</item>
+    </string-array>
+    <string name="postComment">Publicar</string>
+    <string name="newCommentHint">Escribe tu comentario</string>
+    <!--fragment_user_detail_item -->
+    <string name="groupUserListName" />
+    <string name="userGroupListRole" />
+    <!--pop_up_have_you_been_here -->
+    <string name="popUpHaveYouBeenHere">Si conoces este grupo, confirma que has estado aquí. Esto nos hará la vida más fácil.</string>
+
+
+    <!--TODO activity_user_profile -->
+    <!--TODO a partir de aquí, seguir -->
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="navMenuSignUp">SignUp</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="topMenuSearch">Buscar</string>
+    <string name="topMenuNews">Novedades</string>
+    <string name="topMenuLogin">Inicia sesión</string>
+    <string name="loginPassword">Password</string>
+    <string name="content_description_login_menu">Go to login</string>
+    <string name="content_description_search_menu">Go to search menu</string>
+    <string name="content_description_news_menu">Go to news</string>
+    <string name="distanceText" />
+    <string name="userProfileRank" />
+    <string name="userProfileJoined" />
+    <string name="userProfileDateJoin" />
+    <string name="userProfileNumberOfFollowers" />
+    <string name="userProfileFollowers" />
+    <string name="userProfileNumberOfFollowed" />
+    <string name="userProfileFollowed" />
+    <string name="userProfileEventsTitle" />
+    <string name="ModifyProfile">Modificar Perfil</string>
+    <string name="ModifyAvatar">Modificar</string>
+    <string name="changePassword">Cambiar Contraseña</string>
+    <string name="modifyPasswordOld">Contraseña actual</string>
+    <string name="modifyPasswordNew">Nueva Contraseña</string>
+    <string name="modifyPasswordNew2">Repite Contraseña</string>
+    <string name="ModifyAvatarUrl">Pega aquí la url de la imagen</string>
+    <string name="ViewUserActivity">Ver actividad</string>
+    <string name="ViewUserInfo">Ver información</string>
+    <string name="userDetailActivityTitle"><u>Actividad</u></string>
+    <string name="groupCommentsTitle"><u>Comentarios</u></string>
+    <string name="userDetailFollowersTitle"><u>Followers</u></string>
+    <string name="userDetailFollowedTitle"><u>Followed</u></string>
+    <string name="userLogOut">Desconectarse</string>
+    <string name="navMenuAdd">Crear</string>
+    <string name="rodaName" />
+    <string name="rodaDistance" />
+    <string name="rodaPhone" />
+    <string name="rodaDetailName" />
+    <string name="rodaModifName">Nombre</string>
+    <string name="rodaModifDescription">Descripción</string>
+    <string name="searchUsersHint">Busca Usuarios para invitarlos</string>
+    <string name="serchTitle">Busca Usuarios para invitarlos</string>
+    <string name="locationTitle">Selecciona el lugar en el mapa</string>
+    <string name="page_title_login">Login</string>
+    <string name="page_title_sign_up">Registrarse</string>
+    <string name="page_title_update_event">Nuevo Evento</string>
+    <string name="page_title_update_group">Nuevo Grupo</string>
+    <string name="page_title_help">Ayuda</string>
+    <string name="page_title_news">Noticias</string>
+    <string name="page_title_update_online">Nuevo Evento Online</string>
+    <string name="page_title_update_roda">Nueva Roda</string>
+    <string name="page_title_search">Buscar</string>
+    <string name="page_title_update_user">Modificar Perfil</string>
+</resources>

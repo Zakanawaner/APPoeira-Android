@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/objectDetailHeader"
+    android:layout_width="match_parent"
+    android:layout_height="0dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/detailAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@android:mipmap/sym_def_app_icon" />
+
+    <TextView
+        android:id="@+id/detailName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/detailAvatar"
+        app:layout_constraintStart_toStartOf="@+id/detailAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/detailAvatar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/detailRating"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/detailName"
+        app:layout_constraintStart_toStartOf="@+id/detailName"
+        app:layout_constraintTop_toBottomOf="@+id/detailName">
+
+        <ImageButton
+            android:id="@+id/detailStar1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/detailStar2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/detailStar3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/detailStar4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/detailStar5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/detailVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailRating"
+        app:layout_constraintStart_toEndOf="@+id/detailRating"
+        app:layout_constraintTop_toTopOf="@+id/detailRating" />
+
+    <TextView
+        android:id="@+id/detailUrlOrCreator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="@+id/detailMore"
+        app:layout_constraintStart_toStartOf="@+id/detailMore"
+        app:layout_constraintTop_toBottomOf="@+id/detailMore" />
+
+    <TextView
+        android:id="@+id/detailPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/detailUrlOrCreator"
+        app:layout_constraintStart_toStartOf="@+id/detailUrlOrCreator"
+        app:layout_constraintTop_toBottomOf="@+id/detailUrlOrCreator" />
+
+
+    <ImageView
+        android:id="@+id/detailVerified"
+        android:layout_width="24dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailName"
+        app:layout_constraintStart_toEndOf="@+id/detailName"
+        app:layout_constraintTop_toTopOf="@+id/detailName" />
+
+    <TextView
+        android:id="@+id/detailMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/groupDetailMore"
+        android:textColor="#454545"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/detailRating"
+        app:layout_constraintStart_toStartOf="@+id/detailRating"
+        app:layout_constraintTop_toBottomOf="@+id/detailRating" />
+
+    <TextView
+        android:id="@+id/detailAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/detailPhone"
+        app:layout_constraintStart_toStartOf="@+id/detailPhone"
+        app:layout_constraintTop_toBottomOf="@+id/detailPhone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
