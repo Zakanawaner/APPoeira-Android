@@ -14,11 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.commonThings.Constants;
-import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
-import com.onethousandprojects.appoeira.userModificationView.ProfileModificationActivity;
-import com.squareup.picasso.Picasso;
 
 public class ModifyRodaAvatarFragment extends DialogFragment {
     @Override

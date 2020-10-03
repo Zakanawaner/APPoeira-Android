@@ -5,7 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".onlineModificationView.OnlineModificationActivity">
+
     <include layout="@layout/common_top_navigation"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/modifScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topMenuLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/common_object_modification_header"/>
+
+            <include layout="@layout/common_onject_modification_date_picker"/>
+
+            <include layout="@layout/common_search_user"/>
+
+            <TextView
+                android:id="@+id/platformTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/platformTitle"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@+id/searchUserLayout"
+                app:layout_constraintEnd_toEndOf="@+id/searchUserLayout"
+                app:layout_constraintStart_toStartOf="@+id/searchUserLayout"/>
+
+            <Spinner
+                android:id="@+id/platformSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:autofillHints="@string/platformSpinner"
+                app:layout_constraintTop_toBottomOf="@+id/platformTitle"
+                app:layout_constraintEnd_toEndOf="@+id/platformTitle"
+                app:layout_constraintStart_toStartOf="@+id/platformTitle" />
+
+            <Button
+                android:id="@+id/modifySave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ModifyProfile"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/platformSpinner"
+                app:layout_constraintEnd_toEndOf="@+id/platformSpinner"
+                app:layout_constraintStart_toStartOf="@+id/platformSpinner" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/modifyAvatarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

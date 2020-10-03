@@ -16,7 +16,6 @@ import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.squareup.picasso.Picasso;
 
 public class OnlineListActivity extends AppCompatActivity {

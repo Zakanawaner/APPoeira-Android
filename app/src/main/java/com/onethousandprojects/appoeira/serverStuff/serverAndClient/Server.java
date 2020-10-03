@@ -2,6 +2,8 @@ package com.onethousandprojects.appoeira.serverStuff.serverAndClient;
 
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ClientEventDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ServerEventDetailResponse;
+import com.onethousandprojects.appoeira.serverStuff.eventModification.ClientEventModificationRequest;
+import com.onethousandprojects.appoeira.serverStuff.eventModification.ServerEventModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupRatedByUser.ClientGroupRatedByUserRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupRatedByUser.ServeGroupRatedByUserResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupComments.ClientGroupCommentsRequest;
@@ -16,6 +18,8 @@ import com.onethousandprojects.appoeira.serverStuff.joinGroup.ClientGroupJoinReq
 import com.onethousandprojects.appoeira.serverStuff.joinGroup.ServerGroupJoinResponse;
 import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ClientLoginRequest;
 import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ServerLoginResponse;
+import com.onethousandprojects.appoeira.serverStuff.onlineModification.ClientOnlineModificationRequest;
+import com.onethousandprojects.appoeira.serverStuff.onlineModification.ServerOnlineModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ClientRodaDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ServerRodaDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
@@ -71,6 +75,12 @@ public interface Server {
 
     @POST("/roda-create")
     Call<ServerRodaModificationResponse> post_roda_update(@Body ClientRodaModificationRequest clientRodaModificationRequest);
+
+    @POST("/online-create")
+    Call<ServerOnlineModificationResponse> post_online_update(@Body ClientOnlineModificationRequest clientOnlineModificationRequest);
+
+    @POST("/event-create")
+    Call<ServerEventModificationResponse> post_event_update(@Body ClientEventModificationRequest clientEventModificationRequest);
 
     @POST("/roda-detail")
     Call<ServerRodaDetailResponse> post_roda_detail(@Body ClientRodaDetailRequest clientRodaDetailRequest);

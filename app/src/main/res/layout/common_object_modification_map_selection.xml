@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/mapFragmentLayout"
+    app:layout_constraintTop_toBottomOf="@+id/platformSpinner"
+    app:layout_constraintEnd_toEndOf="@+id/platformSpinner"
+    app:layout_constraintStart_toStartOf="@+id/platformSpinner">
+
+    <TextView
+        android:id="@+id/locationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/locationTitle"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"/>
+
+    <fragment
+        android:id="@+id/detailMap"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationTitle" />
+
+    <TextView
+        android:id="@+id/locationAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/detailMap"
+        app:layout_constraintEnd_toEndOf="@+id/detailMap"
+        app:layout_constraintStart_toStartOf="@+id/detailMap"/>
+</LinearLayout>

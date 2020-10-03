@@ -13,10 +13,11 @@ public class ClientRodaModificationRequest {
     private List<Integer> invited;
     private Double latitude;
     private Double longitude;
+    private String phone;
 
     public ClientRodaModificationRequest(List<Integer> owners, String name, String description,
                                          String date, String picUrl, List<Integer> invited,
-                                         Double latitude, Double longitude) {
+                                         Double latitude, Double longitude, String phone) {
         super();
         this.owners = owners;
         this.name = name;
@@ -26,6 +27,7 @@ public class ClientRodaModificationRequest {
         this.invited = invited;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.phone = phone;
     }
     public List<Integer> getOwners() {
         return owners;
@@ -89,5 +91,13 @@ public class ClientRodaModificationRequest {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

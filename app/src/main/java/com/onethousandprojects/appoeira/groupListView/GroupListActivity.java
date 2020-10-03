@@ -147,8 +147,8 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
                     tvDistance.setText(String.valueOf(sbDistance.getProgress()) + "Km");
                 } else {
                     showingDistance = false;
-                    sbDistance.setVisibility(View.INVISIBLE);
-                    tvDistance.setVisibility(View.INVISIBLE);
+                    sbDistance.setVisibility(View.GONE);
+                    tvDistance.setVisibility(View.GONE);
                     fbtnDistance.setImageResource(R.drawable.ic_road);
                 }
             }

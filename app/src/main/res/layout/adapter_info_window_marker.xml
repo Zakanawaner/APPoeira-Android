@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:id="@+id/groupMarkerAvatar"
+        android:id="@+id/markerAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,7 +15,7 @@
         tools:src="@android:mipmap/sym_def_app_icon" />
 
     <TextView
-        android:id="@+id/groupMarkerName"
+        android:id="@+id/markerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -23,8 +23,8 @@
         android:textSize="12sp"
         android:textStyle="bold"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/groupMarkerAvatar"
-        app:layout_constraintStart_toStartOf="@+id/groupMarkerAvatar"
-        app:layout_constraintTop_toBottomOf="@+id/groupMarkerAvatar" />
+        app:layout_constraintEnd_toEndOf="@+id/markerAvatar"
+        app:layout_constraintStart_toStartOf="@+id/markerAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/markerAvatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

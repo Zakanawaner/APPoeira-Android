@@ -1,4 +1,4 @@
-package com.onethousandprojects.appoeira.rodaModificationView.content;
+package com.onethousandprojects.appoeira.searchView.content;
 
 public class UserSearchContent {
     private Integer id;

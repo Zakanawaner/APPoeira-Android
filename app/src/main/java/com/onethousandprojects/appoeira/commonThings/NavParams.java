@@ -1,7 +1,5 @@
 package com.onethousandprojects.appoeira.commonThings;
 
-import androidx.lifecycle.LifecycleOwner;
-
 import com.onethousandprojects.appoeira.authView.LoginActivity;
 import com.onethousandprojects.appoeira.authView.SignUpActivity;
 import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActivity;

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.rodaModificationView.content.UserSearchContent;
+import com.onethousandprojects.appoeira.searchView.content.UserSearchContent;
 import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
 
 import java.util.ArrayList;

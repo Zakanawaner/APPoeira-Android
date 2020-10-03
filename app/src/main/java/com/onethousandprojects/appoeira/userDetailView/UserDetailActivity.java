@@ -154,9 +154,9 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
         TextView tvLogOut = findViewById(R.id.userLogOut);
 
         ivUserPremium.setImageResource(R.drawable.ic_premium);
-        activityConstraint.setVisibility(View.INVISIBLE);
-        followersConstraint.setVisibility(View.INVISIBLE);
-        followedConstraint.setVisibility(View.INVISIBLE);
+        activityConstraint.setVisibility(View.GONE);
+        followersConstraint.setVisibility(View.GONE);
+        followedConstraint.setVisibility(View.GONE);
 
         authretrofitinit();
         retrofitinit();
@@ -209,7 +209,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                     if (myResponse.isPremium()) {
                         ivUserPremium.setVisibility(View.VISIBLE);
                     } else {
-                        ivUserPremium.setVisibility(View.INVISIBLE);
+                        ivUserPremium.setVisibility(View.GONE);
                     }
                     if (!(myResponse.getGroups().size() == 1 && myResponse.getGroups().get(0).getGroupId() == null)) {
                         NUM_DETAILS = NUM_DETAILS + myResponse.getGroups().size();
@@ -302,7 +302,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
 
     private void manageFollowButtons() {
         if (!onProfile) {
-            tvModifyProfile.setVisibility(View.INVISIBLE);
+            tvModifyProfile.setVisibility(View.GONE);
             if (!alreadyFollowing) {
                 ivFollow.setImageResource(R.drawable.ic_follow);
                 ivFollow.setOnClickListener(new View.OnClickListener() {
@@ -364,7 +364,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
             }
 
         } else {
-            ivFollow.setVisibility(View.INVISIBLE);
+            ivFollow.setVisibility(View.GONE);
             tvModifyProfile.setVisibility(View.VISIBLE);
             tvModifyProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -386,36 +386,36 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                     onActivity = true;
                     tvViewActivity.setText(R.string.ViewUserInfo);
                     tvNumberActivity.setText("(" + NUM_DETAILS + ")");
-                    detailsConstraint.setVisibility(View.INVISIBLE);
+                    detailsConstraint.setVisibility(View.GONE);
                     activityConstraint.setVisibility(View.VISIBLE);
-                    followersConstraint.setVisibility(View.INVISIBLE);
-                    followedConstraint.setVisibility(View.INVISIBLE);
+                    followersConstraint.setVisibility(View.GONE);
+                    followedConstraint.setVisibility(View.GONE);
                 } else {
                     onActivity = false;
                     tvViewActivity.setText(R.string.ViewUserActivity);
                     tvNumberActivity.setText("(" + NUM_ACTIVITIES + ")");
                     detailsConstraint.setVisibility(View.VISIBLE);
-                    activityConstraint.setVisibility(View.INVISIBLE);
-                    followersConstraint.setVisibility(View.INVISIBLE);
-                    followedConstraint.setVisibility(View.INVISIBLE);
+                    activityConstraint.setVisibility(View.GONE);
+                    followersConstraint.setVisibility(View.GONE);
+                    followedConstraint.setVisibility(View.GONE);
                 }
             }
         });
         tvUserFollowers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                detailsConstraint.setVisibility(View.INVISIBLE);
-                activityConstraint.setVisibility(View.INVISIBLE);
+                detailsConstraint.setVisibility(View.GONE);
+                activityConstraint.setVisibility(View.GONE);
                 followersConstraint.setVisibility(View.VISIBLE);
-                followedConstraint.setVisibility(View.INVISIBLE);
+                followedConstraint.setVisibility(View.GONE);
             }
         });
         tvUserFollowed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                detailsConstraint.setVisibility(View.INVISIBLE);
-                activityConstraint.setVisibility(View.INVISIBLE);
-                followersConstraint.setVisibility(View.INVISIBLE);
+                detailsConstraint.setVisibility(View.GONE);
+                activityConstraint.setVisibility(View.GONE);
+                followersConstraint.setVisibility(View.GONE);
                 followedConstraint.setVisibility(View.VISIBLE);
             }
         });

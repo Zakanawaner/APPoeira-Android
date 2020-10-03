@@ -48,8 +48,8 @@ public class MyGroupMembersRecyclerViewAdapter extends RecyclerView.Adapter<MyGr
             holder.tvUSerPremium.setVisibility(View.VISIBLE);
             holder.ivUserPremium.setVisibility(View.VISIBLE);
         } else {
-            holder.tvUSerPremium.setVisibility(View.INVISIBLE);
-            holder.ivUserPremium.setVisibility(View.INVISIBLE);
+            holder.tvUSerPremium.setVisibility(View.GONE);
+            holder.ivUserPremium.setVisibility(View.GONE);
         }
     }
 

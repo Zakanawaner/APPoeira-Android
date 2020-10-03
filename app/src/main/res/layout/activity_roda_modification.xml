@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +9,7 @@
 
     <include layout="@layout/common_top_navigation"/>
 
-    <androidx.core.widget.NestedScrollView
+    <com.onethousandprojects.appoeira.commonThings.CustomScrollView
     android:id="@+id/modifScrollView"
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -22,105 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@android:mipmap/sym_def_app_icon" />
+            <include layout="@layout/common_object_modification_header"/>
 
-            <TextView
-                android:id="@+id/modifyAvatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ModifyAvatar"
-                android:background="@color/colorWhite"
-                android:alpha="0.7"
-                android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="@+id/avatar"
-                app:layout_constraintEnd_toEndOf="@+id/avatar" />
+            <include layout="@layout/common_onject_modification_date_picker"/>
 
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rodaDetailName"
-                android:ems="9"
-                android:layout_marginTop="10dp"
-                android:hint="@string/rodaModifName"
-                android:inputType="text"
-                app:layout_constraintEnd_toEndOf="@+id/avatar"
-                app:layout_constraintStart_toStartOf="@+id/avatar"
-                app:layout_constraintTop_toBottomOf="@+id/avatar"/>
-
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="9"
-                android:layout_marginTop="10dp"
-                android:hint="@string/rodaModifDescription"
-                android:inputType="textMultiLine"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="@+id/name"
-                app:layout_constraintStart_toStartOf="@+id/name"
-                app:layout_constraintTop_toBottomOf="@+id/name"/>
-
-            <DatePicker
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:datePickerMode="spinner"
-                android:calendarViewShown="false"
-                app:layout_constraintTop_toBottomOf="@+id/description" />
-
-            <TimePicker
-                android:id="@+id/hour"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:timePickerMode="spinner"
-                app:layout_constraintTop_toBottomOf="@+id/date" />
-
-            <TextView
-                android:id="@+id/searchTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/serchTitle"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000"
-                app:layout_constraintTop_toBottomOf="@+id/hour"
-                app:layout_constraintEnd_toEndOf="@+id/hour"
-                app:layout_constraintStart_toStartOf="@+id/hour"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/searchUserLayout"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@+id/searchTitle"
-                app:layout_constraintEnd_toEndOf="@+id/searchTitle"
-                app:layout_constraintStart_toStartOf="@+id/searchTitle">
-
-                <SearchView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/searchUsers"
-                    android:autofillHints="@string/searchUsersHint"/>
-
-                <RelativeLayout
-                    android:id="@+id/ListLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-                </RelativeLayout>
-
-            </LinearLayout>
+            <include layout="@layout/common_search_user"/>
 
             <TextView
                 android:id="@+id/locationTitle"
@@ -167,7 +74,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </com.onethousandprojects.appoeira.commonThings.CustomScrollView>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/modifyAvatarFragment"

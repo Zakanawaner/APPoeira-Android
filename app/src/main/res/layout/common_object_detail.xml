@@ -11,7 +11,7 @@
     app:layout_constraintTop_toBottomOf="@+id/topMenuLayout"
     app:layout_constraintBottom_toTopOf="@+id/bottom_nav">
 
-    <include layout="@layout/common_object_header"/>
+    <include layout="@layout/common_object_detail_header"/>
 
     <fragment
         android:id="@+id/detailMap"

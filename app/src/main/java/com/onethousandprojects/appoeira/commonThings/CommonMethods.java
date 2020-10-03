@@ -1,6 +1,5 @@
 package com.onethousandprojects.appoeira.commonThings;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.onethousandprojects.appoeira.R;
@@ -27,7 +25,6 @@ import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActiv
 import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
 import com.onethousandprojects.appoeira.eventListView.EventListActivity;
 import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
-import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
 import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
 import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
 import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
@@ -43,6 +40,8 @@ import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificatio
 import com.onethousandprojects.appoeira.rodaDetailMoreView.RodaDetailMoreActivity;
 import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
 import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
+import com.onethousandprojects.appoeira.rodaListView.fragments.RodaFragment;
+import com.onethousandprojects.appoeira.rodaListView.fragments.RodaMapsFragment;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.searchView.SearchActivity;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
@@ -76,6 +75,25 @@ public class CommonMethods {
         if (rank.equals(ctx.getResources().getString(R.string.rankSpinner15))) {return 15;}
         if (rank.equals(ctx.getResources().getString(R.string.rankSpinner16))) {return 16;}
         return 0;
+    }
+    public static String fromRankIdToRankName(Integer rank, Context ctx) {
+        if (rank == 1) {return ctx.getResources().getString(R.string.rankSpinner1);}
+        if (rank == 2) {return ctx.getResources().getString(R.string.rankSpinner2);}
+        if (rank == 3) {return ctx.getResources().getString(R.string.rankSpinner3);}
+        if (rank == 4) {return ctx.getResources().getString(R.string.rankSpinner4);}
+        if (rank == 5) {return ctx.getResources().getString(R.string.rankSpinner5);}
+        if (rank == 6) {return ctx.getResources().getString(R.string.rankSpinner6);}
+        if (rank == 7) {return ctx.getResources().getString(R.string.rankSpinner7);}
+        if (rank == 8) {return ctx.getResources().getString(R.string.rankSpinner8);}
+        if (rank == 9) {return ctx.getResources().getString(R.string.rankSpinner9);}
+        if (rank == 10) {return ctx.getResources().getString(R.string.rankSpinner10);}
+        if (rank == 11) {return ctx.getResources().getString(R.string.rankSpinner11);}
+        if (rank == 12) {return ctx.getResources().getString(R.string.rankSpinner12);}
+        if (rank == 13) {return ctx.getResources().getString(R.string.rankSpinner13);}
+        if (rank == 14) {return ctx.getResources().getString(R.string.rankSpinner14);}
+        if (rank == 15) {return ctx.getResources().getString(R.string.rankSpinner15);}
+        if (rank == 16) {return ctx.getResources().getString(R.string.rankSpinner16);}
+        return "";
     }
     public static class CircleTransform  implements Transformation {
         @Override
@@ -142,10 +160,10 @@ public class CommonMethods {
                         switch (item.getItemId()) {
                             case R.id.groups_menu:
                                 if (!groupListActivity.toggle_menu) {
-                                    groupListActivity.fbtnDistance.setVisibility(View.INVISIBLE);
+                                    groupListActivity.fbtnDistance.setVisibility(View.GONE);
                                     groupListActivity.fbtnDistance.setImageResource(R.drawable.ic_road);
-                                    groupListActivity.tvDistance.setVisibility(View.INVISIBLE);
-                                    groupListActivity.sbDistance.setVisibility(View.INVISIBLE);
+                                    groupListActivity.tvDistance.setVisibility(View.GONE);
+                                    groupListActivity.sbDistance.setVisibility(View.GONE);
                                     groupListActivity.srGroupList.setEnabled(false);
                                     groupListActivity.toggle_menu = true;
                                     groupListActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(groupListActivity.getSupportFragmentManager().findFragmentByTag("GroupListFragment"))).commit();
@@ -380,6 +398,22 @@ public class CommonMethods {
                                 rodaListActivity.finish();
                                 break;
                             case R.id.rodas_menu:
+                                if (!rodaListActivity.toggle_menu) {
+                                    rodaListActivity.fbtnDistance.setVisibility(View.GONE);
+                                    rodaListActivity.fbtnDistance.setImageResource(R.drawable.ic_road);
+                                    rodaListActivity.tvDistance.setVisibility(View.GONE);
+                                    rodaListActivity.sbDistance.setVisibility(View.GONE);
+                                    rodaListActivity.srRodaList.setEnabled(false);
+                                    rodaListActivity.toggle_menu = true;
+                                    rodaListActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(rodaListActivity.getSupportFragmentManager().findFragmentByTag("RodaListFragment"))).commit();
+                                    rodaListActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaMapsFragment(), "RodaMapFragment").commit();
+                                } else {
+                                    rodaListActivity.fbtnDistance.setVisibility(View.VISIBLE);
+                                    rodaListActivity.srRodaList.setEnabled(true);
+                                    rodaListActivity.toggle_menu = false;
+                                    rodaListActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(rodaListActivity.getSupportFragmentManager().findFragmentByTag("RodaMapFragment"))).commit();
+                                    rodaListActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaFragment(), "RodaListFragment").commit();
+                                }
                                 break;
                             case R.id.events_menu:
                                 Intent toEventListActivity = new Intent(rodaListActivity, EventListActivity.class);

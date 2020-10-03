@@ -1,26 +1,17 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
 import android.content.Intent;
-import android.icu.text.RelativeDateTimeFormatter;
-import android.location.Location;
-import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.groupListView.fragments.GroupFragment;
+import com.onethousandprojects.appoeira.commonThings.CommonMethods;
+import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
-import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
-import com.onethousandprojects.appoeira.rodaListView.fragments.RodaFragment;
-import com.onethousandprojects.appoeira.rodaListView.fragments.RodaMapsFragment;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.fragments.RodaMembersInvitedFragment;
-import com.onethousandprojects.appoeira.serverStuff.rodaList.ClientLocationRodasRequest;
-import com.onethousandprojects.appoeira.serverStuff.rodaList.ServerLocationRodaResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ServerRodaModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
@@ -28,8 +19,6 @@ import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 import com.onethousandprojects.appoeira.serverStuff.userSearch.ClientUserSearchRequest;
 import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,8 +42,8 @@ public class RodaModificationServer {
     public void sendModificationsToServer(RodaModificationActivity RodaModificationActivity,
                                           List<Integer> owners, String name, String description,
                                           String date, String picUrl, List<Integer> invited,
-                                          Double latitude, Double longitude) {
-        ClientRodaModificationRequest clientRodaModificationRequest = new ClientRodaModificationRequest(owners, name, description, date, picUrl, invited, latitude, longitude);
+                                          Double latitude, Double longitude, String phone) {
+        ClientRodaModificationRequest clientRodaModificationRequest = new ClientRodaModificationRequest(owners, name, description, date, picUrl, invited, latitude, longitude, phone);
         Call<ServerRodaModificationResponse> call = Server.post_roda_update(clientRodaModificationRequest);
         call.enqueue(new Callback<ServerRodaModificationResponse>() {
             @Override
@@ -63,6 +52,8 @@ public class RodaModificationServer {
                     serverRodaModificationResponse = response.body();
                     Intent toRodaDetailActivity = new Intent(RodaModificationActivity, RodaDetailActivity.class);
                     toRodaDetailActivity.putExtra("id", serverRodaModificationResponse.getId());
+                    toRodaDetailActivity.putExtra("ownerRank", CommonMethods.fromRankIdToRankName(SharedPreferencesManager.getIntegerValue(Constants.RANK), RodaModificationActivity));
+                    toRodaDetailActivity.putExtra("owner", SharedPreferencesManager.getStringValue(Constants.APELHIDO));
                     RodaModificationActivity.startActivity(toRodaDetailActivity);
                     RodaModificationActivity.finish();
                 } else {
@@ -82,7 +73,7 @@ public class RodaModificationServer {
         return serverRodaModificationResponse;
     }
     public void sendUserSearchToServer(RodaModificationActivity RodaModificationActivity,
-                                          String search) {
+                                       String search) {
         ClientUserSearchRequest clientUserSearchRequest = new ClientUserSearchRequest(search);
         Call<List<ServerUserSearchResponse>> call = Server.post_user_search(clientUserSearchRequest);
         call.enqueue(new Callback<List<ServerUserSearchResponse>>() {

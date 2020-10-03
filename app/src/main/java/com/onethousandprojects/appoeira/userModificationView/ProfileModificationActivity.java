@@ -138,7 +138,7 @@ public class ProfileModificationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (modifyAvatarFragment==null && modifyPasswordFragment==null) {
                     modifyAvatarFragment = new ModifyAvatarFragment();
-                    btnSaveChanges.setVisibility(View.INVISIBLE);
+                    btnSaveChanges.setVisibility(View.GONE);
                     getSupportFragmentManager().beginTransaction().add(R.id.modifyAvatarFragment, modifyAvatarFragment, "ModifyAvatarFragment").commit();
                 }
             }
@@ -148,7 +148,7 @@ public class ProfileModificationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (modifyPasswordFragment==null && modifyAvatarFragment==null) {
                     modifyPasswordFragment = new ModifyPasswordFragment();
-                    btnSaveChanges.setVisibility(View.INVISIBLE);
+                    btnSaveChanges.setVisibility(View.GONE);
                     getSupportFragmentManager().beginTransaction().add(R.id.modifyPasswordFragment, modifyPasswordFragment, "ModifyPasswordFragment").commit();
                 }
             }

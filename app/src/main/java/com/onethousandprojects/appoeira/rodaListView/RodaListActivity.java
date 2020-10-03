@@ -33,7 +33,6 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
 import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
 import com.onethousandprojects.appoeira.rodaListView.adapter.MyRodaListRecyclerViewAdapter;
@@ -147,8 +146,8 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
                     tvDistance.setText(String.valueOf(sbDistance.getProgress()) + "Km");
                 } else {
                     showingDistance = false;
-                    sbDistance.setVisibility(View.INVISIBLE);
-                    tvDistance.setVisibility(View.INVISIBLE);
+                    sbDistance.setVisibility(View.GONE);
+                    tvDistance.setVisibility(View.GONE);
                     fbtnDistance.setImageResource(R.drawable.ic_road);
                 }
             }

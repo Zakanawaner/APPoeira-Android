@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.content.UserSearchContent;
+import com.onethousandprojects.appoeira.searchView.content.UserSearchContent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,8 +51,8 @@ public class MyRodaModificationInviteMembersRecyclerViewAdapter extends Recycler
             holder.tvUSerPremium.setVisibility(View.VISIBLE);
             holder.ivUserPremium.setVisibility(View.VISIBLE);
         } else {
-            holder.tvUSerPremium.setVisibility(View.INVISIBLE);
-            holder.ivUserPremium.setVisibility(View.INVISIBLE);
+            holder.tvUSerPremium.setVisibility(View.GONE);
+            holder.ivUserPremium.setVisibility(View.GONE);
         }
         if (((RodaModificationActivity) ctx).checkMembers(holder.mItem.getId())){
             holder.invited[0] = true;

@@ -55,7 +55,7 @@ public class CommentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comments_group_item_list, container, false);
         GroupDetailMoreActivity activity = (GroupDetailMoreActivity) getActivity();
         assert activity != null;
-        List<ServerGroupCommentsResponse> myResponseFromActivity = activity.getMyResponseComments();
+        List<ServerGroupCommentsResponse> myResponseFromActivity = activity.groupDetailMoreServer.getMyResponseComments();
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();

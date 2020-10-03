@@ -30,6 +30,7 @@
     <string name="groupDetailMoreFrontLineTitle"><u>Línea de frente</u></string>
     <string name="groupDetailMoreStudentsTitle"><u>Alumnos</u></string>
     <string name="groupDetailMoreFriendsTitle"><u>Amigos</u></string>
+    <string name="groupDetailMoreGroupVerification">Si conoces este grupo, confirma que has estado aquí. Esto nos hará la vida más fácil.</string>
     <!--top_navigation_menu -->
     <string name="page_title_group_list">Lista De Grupos</string>
     <string name="page_title_group_detail">Grupo</string>
@@ -201,4 +202,30 @@
     <string name="page_title_update_roda">Nueva Roda</string>
     <string name="page_title_search">Buscar</string>
     <string name="page_title_update_user">Modificar Perfil</string>
+    <string name="groupDetailMoreIKnowItButton">¡Lo conozco!</string>
+    <string name="sendRating">Enviar</string>
+    <string name="wouldYouLikeToRate">¿te gustría valorar tu experiencia?</string>
+    <string name="dateTitle">Selecciona una fecha</string>
+    <string name="hourTitle">Selecciona una hora</string>
+    <string name="platformSpinner">Plataforma</string>
+    <string name="rodaModifPhone">Teléfono de contacto</string>
+    <string name="platformSpinner1">APPoeira</string>
+    <string name="platformSpinner2">Zoom</string>
+    <string name="platformSpinner3">Instagram</string>
+    <string name="platformSpinner4">Skype</string>
+    <string name="platformSpinner5">Jitsi Meet</string>
+    <string name="platformSpinner6">Presencial</string>
+    <string name="platformTitle">Selecciona una plataforma online</string>
+    <string name="searchConvidedTitle">Busca a los convidados del evento</string>
+    <string name="rodaModifKey">Clave de acceso</string>
+    <string name="ModifyEvent">Guardar Evento</string>
+    <string-array name="platforms_array">
+        <item>Selecciona una opción</item>
+        <item>@string/platformSpinner1</item>
+        <item>@string/platformSpinner2</item>
+        <item>@string/platformSpinner3</item>
+        <item>@string/platformSpinner4</item>
+        <item>@string/platformSpinner5</item>
+        <item>@string/platformSpinner6</item>
+    </string-array>
 </resources>

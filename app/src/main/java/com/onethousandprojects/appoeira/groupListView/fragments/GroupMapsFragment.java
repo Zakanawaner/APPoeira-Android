@@ -70,8 +70,8 @@ public class GroupMapsFragment extends Fragment {
         public View getInfoContents(Marker marker) {
             View v = getLayoutInflater().inflate(R.layout.adapter_info_window_marker, null);
             Pair<String, Integer> pair = (Pair<String, Integer>) marker.getTag();
-            TextView tvGroupName = v.findViewById(R.id.groupMarkerName);
-            ImageView ivGroupAvatar = v.findViewById(R.id.groupMarkerAvatar);
+            TextView tvGroupName = v.findViewById(R.id.markerName);
+            ImageView ivGroupAvatar = v.findViewById(R.id.markerAvatar);
             // TODO no carga la imagen
             //Picasso.with(v.getContext()).load(myResponse.get(pair.second).getPicUrl()).fit().into(ivGroupAvatar);
             tvGroupName.setText(marker.getTitle());

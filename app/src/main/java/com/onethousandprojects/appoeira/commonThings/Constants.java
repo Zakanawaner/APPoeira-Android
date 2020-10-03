@@ -1,7 +1,7 @@
 package com.onethousandprojects.appoeira.commonThings;
 
 public class Constants {
-    public static final String API_APPOEIRA_BASE_URL = "https://83529147b046.ngrok.io/";
+    public static final String API_APPOEIRA_BASE_URL = "https://43a95c120b7f.ngrok.io/";
     public static final String PERF_TOKEN = "PERF_TOKEN";
     public static final String ID = "ID";
     public static final String APELHIDO = "APELHIDO";

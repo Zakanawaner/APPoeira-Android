@@ -30,6 +30,7 @@ public class NewCommentFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        GroupDetailMoreActivity groupDetailMoreActivity = ((GroupDetailMoreActivity) requireActivity());
         View view = inflater.inflate(R.layout.fragment_new_comment, container, false);
         ImageView ivClose = view.findViewById(R.id.newCommentClose);
         ImageView ivAvatar = view.findViewById(R.id.groupCommentUserAvatar);
@@ -39,15 +40,17 @@ public class NewCommentFragment extends DialogFragment {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((GroupDetailMoreActivity) requireActivity()).killFragment();
+                groupDetailMoreActivity.killFragment();
             }
         });
         btnPostComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((GroupDetailMoreActivity) requireActivity()).postComment(String.valueOf(etComment.getText()));
-                ((GroupDetailMoreActivity) requireActivity()).refreshActivity();
-                ((GroupDetailMoreActivity) requireActivity()).killFragment();
+                groupDetailMoreActivity.groupDetailMoreServer.postComment(groupDetailMoreActivity,
+                        groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"),
+                        String.valueOf(etComment.getText()));
+                groupDetailMoreActivity.refreshActivity();
+                groupDetailMoreActivity.killFragment();
             }
         });
         return view;

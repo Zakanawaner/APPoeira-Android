@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/modificationDatesConstraint"
+    app:layout_constraintTop_toBottomOf="@+id/modificationHeaderConstraint"
+    app:layout_constraintEnd_toEndOf="@+id/modificationHeaderConstraint"
+    app:layout_constraintStart_toStartOf="@+id/modificationHeaderConstraint">
+
+    <TextView
+        android:id="@+id/dateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dateTitle"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <DatePicker
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        app:layout_constraintTop_toBottomOf="@+id/dateTitle" />
+
+    <TextView
+        android:id="@+id/hourTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hourTitle"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/date"
+        app:layout_constraintEnd_toEndOf="@+id/date"
+        app:layout_constraintStart_toStartOf="@+id/date"/>
+
+    <TimePicker
+        android:id="@+id/hour"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintTop_toBottomOf="@+id/hourTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,8 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
-import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
+import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
 import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
 
 public class RodaMapsFragment extends Fragment {
@@ -54,10 +53,10 @@ public class RodaMapsFragment extends Fragment {
         @Override
         public void onInfoWindowClick(Marker marker) {
             Pair<String, Integer> pair = (Pair<String, Integer>) marker.getTag();
-            Intent toGroupDetailActivity = new Intent(getContext(), GroupDetailActivity.class);
+            Intent toRodaDetailActivity = new Intent(getContext(), RodaDetailActivity.class);
             assert pair != null;
-            toGroupDetailActivity.putExtra("id", pair.second);
-            startActivity(toGroupDetailActivity);
+            toRodaDetailActivity.putExtra("id", pair.second);
+            startActivity(toRodaDetailActivity);
         }
     };
     GoogleMap.InfoWindowAdapter infoWindowAdapter = new GoogleMap.InfoWindowAdapter() {
@@ -70,11 +69,11 @@ public class RodaMapsFragment extends Fragment {
         public View getInfoContents(Marker marker) {
             View v = getLayoutInflater().inflate(R.layout.adapter_info_window_marker, null);
             Pair<String, Integer> pair = (Pair<String, Integer>) marker.getTag();
-            TextView tvGroupName = v.findViewById(R.id.groupMarkerName);
-            ImageView ivGroupAvatar = v.findViewById(R.id.groupMarkerAvatar);
+            TextView tvRodaName = v.findViewById(R.id.markerName);
+            ImageView ivRodaAvatar = v.findViewById(R.id.markerAvatar);
             // TODO no carga la imagen
-            //Picasso.with(v.getContext()).load(myResponse.get(pair.second).getPicUrl()).fit().into(ivGroupAvatar);
-            tvGroupName.setText(marker.getTitle());
+            //Picasso.with(v.getContext()).load(myResponse.get(pair.second).getPicUrl()).fit().into(ivRodaAvatar);
+            tvRodaName.setText(marker.getTitle());
             return v;
         }
     };
@@ -93,7 +92,7 @@ public class RodaMapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_group_maps, container, false);
+        View view = inflater.inflate(R.layout.fragment_roda_maps, container, false);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
         return view;
     }

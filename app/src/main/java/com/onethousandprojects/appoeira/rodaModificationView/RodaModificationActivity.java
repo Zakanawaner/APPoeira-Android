@@ -4,7 +4,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -27,19 +25,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.authView.LoginActivity;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.CustomScrollView;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
-import com.onethousandprojects.appoeira.rodaDetailMoreView.RodaDetailMoreActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaModificationView.fragments.ModifyRodaAvatarFragment;
 import com.onethousandprojects.appoeira.serverStuff.methods.RodaModificationServer;
-import com.onethousandprojects.appoeira.serverStuff.userModification.ServerUserModificationResponse;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
-import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -49,12 +42,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class RodaModificationActivity extends AppCompatActivity implements MyRodaModificationInviteMembersRecyclerViewAdapter.OnRodaModificationInviteMembersListener,
-                                                                           OnMapReadyCallback {
-
+        OnMapReadyCallback {
     private ModifyRodaAvatarFragment modifyRodaAvatarFragment;
     public String newUrl = "";
     public ImageView ivAvatar;
     private Button btnSave;
+    private CustomScrollView nsvModifView;
     public RodaModificationServer rodaModificationServer = new RodaModificationServer();
     private List<Integer> ownerMembers = new ArrayList<>();
     private List<Integer> invitedMembers = new ArrayList<>();
@@ -62,23 +55,6 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
     private TextView address;
     Geocoder geocoder;
     private GoogleMap myGoogleMap;
-    GoogleMap.OnMapClickListener onMapClickListener = new GoogleMap.OnMapClickListener() {
-        @Override
-        public void onMapClick(LatLng latLng) {
-            latitude = latLng.latitude;
-            longitude = latLng.longitude;
-            myGoogleMap.clear();
-            myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Mi roda"));
-            try {
-                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                if (addresses.size() > 0) {
-                    address.setText(addresses.get(0).getAddressLine(0));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
     String origin = "RodaModificationActivity";
     NavParams navParams = new NavParams(
             null,
@@ -112,10 +88,12 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roda_modification);
 
+        nsvModifView = findViewById(R.id.modifScrollView);
         ivAvatar = findViewById(R.id.avatar);
         TextView tvModifyAvatar = findViewById(R.id.modifyAvatar);
         EditText etName = findViewById(R.id.name);
         EditText etDescription = findViewById(R.id.description);
+        EditText etPhone = findViewById(R.id.phone);
         DatePicker dpDate = findViewById(R.id.date);
         TimePicker tpTime = findViewById(R.id.hour);
         SearchView svUsers = findViewById(R.id.searchUsers);
@@ -137,13 +115,12 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
         }
-
         tvModifyAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (modifyRodaAvatarFragment==null) {
                     modifyRodaAvatarFragment = new ModifyRodaAvatarFragment();
-                    btnSave.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.GONE);
                     getSupportFragmentManager().beginTransaction().add(R.id.modifyAvatarFragment, modifyRodaAvatarFragment, "ModifyAvatarFragment").commit();
                 }
             }
@@ -176,7 +153,7 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
                 rodaModificationServer.sendModificationsToServer(RodaModificationActivity.this,
                         ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
                         createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
-                        newUrl, invitedMembers, latitude, longitude);
+                        newUrl, invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()));
             }
         });
     }
@@ -191,7 +168,6 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
     private String createDate(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
         return year + "-" + month + "-" + day + "-" + hour + "-" + minute;
     }
-
     @Override
     public void OnRodaInviteMemberClick(int position) {
         invitedMembers.add(rodaModificationServer.getUserSearchResponse().get(position).getId());
@@ -215,10 +191,37 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
         }
         return false;
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         myGoogleMap = googleMap;
-        myGoogleMap.setOnMapClickListener(onMapClickListener);
+        myGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                latitude = latLng.latitude;
+                longitude = latLng.longitude;
+                myGoogleMap.clear();
+                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Mi roda"));
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                    if (addresses.size() > 0) {
+                        address.setText(addresses.get(0).getAddressLine(0));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        myGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                nsvModifView.setEnableScrolling(false);
+            }
+        });
+        myGoogleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                nsvModifView.setEnableScrolling(true);
+            }
+        });
     }
 }
