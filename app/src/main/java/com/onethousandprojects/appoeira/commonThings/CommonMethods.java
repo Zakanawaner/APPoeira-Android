@@ -95,6 +95,23 @@ public class CommonMethods {
         if (rank == 16) {return ctx.getResources().getString(R.string.rankSpinner16);}
         return "";
     }
+    public static String fromPlatformIdToPlatformName(Integer platform, Context ctx) {
+        if (platform == 1) {return ctx.getResources().getString(R.string.platformSpinner1);}
+        if (platform == 2) {return ctx.getResources().getString(R.string.platformSpinner2);}
+        if (platform == 3) {return ctx.getResources().getString(R.string.platformSpinner3);}
+        if (platform == 4) {return ctx.getResources().getString(R.string.platformSpinner4);}
+        if (platform == 5) {return ctx.getResources().getString(R.string.platformSpinner5);}
+        if (platform == 6) {return ctx.getResources().getString(R.string.platformSpinner6);}
+        return "";
+    }
+    public static ImageView fromPlatformNameToPlatformLogo(String platform, Context ctx, ImageView imageView) {
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner1))) {imageView.setImageResource(R.drawable.ic_launcher_foreground);}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner2))) {imageView.setImageResource(R.drawable.ic_zoom_logo);}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner3))) {imageView.setImageResource(R.drawable.ic_instagram_logo);}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner4))) {imageView.setImageResource(R.drawable.ic_skype);}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner5))) {imageView.setImageResource(R.drawable.ic_jitsi_logo);}
+        return imageView;
+    }
     public static class CircleTransform  implements Transformation {
         @Override
         public Bitmap transform(Bitmap source) {

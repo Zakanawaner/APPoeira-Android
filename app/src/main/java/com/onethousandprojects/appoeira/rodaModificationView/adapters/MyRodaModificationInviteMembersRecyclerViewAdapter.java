@@ -106,16 +106,16 @@ public class MyRodaModificationInviteMembersRecyclerViewAdapter extends Recycler
             invited[0] = true;
             ((RodaModificationActivity) ctx).addInvited(id);
             ivAdd.setImageResource(R.drawable.ic_close);
-            clLayout.setBackgroundColor(Color.parseColor("#a6ff9e"));
+            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
         } else {
             invited[0] = false;
             ((RodaModificationActivity) ctx).deleteInvited(id);
             ivAdd.setImageResource(R.drawable.ic_add_plus);
-            clLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorWhite)));
         }
     }
     private void iAmInvited(ImageView ivAdd, ConstraintLayout clLayout) {
         ivAdd.setImageResource(R.drawable.ic_close);
-        clLayout.setBackgroundColor(Color.parseColor("#a6ff9e"));
+        clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
     }
 }

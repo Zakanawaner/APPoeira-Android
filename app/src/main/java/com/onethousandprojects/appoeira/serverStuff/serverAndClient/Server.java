@@ -2,26 +2,30 @@ package com.onethousandprojects.appoeira.serverStuff.serverAndClient;
 
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ClientEventDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ServerEventDetailResponse;
+import com.onethousandprojects.appoeira.serverStuff.eventList.ClientLocationEventRequest;
+import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ClientEventModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ServerEventModificationResponse;
-import com.onethousandprojects.appoeira.serverStuff.groupRatedByUser.ClientGroupRatedByUserRequest;
-import com.onethousandprojects.appoeira.serverStuff.groupRatedByUser.ServeGroupRatedByUserResponse;
-import com.onethousandprojects.appoeira.serverStuff.groupComments.ClientGroupCommentsRequest;
-import com.onethousandprojects.appoeira.serverStuff.groupComments.ClientGroupNewCommentRequest;
-import com.onethousandprojects.appoeira.serverStuff.groupComments.ServerGroupCommentsResponse;
-import com.onethousandprojects.appoeira.serverStuff.groupComments.ServerGroupNewCommentResponse;
+import com.onethousandprojects.appoeira.serverStuff.ratedByUser.ClientRatedByUserRequest;
+import com.onethousandprojects.appoeira.serverStuff.ratedByUser.ServeRatedByUserResponse;
+import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
+import com.onethousandprojects.appoeira.serverStuff.comments.ClientNewCommentRequest;
+import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsResponse;
+import com.onethousandprojects.appoeira.serverStuff.comments.ServerNewCommentResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupDetail.ClientGroupDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupDetail.ServerGroupDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupDetailMore.ClientGroupDetailMoreRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupDetailMore.ServerGroupDetailMoreResponse;
-import com.onethousandprojects.appoeira.serverStuff.joinGroup.ClientGroupJoinRequest;
-import com.onethousandprojects.appoeira.serverStuff.joinGroup.ServerGroupJoinResponse;
+import com.onethousandprojects.appoeira.serverStuff.joinObject.ClientJoinRequest;
+import com.onethousandprojects.appoeira.serverStuff.joinObject.ServerJoinResponse;
 import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ClientLoginRequest;
 import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ServerLoginResponse;
 import com.onethousandprojects.appoeira.serverStuff.onlineModification.ClientOnlineModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.onlineModification.ServerOnlineModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ClientRodaDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ServerRodaDetailResponse;
+import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ClientRodaDetailMoreRequest;
+import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ServerRodaModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ClientUserModificationRequest;
@@ -65,10 +69,10 @@ public interface Server {
     Call<List<ServerGroupDetailMoreResponse>> post_group_detail_more(@Body ClientGroupDetailMoreRequest clientGroupDetailMoreRequest);
 
     @POST("/group-join")
-    Call<ServerGroupJoinResponse> post_join_group(@Body ClientGroupJoinRequest clientGroupJoinRequest);
+    Call<ServerJoinResponse> post_join_group(@Body ClientJoinRequest clientJoinRequest);
 
     @POST("/group-comments")
-    Call<List<ServerGroupCommentsResponse>> post_group_comments(@Body ClientGroupCommentsRequest clientGroupCommentsRequest);
+    Call<List<ServerCommentsResponse>> post_group_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
 
     @POST("/location-roda")
     Call<List<ServerLocationRodaResponse>> post_location_rodas(@Body ClientLocationRodasRequest clientLocationRodasRequest);
@@ -85,6 +89,9 @@ public interface Server {
     @POST("/roda-detail")
     Call<ServerRodaDetailResponse> post_roda_detail(@Body ClientRodaDetailRequest clientRodaDetailRequest);
 
+    @POST("/location-event")
+    Call<List<ServerLocationEventResponse>> post_location_event(@Body ClientLocationEventRequest clientLocationEventRequest);
+
     @POST("/event-detail")
     Call<ServerEventDetailResponse> post_event_detail(@Body ClientEventDetailRequest clientEventDetailRequest);
 
@@ -92,10 +99,10 @@ public interface Server {
     Call<ServerUserDetailResponse> post_user_detail(@Body ClientUserDetailRequest clientUserDetailRequest);
 
     @POST("/user-rated-group")
-    Call<ServeGroupRatedByUserResponse> post_user_rated_group(@Body ClientGroupRatedByUserRequest clientGroupRatedByUserRequest);
+    Call<ServeRatedByUserResponse> post_user_rated_group(@Body ClientRatedByUserRequest clientRatedByUserRequest);
 
-    @POST("/new-comment")
-    Call<ServerGroupNewCommentResponse> post_new_comment(@Body ClientGroupNewCommentRequest clientGroupNewCommentRequest);
+    @POST("/new-comment-group")
+    Call<ServerNewCommentResponse> post_new_comment_group(@Body ClientNewCommentRequest clientNewCommentRequest);
 
     @POST("/user-follow")
     Call<ServerUserFollowUserResponse> post_user_follow_user(@Body ClientUserFollowUserRequest clientUserFollowUserRequest);
@@ -108,4 +115,19 @@ public interface Server {
 
     @POST("/user-search")
     Call<List<ServerUserSearchResponse>> post_user_search(@Body ClientUserSearchRequest clientUserSearchRequest);
+
+    @POST("/user-rated-roda")
+    Call<ServeRatedByUserResponse> post_user_rated_roda(@Body ClientRatedByUserRequest clientRatedByUserRequest);
+
+    @POST("/new-comment-roda")
+    Call<ServerNewCommentResponse> post_new_comment_roda(@Body ClientNewCommentRequest clientNewCommentRequest);
+
+    @POST("/roda-detail-more")
+    Call<List<ServerRodaDetailMoreResponse>> post_roda_detail_more(@Body ClientRodaDetailMoreRequest clientRodaDetailMoreRequest);
+
+    @POST("/roda-join")
+    Call<ServerJoinResponse> post_join_roda(@Body ClientJoinRequest clientJoinRequest);
+
+    @POST("/roda-comments")
+    Call<List<ServerCommentsResponse>> post_roda_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
 }

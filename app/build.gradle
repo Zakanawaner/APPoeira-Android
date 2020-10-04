@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     //Location libraries
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
     //Circular Images
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     //Picasso

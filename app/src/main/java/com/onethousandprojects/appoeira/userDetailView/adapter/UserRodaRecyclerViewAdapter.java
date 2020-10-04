@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
@@ -28,6 +29,7 @@ public class UserRodaRecyclerViewAdapter extends RecyclerView.Adapter<UserRodaRe
 
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -42,7 +44,8 @@ public class UserRodaRecyclerViewAdapter extends RecyclerView.Adapter<UserRodaRe
             Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivAvatar);
         }
         if (holder.mItem.getName().length() > 36) {
-            holder.tvName.setText(holder.mItem.getName().substring(0, 35) + "...");
+            String name = holder.mItem.getName().substring(0, 35) + "...";
+            holder.tvName.setText(name);
         } else {
             holder.tvName.setText(holder.mItem.getName());
         }

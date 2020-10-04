@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.groupListView.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -27,6 +28,7 @@ public class MyGroupListRecyclerViewAdapter extends RecyclerView.Adapter<MyGroup
         ctx = context;
         this.myOnGroupListener = onGroupListener;
     }
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -38,7 +40,8 @@ public class MyGroupListRecyclerViewAdapter extends RecyclerView.Adapter<MyGroup
         holder.mItem = mValues.get(position);
         Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivGroupAvatar);
         if (holder.mItem.getName().length() > 25) {
-            holder.tvGroupName.setText(holder.mItem.getName().substring(0,24) + "...");
+            String name = holder.mItem.getName().substring(0,24) + "...";
+            holder.tvGroupName.setText(name);
         } else {
             holder.tvGroupName.setText(holder.mItem.getName());
         }

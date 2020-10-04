@@ -1,10 +1,10 @@
-package com.onethousandprojects.appoeira.serverStuff.groupComments;
+package com.onethousandprojects.appoeira.serverStuff.comments;
 
 
-public class ClientGroupCommentsRequest {
+public class ClientCommentsRequest {
     private Integer groupId;
 
-    public ClientGroupCommentsRequest(Integer groupId) {
+    public ClientCommentsRequest(Integer groupId) {
         super();
         this.groupId = groupId;
     }

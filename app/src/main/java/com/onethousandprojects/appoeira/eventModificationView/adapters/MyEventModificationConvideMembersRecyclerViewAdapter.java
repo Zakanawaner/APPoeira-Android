@@ -29,16 +29,13 @@ public class MyEventModificationConvideMembersRecyclerViewAdapter extends Recycl
         mValues = items;
         ctx = context;
         this.myOnEventModificationInviteMembersListener = onEventModificationConvideMembersListener;
-
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_user_invite_item, parent, false);
         return new ViewHolder(view, myOnEventModificationInviteMembersListener);
     }
-
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
@@ -59,12 +56,10 @@ public class MyEventModificationConvideMembersRecyclerViewAdapter extends Recycl
             iAmInvited(holder.ivAdd, holder.clLayout);
         }
     }
-
     @Override
     public int getItemCount() {
         return mValues.size();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final ConstraintLayout clLayout;
@@ -106,16 +101,16 @@ public class MyEventModificationConvideMembersRecyclerViewAdapter extends Recycl
             invited[0] = true;
             ((EventModificationActivity) ctx).addInvited(id, true);
             ivAdd.setImageResource(R.drawable.ic_close);
-            clLayout.setBackgroundColor(Color.parseColor("#a6ff9e"));
+            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
         } else {
             invited[0] = false;
             ((EventModificationActivity) ctx).deleteInvited(id, true);
             ivAdd.setImageResource(R.drawable.ic_add_plus);
-            clLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorWhite)));
         }
     }
     private void iAmInvited(ImageView ivAdd, ConstraintLayout clLayout) {
         ivAdd.setImageResource(R.drawable.ic_close);
-        clLayout.setBackgroundColor(Color.parseColor("#a6ff9e"));
+        clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
     }
 }

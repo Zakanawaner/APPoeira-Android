@@ -15,7 +15,7 @@ import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
 import com.onethousandprojects.appoeira.groupDetailMoreView.adapter.MyGroupCommentsRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.groupDetailMoreView.content.GroupCommentsContent;
-import com.onethousandprojects.appoeira.serverStuff.groupComments.ServerGroupCommentsResponse;
+import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,10 +52,10 @@ public class CommentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_comments_group_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_comments_item_list, container, false);
         GroupDetailMoreActivity activity = (GroupDetailMoreActivity) getActivity();
         assert activity != null;
-        List<ServerGroupCommentsResponse> myResponseFromActivity = activity.groupDetailMoreServer.getMyResponseComments();
+        List<ServerCommentsResponse> myResponseFromActivity = activity.groupDetailMoreServer.getMyResponseComments();
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();

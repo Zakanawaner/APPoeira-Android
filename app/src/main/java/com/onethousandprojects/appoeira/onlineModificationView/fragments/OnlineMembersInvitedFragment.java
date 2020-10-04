@@ -54,6 +54,7 @@ public class OnlineMembersInvitedFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         OnlineModificationActivity activity = (OnlineModificationActivity) getActivity();
+        assert activity != null;
         List<ServerUserSearchResponse> myResponseFromActivity = activity.onlineModificationServer.getUserSearchResponse();
         // Set the adapter
         if (view instanceof RecyclerView) {

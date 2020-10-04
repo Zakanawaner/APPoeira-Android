@@ -46,7 +46,7 @@ public class ModifyRodaAvatarFragment extends DialogFragment {
                 //TODO No carga imagen
                 rodaModificationActivity.chargeImage();
                 rodaModificationActivity.killAvatarFragment();
-                Toast.makeText(getContext(),"Nueva imagen lista para actualizar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.newImageReady, Toast.LENGTH_SHORT).show();
             }
         });
         return view;

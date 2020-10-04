@@ -33,6 +33,7 @@ import com.google.maps.android.SphericalUtil;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
 import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
+import com.squareup.picasso.Picasso;
 
 public class GroupMapsFragment extends Fragment {
     private static final String TAG = "MyLogTag";
@@ -73,7 +74,8 @@ public class GroupMapsFragment extends Fragment {
             TextView tvGroupName = v.findViewById(R.id.markerName);
             ImageView ivGroupAvatar = v.findViewById(R.id.markerAvatar);
             // TODO no carga la imagen
-            //Picasso.with(v.getContext()).load(myResponse.get(pair.second).getPicUrl()).fit().into(ivGroupAvatar);
+            assert pair != null;
+            Picasso.with(v.getContext()).load(pair.first).fit().into(ivGroupAvatar);
             tvGroupName.setText(marker.getTitle());
             return v;
         }

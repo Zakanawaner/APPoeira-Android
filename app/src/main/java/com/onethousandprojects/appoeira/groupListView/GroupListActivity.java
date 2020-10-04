@@ -126,7 +126,8 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
         sbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvDistance.setText(i + "Km");
+                String distance = i + "Km";
+                tvDistance.setText(distance);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -144,7 +145,8 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
                     sbDistance.setVisibility(View.VISIBLE);
                     tvDistance.setVisibility(View.VISIBLE);
                     fbtnDistance.setImageDrawable(null);
-                    tvDistance.setText(String.valueOf(sbDistance.getProgress()) + "Km");
+                    String distance = sbDistance.getProgress() + "Km";
+                    tvDistance.setText(distance);
                 } else {
                     showingDistance = false;
                     sbDistance.setVisibility(View.GONE);
@@ -173,7 +175,7 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
                     //We have a location
                     groupListServer.sendLocationToServer(GroupListActivity.this, location, sbDistance.getProgress());
                 } else {
-                    Toast.makeText(GroupListActivity.this, "Problema al obtener la localización", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupListActivity.this, R.string.locationFailed, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -196,7 +198,7 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
         }
     }
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == Constants.LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //Permission granted

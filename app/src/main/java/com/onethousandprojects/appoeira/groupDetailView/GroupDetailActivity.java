@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.groupDetailView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +98,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
         TextView tvGroupAddress = findViewById(R.id.detailAddress);
         TextView tvVotes = findViewById(R.id.detailVotes);
         TextView tvMore = findViewById(R.id.detailMore);
+        LinearLayout llDetailRating = findViewById(R.id.detailRating);
 
         ivGroupStar1 = findViewById(R.id.detailStar1);
         ivGroupStar2 = findViewById(R.id.detailStar2);
@@ -109,9 +112,10 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
         Call<ServerGroupDetailResponse> call = Server.post_group_detail(clientGroupDetailRequest);
         call.enqueue(new Callback<ServerGroupDetailResponse>() {
             @Override
-            public void onResponse(Call<ServerGroupDetailResponse> call, Response<ServerGroupDetailResponse> response) {
+            public void onResponse(@NonNull Call<ServerGroupDetailResponse> call, @NonNull Response<ServerGroupDetailResponse> response) {
                 if (response.isSuccessful()){
                     myResponse = response.body();
+                    assert myResponse != null;
                     if (myResponse.getError().equals("")) {
                         Picasso.with(GroupDetailActivity.this).load(myResponse.getPicUrl()).fit().into(ivGroupAvatar);
                         tvGroupName.setText(myResponse.getName());
@@ -127,9 +131,21 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
                             ivGroupStar3 = stars.get(2);
                             ivGroupStar4 = stars.get(3);
                             ivGroupStar5 = stars.get(4);
-                            tvVotes.setText("(" + myResponse.getVotes() + ")");
+                            String votes = "(" + myResponse.getVotes() + ")";
+                            tvVotes.setText(votes);
+                        } else {
+                            llDetailRating.setVisibility(View.GONE);
+                            tvVotes.setVisibility(View.GONE);
                         }
-
+                        if (myResponse.getPhone()==null) {
+                            tvGroupPhone.setVisibility(View.GONE);
+                        }
+                        if (myResponse.getUrl()==null) {
+                            tvGroupUrl.setVisibility(View.GONE);
+                        }
+                        if (myResponse.getAddress()==null) {
+                            tvGroupAddress.setVisibility(View.GONE);
+                        }
                         latitude = myResponse.getLatitude();
                         longitude = myResponse.getLongitude();
                         mapFragment.getMapAsync(GroupDetailActivity.this);
@@ -141,11 +157,11 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
                         finish();
                     }
                 } else {
-                    Toast.makeText(GroupDetailActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupDetailActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
-            public void onFailure(Call<ServerGroupDetailResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ServerGroupDetailResponse> call, @NonNull Throwable t) {
                 Toast.makeText(GroupDetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -202,7 +218,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(myResponse.getName()));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
     }
 }

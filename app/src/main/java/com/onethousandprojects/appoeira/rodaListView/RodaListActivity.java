@@ -125,7 +125,8 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
         sbDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                tvDistance.setText(i + "Km");
+                String distance = i + "Km";
+                tvDistance.setText(distance);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -143,7 +144,8 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
                     sbDistance.setVisibility(View.VISIBLE);
                     tvDistance.setVisibility(View.VISIBLE);
                     fbtnDistance.setImageDrawable(null);
-                    tvDistance.setText(String.valueOf(sbDistance.getProgress()) + "Km");
+                    String distance = sbDistance.getProgress() + "Km";
+                    tvDistance.setText(distance);
                 } else {
                     showingDistance = false;
                     sbDistance.setVisibility(View.GONE);
@@ -172,7 +174,7 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
                     //We have a location
                     rodaListServer.sendLocationToServer(RodaListActivity.this, location, sbDistance.getProgress());
                 } else {
-                    Toast.makeText(RodaListActivity.this, "Problema al obtener la localización", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RodaListActivity.this, R.string.locationFailed, Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -1,10 +1,10 @@
-package com.onethousandprojects.appoeira.serverStuff.groupComments;
+package com.onethousandprojects.appoeira.serverStuff.joinObject;
 
 
-public class ServerGroupNewCommentResponse {
+public class ServerJoinResponse {
     private boolean ok;
 
-    public ServerGroupNewCommentResponse(boolean ok) {
+    public ServerJoinResponse(boolean ok) {
         super();
         this.ok = ok;
     }

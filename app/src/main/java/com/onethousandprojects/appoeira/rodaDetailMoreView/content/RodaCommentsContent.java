@@ -1,16 +1,13 @@
-package com.onethousandprojects.appoeira.serverStuff.groupComments;
+package com.onethousandprojects.appoeira.rodaDetailMoreView.content;
 
-
-public class ServerGroupCommentsResponse {
+public class RodaCommentsContent {
     private Integer userId;
     private String picUrl;
     private String userApelhido;
     private String comment;
     private String date;
 
-
-    public ServerGroupCommentsResponse(Integer userId, String picUrl, String userApelhido, String comment, String date) {
-        super();
+    public RodaCommentsContent(Integer userId, String picUrl, String userApelhido, String comment, String date) {
         this.userId = userId;
         this.picUrl = picUrl;
         this.userApelhido = userApelhido;
@@ -57,5 +54,4 @@ public class ServerGroupCommentsResponse {
     public void setDate(String date) {
         this.date = date;
     }
-
 }

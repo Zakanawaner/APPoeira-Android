@@ -1,10 +1,10 @@
-package com.onethousandprojects.appoeira.serverStuff.groupRatedByUser;
+package com.onethousandprojects.appoeira.serverStuff.ratedByUser;
 
-public class ServeGroupRatedByUserResponse {
+public class ServeRatedByUserResponse {
     private boolean ok;
     private Integer stars;
 
-    public ServeGroupRatedByUserResponse(boolean ok, Integer stars) {
+    public ServeRatedByUserResponse(boolean ok, Integer stars) {
         super();
         this.ok = ok;
         this.stars = stars;

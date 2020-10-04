@@ -84,7 +84,7 @@ public class JoinGroupFragment extends DialogFragment {
                     groupDetailMoreActivity.refreshActivity();
                     groupDetailMoreActivity.killFragment();
                 } else {
-                    Toast.makeText(getContext(),"Selecciona un rol", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.selectRole, Toast.LENGTH_SHORT).show();
                 }
             }
         });

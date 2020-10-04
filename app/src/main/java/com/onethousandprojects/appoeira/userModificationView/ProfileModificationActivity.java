@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.userModificationView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
@@ -160,19 +161,19 @@ public class ProfileModificationActivity extends AppCompatActivity {
                 Call<ServerUserModificationResponse> call = Server.post_user_update_profile(clientUserModificationRequest);
                 call.enqueue(new Callback<ServerUserModificationResponse>() {
                     @Override
-                    public void onResponse(Call<ServerUserModificationResponse> call, Response<ServerUserModificationResponse> response) {
+                    public void onResponse(@NonNull Call<ServerUserModificationResponse> call, @NonNull Response<ServerUserModificationResponse> response) {
                         if (response.isSuccessful()) {
                             assert response.body() != null;
                             myResponse = response.body();
                             manageResponse();
                             refreshActivity();
                         } else {
-                            Toast.makeText(ProfileModificationActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileModificationActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ServerUserModificationResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<ServerUserModificationResponse> call, @NonNull Throwable t) {
                         Toast.makeText(ProfileModificationActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -183,17 +184,17 @@ public class ProfileModificationActivity extends AppCompatActivity {
     private void manageResponse() {
         String errorBin = Integer.toBinaryString(myResponse.getError());
         if (errorBin.substring(0, 1).equals("0")) {
-            Toast.makeText(ProfileModificationActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
         }
         if (errorBin.substring(1, 2).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Contraseña guardada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.savedPass, Toast.LENGTH_SHORT).show();
         }
         if (errorBin.substring(2, 3).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Hemos actualizado tu imagen de perfil", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.imageUpdated, Toast.LENGTH_SHORT).show();
             SharedPreferencesManager.setStringValue(Constants.PIC_URL, myResponse.getPicUrl());
         }
         if (errorBin.substring(3, 4).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Hemos actualizado tu rango", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.rankUpdated, Toast.LENGTH_SHORT).show();
             SharedPreferencesManager.setIntegerValue(Constants.RANK, myResponse.getRank());
         }
         if (errorBin.substring(4, 5).equals("1")) {
@@ -203,20 +204,20 @@ public class ProfileModificationActivity extends AppCompatActivity {
             //Toast.makeText(ProfileModificationActivity.this, "La contraseña no se guardó porque la antigua contraseña no coincide", Toast.LENGTH_SHORT).show();
         }
         if (errorBin.substring(7, 8).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Hemos actualizado tu apelhido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.apelhidoUpdated, Toast.LENGTH_SHORT).show();
             SharedPreferencesManager.setStringValue(Constants.APELHIDO, myResponse.getApelhido());
         }
         if (errorBin.substring(8, 9).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Hemos actualizado tu apellido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.lastNameUpdated, Toast.LENGTH_SHORT).show();
             SharedPreferencesManager.setStringValue(Constants.LAST_NAME, myResponse.getLastName());
         }
         if (errorBin.substring(9).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Hemos actualizado tu nombre", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.nameUpdated, Toast.LENGTH_SHORT).show();
             SharedPreferencesManager.setStringValue(Constants.FIRST_NAME, myResponse.getName());
         }
         if (errorBin.substring(6, 7).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, "Hemos actualizado tu email", Toast.LENGTH_SHORT).show();
-            Toast.makeText(ProfileModificationActivity.this, "Revisa tu correo. Te hemos enviado un email de verificación", Toast.LENGTH_LONG).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.emailUpdated, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ProfileModificationActivity.this, R.string.checkYourEmail, Toast.LENGTH_LONG).show();
             SharedPreferencesManager.setBooleanValue(Constants.EMAIL_VERIFIED, false);
         }
         SharedPreferencesManager.setStringValue(Constants.PERF_TOKEN, myResponse.getToken());

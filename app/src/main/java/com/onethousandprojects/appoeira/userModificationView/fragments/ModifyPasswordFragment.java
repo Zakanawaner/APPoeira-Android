@@ -47,7 +47,7 @@ public class ModifyPasswordFragment extends DialogFragment {
                     ((ProfileModificationActivity) requireActivity()).pass = String.valueOf(etOldPass.getText());
                     ((ProfileModificationActivity) requireActivity()).newPass = String.valueOf(etNewPass.getText());
                     ((ProfileModificationActivity) requireActivity()).killPasswordFragment();
-                    Toast.makeText(getContext(), "Contraseña guardada. Envía los cambios para terminar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.passReady, Toast.LENGTH_SHORT).show();
                 } else { Toast.makeText(getContext(), R.string.signupIncorrectPassword, Toast.LENGTH_SHORT).show(); }
 
             }

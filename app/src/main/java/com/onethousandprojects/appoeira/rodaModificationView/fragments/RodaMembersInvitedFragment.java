@@ -54,6 +54,7 @@ public class RodaMembersInvitedFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         RodaModificationActivity activity = (RodaModificationActivity) getActivity();
+        assert activity != null;
         List<ServerUserSearchResponse> myResponseFromActivity = activity.rodaModificationServer.getUserSearchResponse();
         // Set the adapter
         if (view instanceof RecyclerView) {

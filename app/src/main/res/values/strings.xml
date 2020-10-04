@@ -4,6 +4,8 @@
     <string name="failed">Algo fue mal</string>
     <string name="openParent">(</string>
     <string name="closeParent">)</string>
+    <string name="space"> </string>
+    <string name="locationFailed">Problema al obtener la localización</string>
     <!--activity_welcome -->
     <string name="tvStringWelcomeMessage">¡Hola, Capoeirista!</string>
     <string name="tvStringEducationalPermission">Para ver los grupos, rodas, eventos cercanos, necesitamos que nos permitas acceder a la funcionalidad de geolocalización de tu dispositivo.</string>
@@ -228,4 +230,24 @@
         <item>@string/platformSpinner5</item>
         <item>@string/platformSpinner6</item>
     </string-array>
+    <string name="newImageReady">Nueva imagen lista para actualizar</string>
+    <string name="selectRole">Selecciona un rol</string>
+    <string name="savedPass">Contraseña guardada</string>
+    <string name="imageUpdated">Hemos actualizado tu imagen de perfil</string>
+    <string name="rankUpdated">Hemos actualizado tu rango</string>
+    <string name="apelhidoUpdated">Hemos actualizado tu apelhido</string>
+    <string name="lastNameUpdated">Hemos actualizado tu apellido</string>
+    <string name="nameUpdated">Hemos actualizado tu nombre</string>
+    <string name="emailUpdated">Hemos actualizado tu email</string>
+    <string name="checkYourEmail">Revisa tu correo. Te hemos enviado un email de verificación</string>
+    <string name="passReady">Contraseña guardada. Envía los cambios para terminar</string>
+    <string name="wasFollowedBy">Fue seguido por:</string>
+    <string name="followedTo">Siguió a:</string>
+    <string name="joinedGroup">Se unió al grupo:</string>
+    <string name="joinedEvent">Se unió al evento:</string>
+    <string name="joinedRoda">Se unió a la roda:</string>
+    <string name="joinedOnline">Se unió a la clase online:</string>
+    <string name="requestSent">Tu petición se envió correctamente</string>
+    <string name="requestNotSaved">Tu petición no pudo guardarse</string>
+    <string name="participants"><u>Participantes</u></string>
 </resources>

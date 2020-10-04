@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.groupDetailMoreView.content.GroupCommentsContent;
 import com.squareup.picasso.Picasso;
 
@@ -32,7 +31,7 @@ public class MyGroupCommentsRecyclerViewAdapter extends RecyclerView.Adapter<MyG
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_comments_group_item, parent, false);
+                .inflate(R.layout.fragment_comments_item, parent, false);
         return new ViewHolder(view, myOnGroupDetailListener);
     }
 
@@ -62,10 +61,10 @@ public class MyGroupCommentsRecyclerViewAdapter extends RecyclerView.Adapter<MyG
         public ViewHolder(View view, OnGroupDetailListener onGroupDetailListener) {
             super(view);
             mView = view;
-            ivAvatar = (ImageView) view.findViewById(R.id.groupUserCommentAvatar);
-            tvApelhido = (TextView) view.findViewById(R.id.groupUserCommentApelhido);
-            tvDate = (TextView) view.findViewById(R.id.groupUserCommentDate);
-            tvComment = (TextView) view.findViewById(R.id.groupUserCommentContent);
+            ivAvatar = (ImageView) view.findViewById(R.id.UserCommentAvatar);
+            tvApelhido = (TextView) view.findViewById(R.id.UserCommentApelhido);
+            tvDate = (TextView) view.findViewById(R.id.UserCommentDate);
+            tvComment = (TextView) view.findViewById(R.id.UserCommentContent);
             this.onGroupDetailListener = onGroupDetailListener;
             view.setOnClickListener(this);
         }

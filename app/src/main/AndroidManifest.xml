@@ -33,7 +33,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".helpView.HelpActivity"></activity>
+        <activity android:name=".helpView.HelpActivity" />
         <activity android:name=".eventModificationView.EventModificationActivity" />
         <activity android:name=".eventDetailMoreView.EventDetailMoreActivity" />
         <activity android:name=".onlineDetailMoreView.OnlineDetailMoreActivity" />
@@ -94,9 +94,7 @@
                 <data
                     android:host="Appoeira-emailVerified"
                     android:scheme="https://OneTHousandProjects" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>

@@ -15,6 +15,7 @@ public class ServerEventDetailResponse {
     private String country;
     private Double latitude;
     private Double longitude;
+    private String platform;
     private boolean isMember;
     private Integer hasVoted;
     private boolean isOwner;
@@ -23,7 +24,8 @@ public class ServerEventDetailResponse {
     public ServerEventDetailResponse(String error, Integer id, String name, String picUrl, String description, String phone,
                                      boolean verified, Double rating, Integer votes, String address,
                                      String city, String country, Double latitude, Double longitude,
-                                     boolean isMember, Integer hasVoted, boolean isOwner) {
+                                     String platform, boolean isMember, Integer hasVoted,
+                                     boolean isOwner) {
         super();
         this.error = error;
         this.id = id;
@@ -38,6 +40,7 @@ public class ServerEventDetailResponse {
         this.country = country;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.platform = platform;
         this.isMember = isMember;
         this.hasVoted = hasVoted;
         this.isOwner = isOwner;
@@ -162,6 +165,14 @@ public class ServerEventDetailResponse {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public boolean getIsMember() {

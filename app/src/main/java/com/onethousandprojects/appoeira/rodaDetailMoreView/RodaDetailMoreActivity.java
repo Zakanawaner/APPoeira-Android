@@ -2,8 +2,16 @@ package com.onethousandprojects.appoeira.rodaDetailMoreView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.PagerAdapter;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -12,11 +20,37 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
+import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.NewCommentFragment;
+import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaCommentsRecyclerViewAdapter;
+import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaMembersRecyclerViewAdapter;
+import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.BeenHereRatingRoda;
+import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.JoinRodaFragment;
+import com.onethousandprojects.appoeira.serverStuff.methods.RodaDetailMoreServer;
+import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.squareup.picasso.Picasso;
 
-public class RodaDetailMoreActivity extends AppCompatActivity {
+import java.util.List;
+import java.util.Objects;
 
+public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaMembersRecyclerViewAdapter.OnRodaDetailListener,
+                                                                         MyRodaCommentsRecyclerViewAdapter.OnRodaDetailListener{
+    public RodaDetailMoreServer rodaDetailMoreServer = new RodaDetailMoreServer();
+    public Bundle fromRodaDetailActivity;
+    ImageView ivRodaStar1;
+    ImageView ivRodaStar2;
+    ImageView ivRodaStar3;
+    ImageView ivRodaStar4;
+    ImageView ivRodaStar5;
+    TextView tvNumberComments;
+    TextView tvRodaDetailVerification;
+    public TextView tvNumberCommentsNum;
+    TextView tvJoinRoda;
+    ConstraintLayout groupDetails;
+    ConstraintLayout groupComments;
+    public int NUM_PAGES = 0;
+    public int NUM_MEMBERS = 0;
+    private PagerAdapter pagerAdapter;
+    static boolean onComments = false;
     String origin = "RodaDetailMoreActivity";
     NavParams navParams = new NavParams(
             null,
@@ -44,11 +78,120 @@ public class RodaDetailMoreActivity extends AppCompatActivity {
             null);
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavListener = CommonMethods.BottomNavigationMenuHandler(origin, navParams);
     private MaterialToolbar.OnMenuItemClickListener topNavListener = CommonMethods.TopNavigationMenuHandler(origin, navParams);
-
+    private View.OnClickListener showCommentsListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (!onComments) {
+                onComments = true;
+                String numComments = "(" + NUM_MEMBERS + ")";
+                tvNumberCommentsNum.setText(numComments);
+                tvNumberComments.setText(R.string.groupDetailMoreNumberOfMembers);
+                tvJoinRoda.setText(R.string.groupDetailMoreCommentGroup);
+                groupDetails.setVisibility(View.GONE);
+                groupComments.setVisibility(View.VISIBLE);
+            } else {
+                onComments = false;
+                String numComments = "(" + NUM_PAGES + ")";
+                tvNumberCommentsNum.setText(numComments);
+                tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);
+                tvJoinRoda.setText(R.string.groupDetailMoreJoinGroup);
+                groupDetails.setVisibility(View.VISIBLE);
+                groupComments.setVisibility(View.GONE);
+            }
+            killFragment();
+        }
+    };
+    private View.OnClickListener joinRodaListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            killFragment();
+            if (onComments) {
+                getSupportFragmentManager().beginTransaction().add(R.id.newCommentFragment, new NewCommentFragment(), "NewCommentFragment").commit();
+                groupComments.setVisibility(View.GONE);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("groupImage", fromRodaDetailActivity.getString("image"));
+                JoinRodaFragment joinRodaFragment = new JoinRodaFragment();
+                joinRodaFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().add(R.id.joinGroupFragment, joinRodaFragment, "JoinRodaFragment").commit();
+                groupDetails.setVisibility(View.GONE);
+            }
+        }
+    };
+    private View.OnClickListener groupDetailVerification = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            BeenHereRatingRoda beenHereRatingRoda = new BeenHereRatingRoda();
+            getSupportFragmentManager().beginTransaction().add(R.id.beenHereFragment, beenHereRatingRoda, "BeenHereFragment").commit();
+            groupDetails.setVisibility(View.GONE);
+            groupComments.setVisibility(View.GONE);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roda_detail_more);
+        fromRodaDetailActivity = getIntent().getExtras();
+
+        TextView tvRodaName = findViewById(R.id.groupDetailMoreName);
+        ImageView ivRodaAvatar = findViewById(R.id.groupDetailMoreAvatar);
+        TextView tvVotes = findViewById(R.id.groupDetailMoreVotes);
+        tvNumberComments = findViewById(R.id.groupDetailMoreNumberOfComments);
+        tvNumberCommentsNum = findViewById(R.id.groupDetailMoreNumberOfCommentsNum);
+        tvJoinRoda = findViewById(R.id.groupDetailMoreJoinGroup);
+        groupDetails = findViewById(R.id.SecondConstraint);
+        groupComments = findViewById(R.id.ThirdConstraint);
+        tvRodaDetailVerification = findViewById(R.id.groupDetailVerification);
+        TextView tvRodaAbout = findViewById(R.id.groupDetailAbout);
+        LinearLayout llRodaRating = findViewById(R.id.groupDetailMoreRating);
+        TextView tvFrontLineTitle = findViewById(R.id.groupDetailMoreFronline);
+        TextView tvStudentsTitle = findViewById(R.id.groupDetailMoreStudents);
+        RelativeLayout rlStudentsFragment = findViewById(R.id.groupDetailStudentsLayout);
+        TextView tvFriendsTitle = findViewById(R.id.groupDetailMoreFriends);
+        RelativeLayout rlFriendsFragment = findViewById(R.id.groupDetailFriendsLayout);
+
+        ivRodaStar1 = findViewById(R.id.groupDetailMoreStar1);
+        ivRodaStar2 = findViewById(R.id.groupDetailMoreStar2);
+        ivRodaStar3 = findViewById(R.id.groupDetailMoreStar3);
+        ivRodaStar4 = findViewById(R.id.groupDetailMoreStar4);
+        ivRodaStar5 = findViewById(R.id.groupDetailMoreStar5);
+
+        groupComments.setVisibility(View.GONE);
+        if (!fromRodaDetailActivity.getString("image").equals("")) {
+            Picasso.with(this).load(fromRodaDetailActivity.getString("image")).fit().into(ivRodaAvatar);
+        }
+        tvRodaName.setText(fromRodaDetailActivity.getString("name"));
+        tvRodaAbout.setText(fromRodaDetailActivity.getString("description"));
+        tvStudentsTitle.setVisibility(View.GONE);
+        rlStudentsFragment.setVisibility(View.GONE);
+        tvFriendsTitle.setVisibility(View.GONE);
+        rlFriendsFragment.setVisibility(View.GONE);
+        tvFrontLineTitle.setText(R.string.participants);
+        tvNumberComments.setOnClickListener(showCommentsListener);
+        tvJoinRoda.setOnClickListener(joinRodaListener);
+        tvRodaDetailVerification.setOnClickListener(groupDetailVerification);
+
+        if (fromRodaDetailActivity.getBoolean("verified")) {
+            List<ImageView> stars = CommonMethods.SetStars(fromRodaDetailActivity.getDouble("rating"), ivRodaStar1, ivRodaStar2, ivRodaStar3, ivRodaStar4, ivRodaStar5);
+            ivRodaStar1 = stars.get(0);
+            ivRodaStar2 = stars.get(1);
+            ivRodaStar3 = stars.get(2);
+            ivRodaStar4 = stars.get(3);
+            ivRodaStar5 = stars.get(4);
+            String votes = "(" + fromRodaDetailActivity.getInt("votes") + ")";
+            tvVotes.setText(votes);
+        } else {
+            llRodaRating.setVisibility(View.GONE);
+        }
+        if (fromRodaDetailActivity.getInt("voted") > 0) {
+            tvRodaDetailVerification.setVisibility(View.GONE);
+        }
+        if (fromRodaDetailActivity.getString("about")==null) {
+            tvRodaAbout.setVisibility(View.GONE);
+        }
+
+        rodaDetailMoreServer.getRodaDetailMore(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("id"));
+        rodaDetailMoreServer.serverRodaCommentsResponse(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("id"));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.addItem);
@@ -60,6 +203,34 @@ public class RodaDetailMoreActivity extends AppCompatActivity {
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+        }
+    }
+    @Override
+    public void OnRodaDetailClick(int userId) {
+        Intent toUserDetailActivity = new Intent(this, UserDetailActivity.class);
+        toUserDetailActivity.putExtra("id", userId);
+        startActivity(toUserDetailActivity);
+    }
+    public void refreshActivity() {
+        finish();
+        overridePendingTransition( 0, 0);
+        startActivity(getIntent());
+        overridePendingTransition( 0, 0);
+    }
+    public void killFragment() {
+        if (getSupportFragmentManager().findFragmentByTag("JoinRodaFragment") != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("JoinRodaFragment"))).commit();
+        }
+        if (getSupportFragmentManager().findFragmentByTag("NewCommentFragment") != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("NewCommentFragment"))).commit();
+        }
+        if (getSupportFragmentManager().findFragmentByTag("BeenHereFragment") != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("BeenHereFragment"))).commit();
+        }
+        if (!onComments) {
+            groupDetails.setVisibility(View.VISIBLE);
+        } else {
+            groupComments.setVisibility(View.VISIBLE);
         }
     }
 }

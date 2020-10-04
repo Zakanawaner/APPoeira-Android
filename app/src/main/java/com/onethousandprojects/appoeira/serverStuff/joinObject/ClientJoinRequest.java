@@ -1,12 +1,12 @@
-package com.onethousandprojects.appoeira.serverStuff.joinGroup;
+package com.onethousandprojects.appoeira.serverStuff.joinObject;
 
 
-public class ClientGroupJoinRequest {
+public class ClientJoinRequest {
     private Integer groupId;
     private Integer userId;
     private Integer roleId;
 
-    public ClientGroupJoinRequest(Integer groupId, Integer userId, Integer roleId) {
+    public ClientJoinRequest(Integer groupId, Integer userId, Integer roleId) {
         super();
         this.groupId = groupId;
         this.userId = userId;

@@ -1,11 +1,11 @@
-package com.onethousandprojects.appoeira.serverStuff.groupRatedByUser;
+package com.onethousandprojects.appoeira.serverStuff.ratedByUser;
 
-public class ClientGroupRatedByUserRequest {
+public class ClientRatedByUserRequest {
     private Integer UserId;
     private Integer GroupId;
     private Integer Rating;
 
-    public ClientGroupRatedByUserRequest(Integer UserId, Integer GroupId, Integer Rating) {
+    public ClientRatedByUserRequest(Integer UserId, Integer GroupId, Integer Rating) {
         super();
         this.UserId = UserId;
         this.GroupId = GroupId;

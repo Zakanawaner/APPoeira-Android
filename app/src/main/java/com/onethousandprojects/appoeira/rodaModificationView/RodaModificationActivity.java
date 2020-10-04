@@ -200,7 +200,7 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
                 latitude = latLng.latitude;
                 longitude = latLng.longitude;
                 myGoogleMap.clear();
-                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Mi roda"));
+                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("My roda"));
                 try {
                     List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
                     if (addresses.size() > 0) {

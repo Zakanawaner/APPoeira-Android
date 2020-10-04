@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.userDetailView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -132,6 +133,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
         setContentView(R.layout.activity_user_detail);
 
         fromGroupDetailMoreActivity = getIntent().getExtras();
+        assert fromGroupDetailMoreActivity != null;
         if (fromGroupDetailMoreActivity.getInt("id") == SharedPreferencesManager.getIntegerValue(Constants.ID)) {
             onProfile = true;
         }
@@ -165,7 +167,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
         Call<ServerUserDetailResponse> call = Server.post_user_detail(clientUserDetailRequest);
         call.enqueue(new Callback<ServerUserDetailResponse>() {
             @Override
-            public void onResponse(Call<ServerUserDetailResponse> call, Response<ServerUserDetailResponse> response) {
+            public void onResponse(@NonNull Call<ServerUserDetailResponse> call, @NonNull Response<ServerUserDetailResponse> response) {
                 if (response.isSuccessful()){
                     myResponse = response.body();
                     Picasso.with(UserDetailActivity.this).load(myResponse.getPicUrl()).fit().into(ivUserAvatar);
@@ -181,7 +183,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(followers.get(i).getUserApelhido()),
                                     String.valueOf(followers.get(i).getUserPicUrl()),
                                     String.valueOf(followers.get(i).getUserDate()),
-                                    "Fue seguido por:"));
+                                    String.valueOf(R.string.wasFollowedBy)));
                             if (followers.get(i).getUserId().equals(SharedPreferencesManager.getIntegerValue(Constants.ID))) {
                                 alreadyFollowing = true;
                             }
@@ -199,7 +201,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(followed.get(i).getUserApelhido()),
                                     String.valueOf(followed.get(i).getUserPicUrl()),
                                     String.valueOf(followed.get(i).getUserDate()),
-                                    "Siguió a:"));
+                                    String.valueOf(R.string.followedTo)));
                         }
                         userfollowedListFragment = new UserFollowedListFragment();
                         getSupportFragmentManager().beginTransaction().add(R.id.followedList, userfollowedListFragment, "UserFollowedListFragment").commit();
@@ -220,7 +222,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getGroups().get(i).getGroupName()),
                                     String.valueOf(myResponse.getGroups().get(i).getGroupPicUrl()),
                                     String.valueOf(myResponse.getGroups().get(i).getGroupDate()),
-                                    "Se unió al grupo:"));
+                                    String.valueOf(R.string.joinedGroup)));
                         }
                     }
                     if (!(myResponse.getEvents().size() == 1 && myResponse.getEvents().get(0).getEventId() == null)) {
@@ -232,7 +234,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getEvents().get(i).getEventName()),
                                     String.valueOf(myResponse.getEvents().get(i).getEventPicUrl()),
                                     String.valueOf(myResponse.getEvents().get(i).getEventDate()),
-                                    "Se unió al evento:"));
+                                    String.valueOf(R.string.joinedEvent)));
                         }
                     }
                     if (!(myResponse.getRodas().size() == 1 && myResponse.getRodas().get(0).getRodaId() == null)) {
@@ -244,7 +246,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getRodas().get(i).getRodaName()),
                                     String.valueOf(myResponse.getRodas().get(i).getRodaPicUrl()),
                                     String.valueOf(myResponse.getRodas().get(i).getRodaDate()),
-                                    "Se unió a la roda:"));
+                                    String.valueOf(R.string.joinedRoda)));
                         }
 
                     }
@@ -257,17 +259,18 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getOnlines().get(i).getOnlineName()),
                                     String.valueOf(myResponse.getOnlines().get(i).getOnlinePicUrl()),
                                     String.valueOf(myResponse.getOnlines().get(i).getOnlineDate()),
-                                    "Se unió a la clase online:"));
+                                    String.valueOf(R.string.joinedOnline)));
                         }
                     }
                     if (!(activity.size() == 1 && activity.get(0).getId() == null)) {
                         NUM_ACTIVITIES = activity.size();
                     }
-                    tvNumberActivity.setText("(" + NUM_ACTIVITIES + ")");
+                    String number = "(" + NUM_ACTIVITIES + ")";
+                    tvNumberActivity.setText(number);
                     userActivityListFragment = new UserActivityListFragment();
                     getSupportFragmentManager().beginTransaction().add(R.id.activityList, userActivityListFragment, "UserActivityListFragment").commit();
                 } else {
-                    Toast.makeText(UserDetailActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserDetailActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -312,21 +315,22 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                         Call<ServerUserFollowUserResponse> call = Server.post_user_follow_user(clientUserFollowUserRequest);
                         call.enqueue(new Callback<ServerUserFollowUserResponse>() {
                             @Override
-                            public void onResponse(Call<ServerUserFollowUserResponse> call, Response<ServerUserFollowUserResponse> response) {
+                            public void onResponse(@NonNull Call<ServerUserFollowUserResponse> call, @NonNull Response<ServerUserFollowUserResponse> response) {
                                 if (response.isSuccessful()) {
+                                    assert response.body() != null;
                                     if (response.body().isOk()) {
-                                        Toast.makeText(UserDetailActivity.this, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserDetailActivity.this, R.string.requestSent, Toast.LENGTH_SHORT).show();
                                         refreshActivity();
                                     } else {
-                                        Toast.makeText(UserDetailActivity.this, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserDetailActivity.this, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(UserDetailActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserDetailActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<ServerUserFollowUserResponse> call, Throwable t) {
+                            public void onFailure(@NonNull Call<ServerUserFollowUserResponse> call, @NonNull Throwable t) {
                                 Toast.makeText(UserDetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -341,21 +345,22 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                         Call<ServerUserUnFollowUserResponse> call = Server.post_user_unfollow_user(clientUserUnFollowUserRequest);
                         call.enqueue(new Callback<ServerUserUnFollowUserResponse>() {
                             @Override
-                            public void onResponse(Call<ServerUserUnFollowUserResponse> call, Response<ServerUserUnFollowUserResponse> response) {
+                            public void onResponse(@NonNull Call<ServerUserUnFollowUserResponse> call, @NonNull Response<ServerUserUnFollowUserResponse> response) {
                                 if (response.isSuccessful()) {
+                                    assert response.body() != null;
                                     if (response.body().isOk()) {
-                                        Toast.makeText(UserDetailActivity.this, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserDetailActivity.this, R.string.requestSent, Toast.LENGTH_SHORT).show();
                                         refreshActivity();
                                     } else {
-                                        Toast.makeText(UserDetailActivity.this, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(UserDetailActivity.this, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(UserDetailActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserDetailActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<ServerUserUnFollowUserResponse> call, Throwable t) {
+                            public void onFailure(@NonNull Call<ServerUserUnFollowUserResponse> call, @NonNull Throwable t) {
                                 Toast.makeText(UserDetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });

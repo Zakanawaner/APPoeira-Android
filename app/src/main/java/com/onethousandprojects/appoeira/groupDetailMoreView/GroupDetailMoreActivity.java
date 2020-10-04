@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -81,14 +82,16 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         public void onClick(View view) {
             if (!onComments) {
                 onComments = true;
-                tvNumberCommentsNum.setText("(" + NUM_MEMBERS + ")");
+                String numComments = "(" + NUM_MEMBERS + ")";
+                tvNumberCommentsNum.setText(numComments);
                 tvNumberComments.setText(R.string.groupDetailMoreNumberOfMembers);
                 tvJoinGroup.setText(R.string.groupDetailMoreCommentGroup);
                 groupDetails.setVisibility(View.GONE);
                 groupComments.setVisibility(View.VISIBLE);
             } else {
                 onComments = false;
-                tvNumberCommentsNum.setText("(" + NUM_PAGES + ")");
+                String numComments = "(" + NUM_PAGES + ")";
+                tvNumberCommentsNum.setText(numComments);
                 tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);
                 tvJoinGroup.setText(R.string.groupDetailMoreJoinGroup);
                 groupDetails.setVisibility(View.VISIBLE);
@@ -109,7 +112,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
                 bundle.putString("groupImage", fromGroupDetailActivity.getString("image"));
                 JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
                 joinGroupFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.joinGroupFragment, joinGroupFragment, "JoinGroupFragment").commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.joinGroupFragment, joinGroupFragment, "JoinRodaFragment").commit();
                 groupDetails.setVisibility(View.GONE);
             }
         }
@@ -138,6 +141,8 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         groupDetails = findViewById(R.id.SecondConstraint);
         groupComments = findViewById(R.id.ThirdConstraint);
         tvGroupDetailVerification = findViewById(R.id.groupDetailVerification);
+        TextView tvGroupAbout = findViewById(R.id.groupDetailAbout);
+        LinearLayout llGroupRating = findViewById(R.id.groupDetailMoreRating);
 
         ivGroupStar1 = findViewById(R.id.groupDetailMoreStar1);
         ivGroupStar2 = findViewById(R.id.groupDetailMoreStar2);
@@ -148,6 +153,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         groupComments.setVisibility(View.GONE);
         Picasso.with(this).load(fromGroupDetailActivity.getString("image")).fit().into(ivGroupAvatar);
         tvGroupName.setText(fromGroupDetailActivity.getString("name"));
+        tvGroupAbout.setText(fromGroupDetailActivity.getString("about"));
         tvNumberComments.setOnClickListener(showCommentsListener);
         tvJoinGroup.setOnClickListener(joinGroupListener);
         tvGroupDetailVerification.setOnClickListener(groupDetailVerification);
@@ -159,11 +165,16 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
             ivGroupStar3 = stars.get(2);
             ivGroupStar4 = stars.get(3);
             ivGroupStar5 = stars.get(4);
-            tvVotes.setText("(" + fromGroupDetailActivity.getInt("votes") + ")");
-
+            String votes = "(" + fromGroupDetailActivity.getInt("votes") + ")";
+            tvVotes.setText(votes);
+        } else {
+            llGroupRating.setVisibility(View.GONE);
         }
         if (fromGroupDetailActivity.getInt("voted") > 0) {
             tvGroupDetailVerification.setVisibility(View.GONE);
+        }
+        if (fromGroupDetailActivity.getString("about")==null) {
+            tvGroupAbout.setVisibility(View.GONE);
         }
 
         groupDetailMoreServer.getGroupDetailMore(GroupDetailMoreActivity.this, fromGroupDetailActivity.getInt("id"));
@@ -194,8 +205,8 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         overridePendingTransition( 0, 0);
     }
     public void killFragment() {
-        if (getSupportFragmentManager().findFragmentByTag("JoinGroupFragment") != null) {
-            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("JoinGroupFragment"))).commit();
+        if (getSupportFragmentManager().findFragmentByTag("JoinRodaFragment") != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("JoinRodaFragment"))).commit();
         }
         if (getSupportFragmentManager().findFragmentByTag("NewCommentFragment") != null) {
             getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("NewCommentFragment"))).commit();

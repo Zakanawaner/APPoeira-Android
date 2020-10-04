@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.rodaDetailView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
     ImageView ivRodaStar3;
     ImageView ivRodaStar4;
     ImageView ivRodaStar5;
+    private String platform;
     com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client Client;
     com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server Server;
     private ServerRodaDetailResponse myResponse;
@@ -91,6 +94,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
         TextView tvRodaAddress = findViewById(R.id.detailAddress);
         TextView tvVotes = findViewById(R.id.detailVotes);
         TextView tvMore = findViewById(R.id.detailMore);
+        LinearLayout llDetailRating = findViewById(R.id.detailRating);
 
         ivRodaStar1 = findViewById(R.id.detailStar1);
         ivRodaStar2 = findViewById(R.id.detailStar2);
@@ -104,7 +108,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
         Call<ServerRodaDetailResponse> call = Server.post_roda_detail(clientRodaDetailRequest);
         call.enqueue(new Callback<ServerRodaDetailResponse>() {
             @Override
-            public void onResponse(Call<ServerRodaDetailResponse> call, Response<ServerRodaDetailResponse> response) {
+            public void onResponse(@NonNull Call<ServerRodaDetailResponse> call, @NonNull Response<ServerRodaDetailResponse> response) {
                 if (response.isSuccessful()){
                     myResponse = response.body();
                     assert myResponse != null;
@@ -113,7 +117,8 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
                             Picasso.with(RodaDetailActivity.this).load(myResponse.getPicUrl()).fit().into(ivRodaAvatar);
                         }
                         tvRodaName.setText(myResponse.getName());
-                        tvRodaUrl.setText(fromRodaListActivity.getString("ownerRank") + " " + fromRodaListActivity.getString("owner"));
+                        String url = fromRodaListActivity.getString("ownerRank") + " " + fromRodaListActivity.getString("owner");
+                        tvRodaUrl.setText(url);
                         tvRodaPhone.setText(myResponse.getPhone());
                         tvRodaAddress.setText(myResponse.getAddress());
 
@@ -125,9 +130,18 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
                             ivRodaStar3 = stars.get(2);
                             ivRodaStar4 = stars.get(3);
                             ivRodaStar5 = stars.get(4);
-                            tvVotes.setText("(" + myResponse.getVotes() + ")");
+                            String votes = "(" + myResponse.getVotes() + ")";
+                            tvVotes.setText(votes);
+                        } else {
+                            llDetailRating.setVisibility(View.GONE);
+                            tvVotes.setVisibility(View.GONE);
                         }
-
+                        if (myResponse.getPhone()==null) {
+                            tvRodaPhone.setVisibility(View.GONE);
+                        }
+                        if (myResponse.getAddress()==null) {
+                            tvRodaAddress.setVisibility(View.GONE);
+                        }
                         latitude = myResponse.getLatitude();
                         longitude = myResponse.getLongitude();
                         mapFragment.getMapAsync(RodaDetailActivity.this);
@@ -139,11 +153,11 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
                         finish();
                     }
                 } else {
-                    Toast.makeText(RodaDetailActivity.this, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RodaDetailActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
-            public void onFailure(Call<ServerRodaDetailResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ServerRodaDetailResponse> call, @NonNull Throwable t) {
                 Toast.makeText(RodaDetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -194,7 +208,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(myResponse.getName()));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
     }
 }

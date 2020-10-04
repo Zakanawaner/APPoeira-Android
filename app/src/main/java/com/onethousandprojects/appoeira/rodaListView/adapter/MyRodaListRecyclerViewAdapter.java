@@ -40,7 +40,8 @@ public class MyRodaListRecyclerViewAdapter extends RecyclerView.Adapter<MyRodaLi
             Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivRodaAvatar);
         }
         if (holder.mItem.getName().length() > 25) {
-            holder.tvRodaName.setText(holder.mItem.getName().substring(0,24) + "...");
+            String name = holder.mItem.getName().substring(0,24) + "...";
+            holder.tvRodaName.setText(name);
         } else {
             holder.tvRodaName.setText(holder.mItem.getName());
         }

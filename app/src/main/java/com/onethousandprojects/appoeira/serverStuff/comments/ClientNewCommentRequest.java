@@ -1,12 +1,12 @@
-package com.onethousandprojects.appoeira.serverStuff.groupComments;
+package com.onethousandprojects.appoeira.serverStuff.comments;
 
 
-public class ClientGroupNewCommentRequest {
+public class ClientNewCommentRequest {
     private Integer groupId;
     private Integer userId;
     private String comment;
 
-    public ClientGroupNewCommentRequest(Integer groupId, Integer userId, String comment) {
+    public ClientNewCommentRequest(Integer groupId, Integer userId, String comment) {
         super();
         this.groupId = groupId;
         this.userId = userId;

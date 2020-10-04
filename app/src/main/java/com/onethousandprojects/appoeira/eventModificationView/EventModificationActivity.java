@@ -68,7 +68,6 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
     private TextView address;
     Geocoder geocoder;
     private GoogleMap myGoogleMap;
-    private MapFragment mapFragment;
     private Integer platform;
     AdapterView.OnItemSelectedListener spinnerPlatform = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -130,7 +129,7 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         SearchView svUsers = findViewById(R.id.searchUsers);
         SearchView svConvided = findViewById(R.id.searchConvided);
         llMapFragment = findViewById(R.id.mapFragmentLayout);
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
         Spinner spinner = findViewById(R.id.platformSpinner);
         spinner.setOnItemSelectedListener(spinnerPlatform);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -154,7 +153,9 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         topNavigationView.setTitle(R.string.page_title_update_event);
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
-            Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).
+                    transform(new CommonMethods.CircleTransform()).
+                    into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
         }
 
         tvModifyAvatar.setOnClickListener(new View.OnClickListener() {
@@ -288,7 +289,7 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
                 latitude = latLng.latitude;
                 longitude = latLng.longitude;
                 myGoogleMap.clear();
-                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Mi event"));
+                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("My event"));
                 try {
                     List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
                     if (addresses.size() > 0) {
