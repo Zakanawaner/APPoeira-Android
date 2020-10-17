@@ -91,8 +91,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<ServerLoginResponse> call, Response<ServerLoginResponse> response) {
                 if (response.isSuccessful()){
                     assert response.body() != null;
-                    saveSharedPreferences(response.body());
-                    toGroupList();
+                    if (response.body().getId() != null) {
+                        saveSharedPreferences(response.body());
+                        toGroupList();
+                    } else {
+                        Toast.makeText(LoginActivity.this, R.string.loginFailed, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                 }

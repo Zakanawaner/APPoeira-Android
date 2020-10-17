@@ -13,12 +13,13 @@ public class ServerLocationEventResponse {
     private String ownerRank;
     private Integer platform;
     private String key;
+    private Double rating;
 
 
     public ServerLocationEventResponse(Integer id, String name, String date, String picUrl,
                                        String ownerApelhido, String ownerRank, boolean verified,
                                        Double latitude, Double longitude, Double distance,
-                                       Integer platform, String key) {
+                                       Integer platform, String key, Double rating) {
         super();
         this.id = id;
         this.name = name;
@@ -32,6 +33,7 @@ public class ServerLocationEventResponse {
         this.ownerRank = ownerRank;
         this.platform = platform;
         this.key = key;
+        this.rating = rating;
     }
 
     public Integer getId() {
@@ -128,6 +130,14 @@ public class ServerLocationEventResponse {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
 }

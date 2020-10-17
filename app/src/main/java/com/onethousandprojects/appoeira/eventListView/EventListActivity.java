@@ -159,6 +159,7 @@ public class EventListActivity extends AppCompatActivity implements MyEventListR
             @Override
             public void onClick(View view) {
                 Intent toNewEventActivity = new Intent(EventListActivity.this, EventModificationActivity.class);
+                toNewEventActivity.putExtra("eventId", 0);
                 startActivity(toNewEventActivity);
             }
         });
@@ -211,6 +212,7 @@ public class EventListActivity extends AppCompatActivity implements MyEventListR
             ServerLocationEventResponse event = eventListServer.getServerLocationEventResponse().get(position);
             Intent toEventDetailActivity = new Intent(this, EventDetailActivity.class);
             toEventDetailActivity.putExtra("id", event.getId());
+            toEventDetailActivity.putExtra("date", event.getDate());
             toEventDetailActivity.putExtra("owner", event.getOwnerApelhido());
             toEventDetailActivity.putExtra("ownerRank", event.getOwnerRank());
 

@@ -5,7 +5,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".searchView.SearchActivity">
-    <include layout="@layout/common_top_navigation"/>
+
+    <include
+        android:id="@+id/include6"
+        layout="@layout/common_top_navigation" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight=".50"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/buttonsLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include6">
+
+        <Button
+            android:id="@+id/searchUsersBtn"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:text="@string/searchUserButton" />
+
+        <Button
+            android:id="@+id/searchGroupsBtn"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:text="@string/searcGroupButton" />
+
+        <Button
+            android:id="@+id/searchRodaBtn"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:text="@string/searcRodaButton" />
+
+        <Button
+            android:id="@+id/searchEventBtn"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:text="@string/searcEventButton" />
+
+        <Button
+            android:id="@+id/searchOnlineBtn"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:text="@string/searcOnlineButton" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonsLayout"
+        tools:context=".searchView.SearchActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/modificationDatesConstraint"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/searchInstructions"
+            android:textAlignment="center"
+            android:id="@+id/searchInstructions"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/modificationDatesConstraint"/>
+
+        <include layout="@layout/common_search_user"/>
+
+    </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

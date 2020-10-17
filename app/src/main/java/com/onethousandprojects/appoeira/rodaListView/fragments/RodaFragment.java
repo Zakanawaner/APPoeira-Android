@@ -72,7 +72,8 @@ public class RodaFragment extends Fragment {
                                                myResponseFromActivity.get(i).getVerified(),
                                                myResponseFromActivity.get(i).getLatitude(),
                                                myResponseFromActivity.get(i).getLongitude(),
-                                               myResponseFromActivity.get(i).getDistance()));
+                                               myResponseFromActivity.get(i).getDistance(),
+                                               myResponseFromActivity.get(i).getRating()));
             }
             adapterRoda = new MyRodaListRecyclerViewAdapter(getActivity(), RodaList, (RodaListActivity) getActivity());
             recyclerView.setAdapter(adapterRoda);

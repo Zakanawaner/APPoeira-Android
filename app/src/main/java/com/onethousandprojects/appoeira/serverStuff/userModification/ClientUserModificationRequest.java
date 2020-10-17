@@ -1,6 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.userModification;
 
 public class ClientUserModificationRequest {
+    private String token;
     private Integer userId;
     private String firstName;
     private String lastName;
@@ -9,11 +10,12 @@ public class ClientUserModificationRequest {
     private String password;
     private String newPassword;
     private Integer rank;
-    private String picUrl;
 
-    public ClientUserModificationRequest(Integer userId, String firstName, String lastName, String apelhido,
-                                         String email, String password, String newPassword, Integer rank, String picUrl) {
+    public ClientUserModificationRequest(String token, Integer userId, String firstName,
+                                         String lastName, String apelhido, String email,
+                                         String password, String newPassword, Integer rank) {
         super();
+        this.token = token;
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,8 +24,12 @@ public class ClientUserModificationRequest {
         this.password = password;
         this.newPassword = newPassword;
         this.rank = rank;
-        this.picUrl = picUrl;
     }
+
+    public String getToken() { return token; }
+
+    public void setToken(String token) { this.token = token; }
+
     public Integer getUserId() {
         return userId;
     }
@@ -86,13 +92,5 @@ public class ClientUserModificationRequest {
 
     public void setRank(Integer rank) {
         this.rank = rank;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
     }
 }

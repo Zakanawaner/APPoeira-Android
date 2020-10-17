@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.groupDetailMoreView.fragments;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,15 +51,34 @@ public class JoinGroupFragment extends DialogFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         assert getArguments() != null;
         String groupImage = getArguments().getString("groupImage");
+        boolean member = getArguments().getBoolean("member");
         GroupDetailMoreActivity groupDetailMoreActivity = ((GroupDetailMoreActivity) requireActivity());
 
         View view = inflater.inflate(R.layout.fragment_join_group, container, false);
+        TextView tvJoinInfo = view.findViewById(R.id.tvJoinGroupInfo);
         ImageView ivClose = view.findViewById(R.id.joinGroupClose);
         ImageView ivAvatar = view.findViewById(R.id.joinGroupUserAvatar);
         ImageView ivGroupAvatar = view.findViewById(R.id.joinGroupGroupAvatar);
         Button btnPostComment = view.findViewById(R.id.joinGroupSend);
+        ImageView ivLink = view.findViewById(R.id.imageView2);
         Spinner spinner = (Spinner) view.findViewById(R.id.joinGroupSpinner);
         tvNotSoFast = view.findViewById(R.id.tvNotSoFastBuddy);
+
+        if (member) {
+            ivLink.setImageResource(R.drawable.ic_close);
+            btnPostComment.setText(R.string.leaveGroup);
+            spinner.setVisibility(View.GONE);
+            if (getArguments().getBoolean("isOwner")) {
+                tvJoinInfo.setText(R.string.leaveGroupOwnerExplanation);
+            } else {
+                tvJoinInfo.setText(R.string.leaveGroupExplanation);
+            }
+        } else {
+            ivLink.setImageResource(R.drawable.ic_arrow_right);
+            btnPostComment.setText(R.string.joinGroup);
+            spinner.setVisibility(View.VISIBLE);
+            tvJoinInfo.setText(R.string.joinGroupExplanation);
+        }
 
         Picasso.with(getContext()).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).fit().into(ivAvatar);
         Picasso.with(getContext()).load(groupImage).fit().into(ivGroupAvatar);
@@ -77,14 +97,19 @@ public class JoinGroupFragment extends DialogFragment {
         btnPostComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (roleId > 0) {
-                    groupDetailMoreActivity.groupDetailMoreServer.joinGroup(groupDetailMoreActivity,
-                            groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"),
-                            roleId);
-                    groupDetailMoreActivity.refreshActivity();
-                    groupDetailMoreActivity.killFragment();
+                if (!member) {
+                    if (roleId > 0) {
+                        groupDetailMoreActivity.groupDetailMoreServer.joinGroup(groupDetailMoreActivity,
+                                groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"),
+                                roleId);
+                        groupDetailMoreActivity.refreshActivity();
+                        groupDetailMoreActivity.killFragment();
+                    } else {
+                        Toast.makeText(getContext(), R.string.selectRole, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getContext(), R.string.selectRole, Toast.LENGTH_SHORT).show();
+                    groupDetailMoreActivity.groupDetailMoreServer.leaveGroup(groupDetailMoreActivity,
+                            groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"));
                 }
             }
         });

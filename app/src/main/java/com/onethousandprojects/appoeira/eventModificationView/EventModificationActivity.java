@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -55,8 +57,9 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         MyEventModificationConvideMembersRecyclerViewAdapter.OnEventModificationConvideMembersListener,
         OnMapReadyCallback {
     private ModifyEventAvatarFragment modifyEventAvatarFragment;
-    public String newUrl = "";
     public ImageView ivAvatar;
+    public Bitmap imageBitmap;
+    public Integer eventId;
     private Button btnSave;
     private CustomScrollView nsvModifView;
     public EventModificationServer eventModificationServer = new EventModificationServer();
@@ -116,7 +119,10 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_modification);
+        Bundle fromEventDetail = getIntent().getExtras();
 
+        assert fromEventDetail != null;
+        eventId = fromEventDetail.getInt("eventId");
         nsvModifView = findViewById(R.id.modifScrollView);
         ivAvatar = findViewById(R.id.avatar);
         TextView tvModifyAvatar = findViewById(R.id.modifyAvatar);
@@ -210,13 +216,21 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                ownerMembers.clear();
-                ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
-                eventModificationServer.sendModificationsToServer(EventModificationActivity.this,
-                        ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
-                        createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
-                        newUrl, invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()), convidedMembers,
-                        String.valueOf(etKey.getText()), platform);
+                if (imageBitmap != null) {
+                    ownerMembers.clear();
+                    ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
+                    try {
+                        eventModificationServer.sendModificationsToServer(EventModificationActivity.this,
+                                ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
+                                createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
+                                invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()), convidedMembers,
+                                String.valueOf(etKey.getText()), platform, imageBitmap, eventId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(EventModificationActivity.this, R.string.choseImagePlease, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -225,19 +239,16 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         modifyEventAvatarFragment = null;
         btnSave.setVisibility(View.VISIBLE);
     }
-    public void chargeImage(){
-        Picasso.with(this).load(newUrl).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatarImage(ivAvatar));
-    }
     private String createDate(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
         return year + "-" + month + "-" + day + "-" + hour + "-" + minute;
     }
     @Override
     public void OnEventInviteMemberClick(int position) {
-        invitedMembers.add(eventModificationServer.getUserSearchResponse().get(position).getId());
+        invitedMembers.add(eventModificationServer.getSearchResponse().getUserResponses().get(position).getId());
     }
     @Override
     public void OnEventConvideMemberClick(int position) {
-        convidedMembers.add(eventModificationServer.getUserSearchResponse().get(position).getId());
+        convidedMembers.add(eventModificationServer.getSearchResponse().getUserResponses().get(position).getId());
     }
     public void addInvited(Integer id, boolean membersConv) {
         if (!membersConv) {

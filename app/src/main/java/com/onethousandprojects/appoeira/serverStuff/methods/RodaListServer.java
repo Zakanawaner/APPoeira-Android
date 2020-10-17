@@ -49,12 +49,6 @@ public class RodaListServer {
                 if (response.isSuccessful()){
                     serverLocationRodaResponse = response.body();
                     assert serverLocationRodaResponse != null;
-                    Collections.sort(serverLocationRodaResponse, new Comparator<ServerLocationRodaResponse>() {
-                        @Override
-                        public int compare(ServerLocationRodaResponse lhs, ServerLocationRodaResponse rhs) {
-                            return lhs.getDistance().compareTo(rhs.getDistance());
-                        }
-                    });
                     if (!createdFragment) {
                         createdFragment = true;
                         RodaListActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaFragment(), "RodaListFragment").commit();

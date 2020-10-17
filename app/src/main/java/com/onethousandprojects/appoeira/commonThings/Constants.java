@@ -1,7 +1,7 @@
 package com.onethousandprojects.appoeira.commonThings;
 
 public class Constants {
-    public static final String API_APPOEIRA_BASE_URL = "https://43a95c120b7f.ngrok.io/";
+    public static final String API_APPOEIRA_BASE_URL = "https://b0262077574f.ngrok.io/";
     public static final String PERF_TOKEN = "PERF_TOKEN";
     public static final String ID = "ID";
     public static final String APELHIDO = "APELHIDO";
@@ -15,5 +15,11 @@ public class Constants {
     public static final Integer LOCATION_REQUEST_CODE = 1001;
     public static final String TAG = "MyLogTag";
     public static final String CUSTOM_GROUP_URL = "https://image.flaticon.com/icons/png/512/33/33887.png";
+    public static final Integer CAMERA_REQUEST_CODE = 1002;
+    public static final Integer GALLERY_REQUEST_CODE = 1003;
+    public static final int CAMERA_REQUEST_CODE_INTENT = 1012;
+    public static final int GALLERY_REQUEST_CODE_INTENT = 1013;
+
+    public static CommonMethods.NewsVariable newsVariable = new CommonMethods.NewsVariable(false);
 
 }

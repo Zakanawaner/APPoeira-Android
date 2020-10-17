@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -30,6 +32,7 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.CustomScrollView;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
+import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaModificationView.fragments.ModifyRodaAvatarFragment;
 import com.onethousandprojects.appoeira.serverStuff.methods.RodaModificationServer;
@@ -44,8 +47,9 @@ import java.util.Objects;
 public class RodaModificationActivity extends AppCompatActivity implements MyRodaModificationInviteMembersRecyclerViewAdapter.OnRodaModificationInviteMembersListener,
         OnMapReadyCallback {
     private ModifyRodaAvatarFragment modifyRodaAvatarFragment;
-    public String newUrl = "";
     public ImageView ivAvatar;
+    public Bitmap imageBitmap;
+    public Integer rodaId;
     private Button btnSave;
     private CustomScrollView nsvModifView;
     public RodaModificationServer rodaModificationServer = new RodaModificationServer();
@@ -87,7 +91,10 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roda_modification);
+        Bundle fromRodaDetail = getIntent().getExtras();
 
+        assert fromRodaDetail != null;
+        rodaId = fromRodaDetail.getInt("rodaId");
         nsvModifView = findViewById(R.id.modifScrollView);
         ivAvatar = findViewById(R.id.avatar);
         TextView tvModifyAvatar = findViewById(R.id.modifyAvatar);
@@ -148,12 +155,20 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                ownerMembers.clear();
-                ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
-                rodaModificationServer.sendModificationsToServer(RodaModificationActivity.this,
-                        ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
-                        createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
-                        newUrl, invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()));
+                if (imageBitmap != null) {
+                    ownerMembers.clear();
+                    ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
+                    try {
+                        rodaModificationServer.sendModificationsToServer(RodaModificationActivity.this,
+                                ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
+                                createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
+                                invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()), imageBitmap, rodaId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(RodaModificationActivity.this, R.string.choseImagePlease, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -162,15 +177,12 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
         modifyRodaAvatarFragment = null;
         btnSave.setVisibility(View.VISIBLE);
     }
-    public void chargeImage(){
-        Picasso.with(this).load(newUrl).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatarImage(ivAvatar));
-    }
     private String createDate(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
         return year + "-" + month + "-" + day + "-" + hour + "-" + minute;
     }
     @Override
     public void OnRodaInviteMemberClick(int position) {
-        invitedMembers.add(rodaModificationServer.getUserSearchResponse().get(position).getId());
+        invitedMembers.add(rodaModificationServer.getSearchResponse().getUserResponses().get(position).getId());
     }
     public void addInvited(Integer id) {
         invitedMembers.add(id);

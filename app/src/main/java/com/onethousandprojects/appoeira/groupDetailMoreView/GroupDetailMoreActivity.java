@@ -43,7 +43,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
     TextView tvNumberComments;
     TextView tvGroupDetailVerification;
     public TextView tvNumberCommentsNum;
-    TextView tvJoinGroup;
+    public TextView tvJoinGroup;
     ConstraintLayout groupDetails;
     ConstraintLayout groupComments;
     public int NUM_PAGES = 0;
@@ -93,7 +93,11 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
                 String numComments = "(" + NUM_PAGES + ")";
                 tvNumberCommentsNum.setText(numComments);
                 tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);
-                tvJoinGroup.setText(R.string.groupDetailMoreJoinGroup);
+                if (fromGroupDetailActivity.getBoolean("member")) {
+                    tvJoinGroup.setText(R.string.groupDetailMoreLeaveGroup);
+                } else {
+                    tvJoinGroup.setText(R.string.groupDetailMoreJoinGroup);
+                }
                 groupDetails.setVisibility(View.VISIBLE);
                 groupComments.setVisibility(View.GONE);
             }
@@ -110,9 +114,11 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("groupImage", fromGroupDetailActivity.getString("image"));
+                bundle.putBoolean("member", fromGroupDetailActivity.getBoolean("member"));
+                bundle.putBoolean("isOwner", fromGroupDetailActivity.getBoolean("isOwner"));
                 JoinGroupFragment joinGroupFragment = new JoinGroupFragment();
                 joinGroupFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.joinGroupFragment, joinGroupFragment, "JoinRodaFragment").commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.joinGroupFragment, joinGroupFragment, "JoinGroupFragment").commit();
                 groupDetails.setVisibility(View.GONE);
             }
         }
@@ -120,6 +126,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
     private View.OnClickListener groupDetailVerification = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            killFragment();
             BeenHereRatingGroup beenHereRatingGroup = new BeenHereRatingGroup();
             getSupportFragmentManager().beginTransaction().add(R.id.beenHereFragment, beenHereRatingGroup, "BeenHereFragment").commit();
             groupDetails.setVisibility(View.GONE);
@@ -155,6 +162,11 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         tvGroupName.setText(fromGroupDetailActivity.getString("name"));
         tvGroupAbout.setText(fromGroupDetailActivity.getString("about"));
         tvNumberComments.setOnClickListener(showCommentsListener);
+        if (fromGroupDetailActivity.getBoolean("member")) {
+            tvJoinGroup.setText(R.string.groupDetailMoreLeaveGroup);
+        } else {
+            tvJoinGroup.setText(R.string.groupDetailMoreJoinGroup);
+        }
         tvJoinGroup.setOnClickListener(joinGroupListener);
         tvGroupDetailVerification.setOnClickListener(groupDetailVerification);
 
@@ -205,8 +217,8 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         overridePendingTransition( 0, 0);
     }
     public void killFragment() {
-        if (getSupportFragmentManager().findFragmentByTag("JoinRodaFragment") != null) {
-            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("JoinRodaFragment"))).commit();
+        if (getSupportFragmentManager().findFragmentByTag("JoinGroupFragment") != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("JoinGroupFragment"))).commit();
         }
         if (getSupportFragmentManager().findFragmentByTag("NewCommentFragment") != null) {
             getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("NewCommentFragment"))).commit();

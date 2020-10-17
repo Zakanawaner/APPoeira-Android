@@ -1,6 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,13 @@ import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificatio
 import com.onethousandprojects.appoeira.onlineModificationView.fragments.OnlineMembersInvitedFragment;
 import com.onethousandprojects.appoeira.serverStuff.onlineModification.ClientOnlineModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.onlineModification.ServerOnlineModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ClientUserSearchRequest;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.ClientSearchRequest;
+import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +31,7 @@ import retrofit2.Response;
 
 public class OnlineModificationServer {
     private ServerOnlineModificationResponse serverOnlineModificationResponse;
-    private List<ServerUserSearchResponse> serverUserSearchResponse;
+    private ServerSearchResponse serverSearchResponse;
     public boolean createdFragment = false;
     Client Client;
     Server Server;
@@ -41,10 +44,11 @@ public class OnlineModificationServer {
 
     public void sendModificationsToServer(OnlineModificationActivity OnlineModificationActivity,
                                           List<Integer> owners, String name, String description,
-                                          String date, String picUrl, List<Integer> invited,
-                                          Integer platform, String phone, String key) {
-        ClientOnlineModificationRequest clientOnlineModificationRequest = new ClientOnlineModificationRequest(owners, name, description, date, picUrl, invited, platform, phone, key);
-        Call<ServerOnlineModificationResponse> call = Server.post_online_update(clientOnlineModificationRequest);
+                                          String date, List<Integer> invited,
+                                          Integer platform, String phone, String key,
+                                          Bitmap imageBitmap, Integer onlineId) throws IOException {
+        ClientOnlineModificationRequest clientOnlineModificationRequest = new ClientOnlineModificationRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), owners, name, description, date, invited, platform, phone, key);
+        Call<ServerOnlineModificationResponse> call = Server.post_online_update(clientOnlineModificationRequest, CommonMethods.fromBitmapToFile(OnlineModificationActivity, imageBitmap, "online", "avatar", onlineId, 0));
         call.enqueue(new Callback<ServerOnlineModificationResponse>() {
             @Override
             public void onResponse(@NonNull Call<ServerOnlineModificationResponse> call, @NonNull Response<ServerOnlineModificationResponse> response) {
@@ -74,19 +78,19 @@ public class OnlineModificationServer {
     }
     public void sendUserSearchToServer(OnlineModificationActivity OnlineModificationActivity,
                                           String search) {
-        ClientUserSearchRequest clientUserSearchRequest = new ClientUserSearchRequest(search);
-        Call<List<ServerUserSearchResponse>> call = Server.post_user_search(clientUserSearchRequest);
-        call.enqueue(new Callback<List<ServerUserSearchResponse>>() {
+        ClientSearchRequest clientSearchRequest = new ClientSearchRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), search, "10000");
+        Call<ServerSearchResponse> call = Server.post_search(clientSearchRequest);
+        call.enqueue(new Callback<ServerSearchResponse>() {
             @Override
-            public void onResponse(@NonNull Call<List<ServerUserSearchResponse>> call, @NonNull Response<List<ServerUserSearchResponse>> response) {
+            public void onResponse(@NonNull Call<ServerSearchResponse> call, @NonNull Response<ServerSearchResponse> response) {
                 if (response.isSuccessful()){
-                    serverUserSearchResponse = response.body();
+                    serverSearchResponse = response.body();
                     if (!createdFragment) {
                         createdFragment = true;
                         OnlineModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new OnlineMembersInvitedFragment(), "UserListFragment").commit();
                     } else {
                         OnlineModificationActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(OnlineModificationActivity.getSupportFragmentManager().findFragmentByTag("UserListFragment"))).commit();
-                        if (serverUserSearchResponse.get(0).getId() != null) {
+                        if (serverSearchResponse.getUserResponses().get(0).getId() != null) {
                             OnlineModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new OnlineMembersInvitedFragment(), "UserListFragment").commit();
                         } else {
                             createdFragment = false;
@@ -98,14 +102,14 @@ public class OnlineModificationServer {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<ServerUserSearchResponse>> call,
+            public void onFailure(@NonNull Call<ServerSearchResponse> call,
                                   @NonNull Throwable t) {
                 Toast.makeText(OnlineModificationActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });
     }
-    public List<ServerUserSearchResponse> getUserSearchResponse() {
-        return serverUserSearchResponse;
+    public ServerSearchResponse getSearchResponse() {
+        return serverSearchResponse;
     }
 }

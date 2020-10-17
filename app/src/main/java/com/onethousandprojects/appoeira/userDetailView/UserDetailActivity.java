@@ -78,7 +78,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
     private List<ServerUserDetailFollowResponse> followed;
     private List<UserActivityContent> activity = new ArrayList<>();
     private List<ServerUserDetailEventCommentResponse> eventComments;
-    private ServerUserDetailResponse myResponse;
+    public ServerUserDetailResponse myResponse;
     private boolean alreadyFollowing = false;
     private ImageView ivFollow;
     private TextView tvModifyProfile;
@@ -163,7 +163,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
         authretrofitinit();
         retrofitinit();
 
-        ClientUserDetailRequest clientUserDetailRequest = new ClientUserDetailRequest(fromGroupDetailMoreActivity.getInt("id"));
+        ClientUserDetailRequest clientUserDetailRequest = new ClientUserDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromGroupDetailMoreActivity.getInt("id"));
         Call<ServerUserDetailResponse> call = Server.post_user_detail(clientUserDetailRequest);
         call.enqueue(new Callback<ServerUserDetailResponse>() {
             @Override
@@ -183,7 +183,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(followers.get(i).getUserApelhido()),
                                     String.valueOf(followers.get(i).getUserPicUrl()),
                                     String.valueOf(followers.get(i).getUserDate()),
-                                    String.valueOf(R.string.wasFollowedBy)));
+                                    String.valueOf(R.string.wasFollowedBy), 1));
                             if (followers.get(i).getUserId().equals(SharedPreferencesManager.getIntegerValue(Constants.ID))) {
                                 alreadyFollowing = true;
                             }
@@ -201,7 +201,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(followed.get(i).getUserApelhido()),
                                     String.valueOf(followed.get(i).getUserPicUrl()),
                                     String.valueOf(followed.get(i).getUserDate()),
-                                    String.valueOf(R.string.followedTo)));
+                                    String.valueOf(R.string.followedTo),2));
                         }
                         userfollowedListFragment = new UserFollowedListFragment();
                         getSupportFragmentManager().beginTransaction().add(R.id.followedList, userfollowedListFragment, "UserFollowedListFragment").commit();
@@ -222,7 +222,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getGroups().get(i).getGroupName()),
                                     String.valueOf(myResponse.getGroups().get(i).getGroupPicUrl()),
                                     String.valueOf(myResponse.getGroups().get(i).getGroupDate()),
-                                    String.valueOf(R.string.joinedGroup)));
+                                    String.valueOf(R.string.joinedGroup),3));
                         }
                     }
                     if (!(myResponse.getEvents().size() == 1 && myResponse.getEvents().get(0).getEventId() == null)) {
@@ -234,7 +234,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getEvents().get(i).getEventName()),
                                     String.valueOf(myResponse.getEvents().get(i).getEventPicUrl()),
                                     String.valueOf(myResponse.getEvents().get(i).getEventDate()),
-                                    String.valueOf(R.string.joinedEvent)));
+                                    String.valueOf(R.string.joinedEvent),4));
                         }
                     }
                     if (!(myResponse.getRodas().size() == 1 && myResponse.getRodas().get(0).getRodaId() == null)) {
@@ -246,7 +246,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getRodas().get(i).getRodaName()),
                                     String.valueOf(myResponse.getRodas().get(i).getRodaPicUrl()),
                                     String.valueOf(myResponse.getRodas().get(i).getRodaDate()),
-                                    String.valueOf(R.string.joinedRoda)));
+                                    String.valueOf(R.string.joinedRoda),5));
                         }
 
                     }
@@ -259,7 +259,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                                     String.valueOf(myResponse.getOnlines().get(i).getOnlineName()),
                                     String.valueOf(myResponse.getOnlines().get(i).getOnlinePicUrl()),
                                     String.valueOf(myResponse.getOnlines().get(i).getOnlineDate()),
-                                    String.valueOf(R.string.joinedOnline)));
+                                    String.valueOf(R.string.joinedOnline),6));
                         }
                     }
                     if (!(activity.size() == 1 && activity.get(0).getId() == null)) {
@@ -275,7 +275,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
             }
 
             @Override
-            public void onFailure(Call<ServerUserDetailResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ServerUserDetailResponse> call, @NonNull Throwable t) {
                 Toast.makeText(UserDetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -311,7 +311,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                 ivFollow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ClientUserFollowUserRequest clientUserFollowUserRequest = new ClientUserFollowUserRequest(SharedPreferencesManager.getIntegerValue(Constants.ID), fromGroupDetailMoreActivity.getInt("id"));
+                        ClientUserFollowUserRequest clientUserFollowUserRequest = new ClientUserFollowUserRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), SharedPreferencesManager.getIntegerValue(Constants.ID), fromGroupDetailMoreActivity.getInt("id"));
                         Call<ServerUserFollowUserResponse> call = Server.post_user_follow_user(clientUserFollowUserRequest);
                         call.enqueue(new Callback<ServerUserFollowUserResponse>() {
                             @Override
@@ -341,7 +341,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
                 ivFollow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ClientUserUnFollowUserRequest clientUserUnFollowUserRequest = new ClientUserUnFollowUserRequest(SharedPreferencesManager.getIntegerValue(Constants.ID), fromGroupDetailMoreActivity.getInt("id"));
+                        ClientUserUnFollowUserRequest clientUserUnFollowUserRequest = new ClientUserUnFollowUserRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), SharedPreferencesManager.getIntegerValue(Constants.ID), fromGroupDetailMoreActivity.getInt("id"));
                         Call<ServerUserUnFollowUserResponse> call = Server.post_user_unfollow_user(clientUserUnFollowUserRequest);
                         call.enqueue(new Callback<ServerUserUnFollowUserResponse>() {
                             @Override
@@ -478,8 +478,25 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
     }
 
     @Override
-    public void OnActivityDetailClick(int position) {
-
+    public void OnActivityDetailClick(int id, int type) {
+        switch (type) {
+            case 1:
+            case 2:
+                OnUserDetailClick(id);
+                break;
+            case 3:
+                OnGroupDetailClick(id);
+                break;
+            case 4:
+                OnEventDetailClick(id);
+                break;
+            case 5:
+                OnRodaDetailClick(id);
+                break;
+            case 6:
+                OnOnlineDetailClick(id);
+                break;
+        }
     }
 
     public List<UserActivityContent> getActivity() {

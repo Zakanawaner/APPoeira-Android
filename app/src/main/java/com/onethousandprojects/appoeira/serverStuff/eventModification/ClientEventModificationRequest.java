@@ -3,11 +3,11 @@ package com.onethousandprojects.appoeira.serverStuff.eventModification;
 import java.util.List;
 
 public class ClientEventModificationRequest {
+    private String token;
     private List<Integer> owners;
     private String name;
     private String description;
     private String date;
-    private String picUrl;
     private List<Integer> invited;
     private Double latitude;
     private Double longitude;
@@ -16,16 +16,17 @@ public class ClientEventModificationRequest {
     private String key;
     private Integer platform;
 
-    public ClientEventModificationRequest(List<Integer> owners, String name, String description,
-                                          String date, String picUrl, List<Integer> invited,
-                                          Double latitude, Double longitude, String phone,
-                                          List<Integer> convided, String key, Integer platform) {
+    public ClientEventModificationRequest(String token, List<Integer> owners, String name,
+                                          String description, String date,
+                                          List<Integer> invited, Double latitude, Double longitude,
+                                          String phone, List<Integer> convided, String key,
+                                          Integer platform) {
         super();
+        this.token = token;
         this.owners = owners;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.picUrl = picUrl;
         this.invited = invited;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -34,6 +35,11 @@ public class ClientEventModificationRequest {
         this.key = key;
         this.platform = platform;
     }
+
+    public String getToken() { return token; }
+
+    public void setToken(String token) { this.token = token; }
+
     public List<Integer> getOwners() {
         return owners;
     }
@@ -64,14 +70,6 @@ public class ClientEventModificationRequest {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
     }
 
     public List<Integer> getInvited() {

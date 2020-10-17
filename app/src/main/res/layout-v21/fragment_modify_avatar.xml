@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
@@ -25,16 +26,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/modifyAvatarClose" />
 
-    <EditText
-        android:id="@+id/modifyAvatarUrl"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="9"
-        android:hint="@string/ModifyAvatarUrl"
-        android:inputType="textUri"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/modifyAvatarSend" />
+        app:layout_constraintTop_toBottomOf="@+id/modifyAvatarSend">
+
+        <Button
+            android:id="@+id/takePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/TakePicture" />
+
+        <Button
+            android:id="@+id/selectPicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/SelectPicture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modifyAvatarSend" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

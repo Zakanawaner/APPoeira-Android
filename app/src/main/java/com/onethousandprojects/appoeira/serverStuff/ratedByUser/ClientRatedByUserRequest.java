@@ -1,16 +1,22 @@
 package com.onethousandprojects.appoeira.serverStuff.ratedByUser;
 
 public class ClientRatedByUserRequest {
+    private String token;
     private Integer UserId;
     private Integer GroupId;
     private Integer Rating;
 
-    public ClientRatedByUserRequest(Integer UserId, Integer GroupId, Integer Rating) {
+    public ClientRatedByUserRequest(String token, Integer UserId, Integer GroupId, Integer Rating) {
         super();
+        this.token = token;
         this.UserId = UserId;
         this.GroupId = GroupId;
         this.Rating = Rating;
     }
+
+    public String getToken() { return token; }
+
+    public void setToken(String token) { this.token = token; }
 
     public Integer getUserId() {
         return UserId;

@@ -1,6 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,14 +12,17 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
 import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
+import com.onethousandprojects.appoeira.eventModificationView.fragments.EventMembersConvidedFragment;
 import com.onethousandprojects.appoeira.eventModificationView.fragments.EventMembersInvitedFragment;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ClientEventModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ServerEventModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ClientUserSearchRequest;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.ClientSearchRequest;
+import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,11 +32,11 @@ import retrofit2.Response;
 
 public class EventModificationServer {
     private ServerEventModificationResponse serverEventModificationResponse;
-    private List<ServerUserSearchResponse> serverUserSearchResponse;
+    private ServerSearchResponse serverSearchResponse;
     public boolean createdFragment = false;
     public boolean createdConvidedFragment = false;
     Client Client;
-    Server Server;
+    public Server Server;
 
     public EventModificationServer() {
         super();
@@ -42,11 +46,12 @@ public class EventModificationServer {
 
     public void sendModificationsToServer(EventModificationActivity EventModificationActivity,
                                           List<Integer> owners, String name, String description,
-                                          String date, String picUrl, List<Integer> invited,
+                                          String date, List<Integer> invited,
                                           Double latitude, Double longitude, String phone,
-                                          List<Integer> convided, String key, Integer platform) {
-        ClientEventModificationRequest clientEventModificationRequest = new ClientEventModificationRequest(owners, name, description, date, picUrl, invited, latitude, longitude, phone, convided, key, platform);
-        Call<ServerEventModificationResponse> call = Server.post_event_update(clientEventModificationRequest);
+                                          List<Integer> convided, String key, Integer platform,
+                                          Bitmap imageBitmap, Integer eventId) throws IOException {
+        ClientEventModificationRequest clientEventModificationRequest = new ClientEventModificationRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), owners, name, description, date, invited, latitude, longitude, phone, convided, key, platform);
+        Call<ServerEventModificationResponse> call = Server.post_event_update(clientEventModificationRequest, CommonMethods.fromBitmapToFile(EventModificationActivity, imageBitmap, "event", "avatar", eventId, 0));
         call.enqueue(new Callback<ServerEventModificationResponse>() {
             @Override
             public void onResponse(@NonNull Call<ServerEventModificationResponse> call, @NonNull Response<ServerEventModificationResponse> response) {
@@ -59,7 +64,7 @@ public class EventModificationServer {
                     EventModificationActivity.startActivity(toEventDetailActivity);
                     EventModificationActivity.finish();
                 } else {
-                    Toast.makeText(EventModificationActivity,"Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventModificationActivity,R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -76,20 +81,20 @@ public class EventModificationServer {
     }
     public void sendUserSearchToServer(EventModificationActivity EventModificationActivity,
                                        String search, boolean invConv) {
-        ClientUserSearchRequest clientUserSearchRequest = new ClientUserSearchRequest(search);
-        Call<List<ServerUserSearchResponse>> call = Server.post_user_search(clientUserSearchRequest);
-        call.enqueue(new Callback<List<ServerUserSearchResponse>>() {
+        ClientSearchRequest clientSearchRequest = new ClientSearchRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), search, "10000");
+        Call<ServerSearchResponse> call = Server.post_search(clientSearchRequest);
+        call.enqueue(new Callback<ServerSearchResponse>() {
             @Override
-            public void onResponse(@NonNull Call<List<ServerUserSearchResponse>> call, @NonNull Response<List<ServerUserSearchResponse>> response) {
+            public void onResponse(@NonNull Call<ServerSearchResponse> call, @NonNull Response<ServerSearchResponse> response) {
                 if (response.isSuccessful()){
-                    serverUserSearchResponse = response.body();
+                    serverSearchResponse = response.body();
                     if (!invConv) {
                         if (!createdFragment) {
                             createdFragment = true;
                             EventModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new EventMembersInvitedFragment(), "UserListFragment").commit();
                         } else {
                             EventModificationActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(EventModificationActivity.getSupportFragmentManager().findFragmentByTag("UserListFragment"))).commit();
-                            if (serverUserSearchResponse.get(0).getId() != null) {
+                            if (serverSearchResponse.getUserResponses().get(0).getId() != null) {
                                 EventModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new EventMembersInvitedFragment(), "UserListFragment").commit();
                             } else {
                                 createdFragment = false;
@@ -98,30 +103,30 @@ public class EventModificationServer {
                     } else {
                         if (!createdConvidedFragment) {
                             createdConvidedFragment = true;
-                            EventModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListConvidedLayout, new EventMembersInvitedFragment(), "ConvidedListFragment").commit();
+                            EventModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListConvidedLayout, new EventMembersConvidedFragment(), "ConvidedListFragment").commit();
                         } else {
                             EventModificationActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(EventModificationActivity.getSupportFragmentManager().findFragmentByTag("ConvidedListFragment"))).commit();
-                            if (serverUserSearchResponse.get(0).getId() != null) {
-                                EventModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListConvidedLayout, new EventMembersInvitedFragment(), "ConvidedListFragment").commit();
+                            if (serverSearchResponse.getUserResponses().get(0).getId() != null) {
+                                EventModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListConvidedLayout, new EventMembersConvidedFragment(), "ConvidedListFragment").commit();
                             } else {
                                 createdConvidedFragment = false;
                             }
                         }
                     }
                 } else {
-                    Toast.makeText(EventModificationActivity,"Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventModificationActivity,R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<ServerUserSearchResponse>> call,
+            public void onFailure(@NonNull Call<ServerSearchResponse> call,
                                   @NonNull Throwable t) {
                 Toast.makeText(EventModificationActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });
     }
-    public List<ServerUserSearchResponse> getUserSearchResponse() {
-        return serverUserSearchResponse;
+    public ServerSearchResponse getSearchResponse() {
+        return serverSearchResponse;
     }
 }

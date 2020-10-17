@@ -13,11 +13,12 @@ public class EventContent {
     private String ownerRank;
     private Integer platform;
     private String key;
+    private Double rating;
 
     public EventContent(Integer id, String name, String date, String picUrl,
                         String ownerApelhido, String ownerRank, boolean verified,
                         Double latitude, Double longitude, Double distance,
-                        Integer platform, String key) {
+                        Integer platform, String key, Double rating) {
         this.id = id;
         this.name = name;
         this.date  = date;
@@ -30,6 +31,7 @@ public class EventContent {
         this.distance = distance;
         this.platform = platform;
         this.key = key;
+        this.rating = rating;
     }
 
     public Integer getId() {
@@ -126,5 +128,13 @@ public class EventContent {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }

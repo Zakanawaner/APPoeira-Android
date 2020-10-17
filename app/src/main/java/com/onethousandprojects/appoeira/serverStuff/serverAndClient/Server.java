@@ -2,10 +2,22 @@ package com.onethousandprojects.appoeira.serverStuff.serverAndClient;
 
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ClientEventDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ServerEventDetailResponse;
+import com.onethousandprojects.appoeira.serverStuff.eventDetailMore.ClientEventDetailMoreRequest;
+import com.onethousandprojects.appoeira.serverStuff.eventDetailMore.ServerEventDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.eventList.ClientLocationEventRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ClientEventModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ServerEventModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.leaveObject.ClientLeaveRequest;
+import com.onethousandprojects.appoeira.serverStuff.leaveObject.ServerLeaveResponse;
+import com.onethousandprojects.appoeira.serverStuff.news.ClientAreThereNewsRequest;
+import com.onethousandprojects.appoeira.serverStuff.news.ServerAreThereNewsResponse;
+import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ClientOnlineDetailRequest;
+import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ServerOnlineDetailResponse;
+import com.onethousandprojects.appoeira.serverStuff.onlineDetailMore.ClientOnlineDetailMoreRequest;
+import com.onethousandprojects.appoeira.serverStuff.onlineDetailMore.ServerOnlineDetailMoreResponse;
+import com.onethousandprojects.appoeira.serverStuff.onlineList.ClientLocationOnlineRequest;
+import com.onethousandprojects.appoeira.serverStuff.onlineList.ServerLocationOnlineResponse;
 import com.onethousandprojects.appoeira.serverStuff.ratedByUser.ClientRatedByUserRequest;
 import com.onethousandprojects.appoeira.serverStuff.ratedByUser.ServeRatedByUserResponse;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
@@ -28,6 +40,8 @@ import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ClientRodaDet
 import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ServerRodaModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ClientUploadPictureRequest;
+import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ServerUploadPictureResponse;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ClientUserModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ServerUserModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
@@ -40,16 +54,19 @@ import com.onethousandprojects.appoeira.serverStuff.userDetail.ClientUserDetailR
 import com.onethousandprojects.appoeira.serverStuff.userDetail.ServerUserDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.userFollowUser.ClientUserFollowUserRequest;
 import com.onethousandprojects.appoeira.serverStuff.userFollowUser.ServerUserFollowUserResponse;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ClientUserSearchRequest;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.ClientSearchRequest;
+import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
 import com.onethousandprojects.appoeira.serverStuff.userUnfollowUser.ClientUserUnFollowUserRequest;
 import com.onethousandprojects.appoeira.serverStuff.userUnfollowUser.ServerUserUnFollowUserResponse;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface Server {
 
@@ -71,20 +88,26 @@ public interface Server {
     @POST("/group-join")
     Call<ServerJoinResponse> post_join_group(@Body ClientJoinRequest clientJoinRequest);
 
+    @POST("/group-leave")
+    Call<ServerLeaveResponse> post_leave_group(@Body ClientLeaveRequest clientLeaveRequest);
+
     @POST("/group-comments")
     Call<List<ServerCommentsResponse>> post_group_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
 
     @POST("/location-roda")
     Call<List<ServerLocationRodaResponse>> post_location_rodas(@Body ClientLocationRodasRequest clientLocationRodasRequest);
 
+    @Multipart
     @POST("/roda-create")
-    Call<ServerRodaModificationResponse> post_roda_update(@Body ClientRodaModificationRequest clientRodaModificationRequest);
+    Call<ServerRodaModificationResponse> post_roda_update(@Part("body") ClientRodaModificationRequest clientRodaModificationRequest, @Part MultipartBody.Part image);
 
+    @Multipart
     @POST("/online-create")
-    Call<ServerOnlineModificationResponse> post_online_update(@Body ClientOnlineModificationRequest clientOnlineModificationRequest);
+    Call<ServerOnlineModificationResponse> post_online_update(@Part("body") ClientOnlineModificationRequest clientOnlineModificationRequest, @Part MultipartBody.Part image);
 
+    @Multipart
     @POST("/event-create")
-    Call<ServerEventModificationResponse> post_event_update(@Body ClientEventModificationRequest clientEventModificationRequest);
+    Call<ServerEventModificationResponse> post_event_update(@Part("body") ClientEventModificationRequest clientEventModificationRequest, @Part MultipartBody.Part image);
 
     @POST("/roda-detail")
     Call<ServerRodaDetailResponse> post_roda_detail(@Body ClientRodaDetailRequest clientRodaDetailRequest);
@@ -113,8 +136,8 @@ public interface Server {
     @POST("/profile-update")
     Call<ServerUserModificationResponse> post_user_update_profile(@Body ClientUserModificationRequest clientUserModificationRequest);
 
-    @POST("/user-search")
-    Call<List<ServerUserSearchResponse>> post_user_search(@Body ClientUserSearchRequest clientUserSearchRequest);
+    @POST("/search")
+    Call<ServerSearchResponse> post_search(@Body ClientSearchRequest clientSearchRequest);
 
     @POST("/user-rated-roda")
     Call<ServeRatedByUserResponse> post_user_rated_roda(@Body ClientRatedByUserRequest clientRatedByUserRequest);
@@ -128,6 +151,58 @@ public interface Server {
     @POST("/roda-join")
     Call<ServerJoinResponse> post_join_roda(@Body ClientJoinRequest clientJoinRequest);
 
+    @POST("/roda-leave")
+    Call<ServerLeaveResponse> post_leave_roda(@Body ClientLeaveRequest clientLeaveRequest);
+
     @POST("/roda-comments")
     Call<List<ServerCommentsResponse>> post_roda_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
+
+    @POST("/user-rated-event")
+    Call<ServeRatedByUserResponse> post_user_rated_event(@Body ClientRatedByUserRequest clientRatedByUserRequest);
+
+    @POST("/new-comment-event")
+    Call<ServerNewCommentResponse> post_new_comment_event(@Body ClientNewCommentRequest clientNewCommentRequest);
+
+    @POST("/event-detail-more")
+    Call<List<ServerEventDetailMoreResponse>> post_event_detail_more(@Body ClientEventDetailMoreRequest clientEventDetailMoreRequest);
+
+    @POST("/event-join")
+    Call<ServerJoinResponse> post_join_event(@Body ClientJoinRequest clientJoinRequest);
+
+    @POST("/event-leave")
+    Call<ServerLeaveResponse> post_leave_event(@Body ClientLeaveRequest clientLeaveRequest);
+
+    @POST("/event-comments")
+    Call<List<ServerCommentsResponse>> post_event_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
+
+    @POST("/are-there-news")
+    Call<ServerAreThereNewsResponse> post_are_there_news(@Body ClientAreThereNewsRequest clientAreThereNewsRequest);
+
+    @POST("/location-online")
+    Call<List<ServerLocationOnlineResponse>> post_location_online(@Body ClientLocationOnlineRequest clientLocationOnlineRequest);
+
+    @POST("/online-detail")
+    Call<ServerOnlineDetailResponse> post_online_detail(@Body ClientOnlineDetailRequest clientOnlineDetailRequest);
+
+    @POST("/user-rated-online")
+    Call<ServeRatedByUserResponse> post_user_rated_online(@Body ClientRatedByUserRequest clientRatedByUserRequest);
+
+    @POST("/new-comment-online")
+    Call<ServerNewCommentResponse> post_new_comment_online(@Body ClientNewCommentRequest clientNewCommentRequest);
+
+    @POST("/online-detail-more")
+    Call<List<ServerOnlineDetailMoreResponse>> post_online_detail_more(@Body ClientOnlineDetailMoreRequest clientOnlineDetailMoreRequest);
+
+    @POST("/online-join")
+    Call<ServerJoinResponse> post_join_online(@Body ClientJoinRequest clientJoinRequest);
+
+    @POST("/online-leave")
+    Call<ServerLeaveResponse> post_leave_online(@Body ClientLeaveRequest clientLeaveRequest);
+
+    @POST("/online-comments")
+    Call<List<ServerCommentsResponse>> post_online_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
+
+    @Multipart
+    @POST("/upload-picture")
+    Call<ServerUploadPictureResponse> post_picture(@Part("token") ClientUploadPictureRequest clientUploadPictureRequest, @Part MultipartBody.Part image);
 }

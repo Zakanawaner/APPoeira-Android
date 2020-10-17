@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.eventModificationView.adapters.MyEventModificationInviteMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.searchView.content.UserSearchContent;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
+import com.onethousandprojects.appoeira.searchView.content.SearchContent;
+import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
 public class EventMembersInvitedFragment extends Fragment {
     RecyclerView recyclerView;
     MyEventModificationInviteMembersRecyclerViewAdapter adapterGroupDetail;
-    List<UserSearchContent> MemberList;
+    List<SearchContent> MemberList;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -54,7 +54,7 @@ public class EventMembersInvitedFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         EventModificationActivity activity = (EventModificationActivity) getActivity();
-        List<ServerUserSearchResponse> myResponseFromActivity = activity.eventModificationServer.getUserSearchResponse();
+        List<ServerSearchUserResponse> myResponseFromActivity = activity.eventModificationServer.getSearchResponse().getUserResponses();
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -67,11 +67,13 @@ public class EventMembersInvitedFragment extends Fragment {
             // Lista de miembros del grupo
             MemberList = new ArrayList<>();
             for (int i = 0; i < myResponseFromActivity.size(); i++) {
-                MemberList.add(new UserSearchContent(myResponseFromActivity.get(i).getId(),
+                MemberList.add(new SearchContent(1,
+                        myResponseFromActivity.get(i).getId(),
                         String.valueOf(myResponseFromActivity.get(i).getApelhido()),
                         String.valueOf(myResponseFromActivity.get(i).getPicUrl()),
                         myResponseFromActivity.get(i).isPremium(),
-                        String.valueOf(myResponseFromActivity.get(i).getRank())));
+                        String.valueOf(myResponseFromActivity.get(i).getRank()),
+                        null, null, null));
             }
             adapterGroupDetail = new MyEventModificationInviteMembersRecyclerViewAdapter(getActivity(), MemberList, (EventModificationActivity) getActivity());
             recyclerView.setAdapter(adapterGroupDetail);

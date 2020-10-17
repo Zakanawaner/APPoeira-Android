@@ -38,7 +38,9 @@ public class MyGroupCommentsRecyclerViewAdapter extends RecyclerView.Adapter<MyG
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivAvatar);
+        if (!holder.mItem.getPicUrl().equals("")) {
+            Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivAvatar);
+        }
         holder.tvApelhido.setText(holder.mItem.getUserApelhido());
         holder.tvDate.setText(holder.mItem.getDate());
         holder.tvComment.setText(holder.mItem.getComment());

@@ -24,7 +24,6 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.onethousandprojects.appoeira.userModificationView.fragments.ModifyAvatarFragment;
 import com.onethousandprojects.appoeira.userModificationView.fragments.ModifyPasswordFragment;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
@@ -40,13 +39,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProfileModificationActivity extends AppCompatActivity {
-    Client Client;
-    Server Server;
+    public Client Client;
+    public Server Server;
     private ModifyAvatarFragment modifyAvatarFragment;
     private ModifyPasswordFragment modifyPasswordFragment;
     private ServerUserModificationResponse myResponse;
     private String rank = "";
-    public String newUrl = "";
     public String pass = "";
     public String newPass = "";
     public ImageView ivUserAvatar;
@@ -157,7 +155,7 @@ public class ProfileModificationActivity extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ClientUserModificationRequest clientUserModificationRequest = new ClientUserModificationRequest(SharedPreferencesManager.getIntegerValue(Constants.ID), String.valueOf(etName.getText()), String.valueOf(etLastName.getText()), String.valueOf(etApelhido.getText()), String.valueOf(etEmail.getText()), pass, newPass, roleId, newUrl);
+                ClientUserModificationRequest clientUserModificationRequest = new ClientUserModificationRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), SharedPreferencesManager.getIntegerValue(Constants.ID), String.valueOf(etName.getText()), String.valueOf(etLastName.getText()), String.valueOf(etApelhido.getText()), String.valueOf(etEmail.getText()), pass, newPass, roleId);
                 Call<ServerUserModificationResponse> call = Server.post_user_update_profile(clientUserModificationRequest);
                 call.enqueue(new Callback<ServerUserModificationResponse>() {
                     @Override
@@ -171,7 +169,6 @@ public class ProfileModificationActivity extends AppCompatActivity {
                             Toast.makeText(ProfileModificationActivity.this, R.string.failed, Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     @Override
                     public void onFailure(@NonNull Call<ServerUserModificationResponse> call, @NonNull Throwable t) {
                         Toast.makeText(ProfileModificationActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -188,10 +185,6 @@ public class ProfileModificationActivity extends AppCompatActivity {
         }
         if (errorBin.substring(1, 2).equals("1")) {
             Toast.makeText(ProfileModificationActivity.this, R.string.savedPass, Toast.LENGTH_SHORT).show();
-        }
-        if (errorBin.substring(2, 3).equals("1")) {
-            Toast.makeText(ProfileModificationActivity.this, R.string.imageUpdated, Toast.LENGTH_SHORT).show();
-            SharedPreferencesManager.setStringValue(Constants.PIC_URL, myResponse.getPicUrl());
         }
         if (errorBin.substring(3, 4).equals("1")) {
             Toast.makeText(ProfileModificationActivity.this, R.string.rankUpdated, Toast.LENGTH_SHORT).show();
@@ -225,19 +218,22 @@ public class ProfileModificationActivity extends AppCompatActivity {
         SharedPreferencesManager.setStringValue(Constants.FIRST_NAME, myResponse.getName());
         SharedPreferencesManager.setStringValue(Constants.LAST_NAME, myResponse.getLastName());
         SharedPreferencesManager.setStringValue(Constants.APELHIDO, myResponse.getApelhido());
-        SharedPreferencesManager.setStringValue(Constants.PIC_URL, myResponse.getPicUrl());
         SharedPreferencesManager.setStringValue(Constants.EMAIL, myResponse.getEmail());
     }
 
     public void killAvatarFragment() {
-        getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyAvatarFragment"))).commit();
-        modifyAvatarFragment = null;
-        btnSaveChanges.setVisibility(View.VISIBLE);
+        if (modifyAvatarFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyAvatarFragment"))).commit();
+            modifyAvatarFragment = null;
+            btnSaveChanges.setVisibility(View.VISIBLE);
+        }
     }
     public void killPasswordFragment() {
-        getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyPasswordFragment"))).commit();
-        modifyPasswordFragment = null;
-        btnSaveChanges.setVisibility(View.VISIBLE);
+        if (modifyPasswordFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyPasswordFragment"))).commit();
+            modifyPasswordFragment = null;
+            btnSaveChanges.setVisibility(View.VISIBLE);
+        }
     }
     public void refreshActivity() {
         finish();
@@ -249,8 +245,5 @@ public class ProfileModificationActivity extends AppCompatActivity {
     private void retrofitinit() {
         Client = Client.getInstance();
         Server = Client.getServer();
-    }
-    public void chargeImage(){
-        Picasso.with(this).load(newUrl).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatarImage(ivUserAvatar));
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,14 +32,31 @@ public class JoinRodaFragment extends DialogFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         assert getArguments() != null;
         String rodaImage = getArguments().getString("rodaImage");
+        boolean member = getArguments().getBoolean("member");
         RodaDetailMoreActivity rodaDetailMoreActivity = ((RodaDetailMoreActivity) requireActivity());
 
         View view = inflater.inflate(R.layout.fragment_join_group, container, false);
+        TextView tvJoinInfo = view.findViewById(R.id.tvJoinGroupInfo);
         ImageView ivClose = view.findViewById(R.id.joinGroupClose);
         ImageView ivAvatar = view.findViewById(R.id.joinGroupUserAvatar);
         ImageView ivRodaAvatar = view.findViewById(R.id.joinGroupGroupAvatar);
         Button btnPostComment = view.findViewById(R.id.joinGroupSend);
+        ImageView ivLink = view.findViewById(R.id.imageView2);
         Spinner spinner = (Spinner) view.findViewById(R.id.joinGroupSpinner);
+
+        if (member) {
+            ivLink.setImageResource(R.drawable.ic_close);
+            btnPostComment.setText(R.string.leaveGroup);
+            if (getArguments().getBoolean("isOwner")) {
+                tvJoinInfo.setText(R.string.leaveRodaOwnerExplanation);
+            } else {
+                tvJoinInfo.setText(R.string.leaveRodaExplanation);
+            }
+        } else {
+            ivLink.setImageResource(R.drawable.ic_arrow_right);
+            btnPostComment.setText(R.string.joinGroup);
+            tvJoinInfo.setText(R.string.joinRodaExplanation);
+        }
 
         Picasso.with(getContext()).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).fit().into(ivAvatar);
         Picasso.with(getContext()).load(rodaImage).fit().into(ivRodaAvatar);
@@ -52,14 +70,19 @@ public class JoinRodaFragment extends DialogFragment {
         btnPostComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (roleId > 0) {
-                    rodaDetailMoreActivity.rodaDetailMoreServer.joinRoda(rodaDetailMoreActivity,
-                            rodaDetailMoreActivity.fromRodaDetailActivity.getInt("id"),
-                            roleId);
-                    rodaDetailMoreActivity.refreshActivity();
-                    rodaDetailMoreActivity.killFragment();
+                if (!member) {
+                    if (roleId > 0) {
+                        rodaDetailMoreActivity.rodaDetailMoreServer.joinRoda(rodaDetailMoreActivity,
+                                rodaDetailMoreActivity.fromRodaDetailActivity.getInt("id"),
+                                roleId);
+                        rodaDetailMoreActivity.refreshActivity();
+                        rodaDetailMoreActivity.killFragment();
+                    } else {
+                        Toast.makeText(getContext(), R.string.selectRole, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getContext(), R.string.selectRole, Toast.LENGTH_SHORT).show();
+                    rodaDetailMoreActivity.rodaDetailMoreServer.leaveRoda(rodaDetailMoreActivity,
+                            rodaDetailMoreActivity.fromRodaDetailActivity.getInt("id"));
                 }
             }
         });

@@ -38,7 +38,9 @@ public class MyGroupListRecyclerViewAdapter extends RecyclerView.Adapter<MyGroup
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivGroupAvatar);
+        if (!holder.mItem.getPicUrl().equals("")) {
+            Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivGroupAvatar);
+        }
         if (holder.mItem.getName().length() > 25) {
             String name = holder.mItem.getName().substring(0,24) + "...";
             holder.tvGroupName.setText(name);
@@ -47,6 +49,7 @@ public class MyGroupListRecyclerViewAdapter extends RecyclerView.Adapter<MyGroup
         }
         holder.tvGroupPhone.setText(holder.mItem.getPhone());
         if (holder.mItem.getVerified()) {
+            holder.ivGroupVerified.setVisibility(View.VISIBLE);
             holder.ivGroupVerified.setImageResource(R.drawable.verified);
             List<ImageView> stars = CommonMethods.SetStars(holder.mItem.getRating(), holder.ivGroupStar1, holder.ivGroupStar2, holder.ivGroupStar3, holder.ivGroupStar4, holder.ivGroupStar5);
             holder.ivGroupStar1 = stars.get(0);
@@ -54,6 +57,13 @@ public class MyGroupListRecyclerViewAdapter extends RecyclerView.Adapter<MyGroup
             holder.ivGroupStar3 = stars.get(2);
             holder.ivGroupStar4 = stars.get(3);
             holder.ivGroupStar5 = stars.get(4);
+        } else {
+            holder.ivGroupStar1.setVisibility(View.GONE);
+            holder.ivGroupStar2.setVisibility(View.GONE);
+            holder.ivGroupStar3.setVisibility(View.GONE);
+            holder.ivGroupStar4.setVisibility(View.GONE);
+            holder.ivGroupStar5.setVisibility(View.GONE);
+            holder.ivGroupVerified.setVisibility(View.GONE);
         }
         holder.tvGroupDistance.setText(String.valueOf(holder.mItem.getDistance()));
     }

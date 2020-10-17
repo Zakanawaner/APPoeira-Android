@@ -11,11 +11,13 @@ public class ServerLocationRodaResponse {
     private Double distance;
     private String ownerApelhido;
     private String ownerRank;
+    private Double rating;
 
 
     public ServerLocationRodaResponse(Integer id, String name, String date, String picUrl,
                                       String ownerApelhido, String ownerRank, boolean verified,
-                                      Double latitude, Double longitude, Double distance) {
+                                      Double latitude, Double longitude, Double distance,
+                                      Double rating) {
         super();
         this.id = id;
         this.name = name;
@@ -27,6 +29,7 @@ public class ServerLocationRodaResponse {
         this.distance = distance;
         this.ownerApelhido = ownerApelhido;
         this.ownerRank = ownerRank;
+        this.rating = rating;
     }
 
     public Integer getId() {
@@ -107,6 +110,14 @@ public class ServerLocationRodaResponse {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
 }

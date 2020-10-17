@@ -19,12 +19,15 @@ import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsRespo
 import com.onethousandprojects.appoeira.serverStuff.comments.ServerNewCommentResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupDetailMore.ClientGroupDetailMoreRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupDetailMore.ServerGroupDetailMoreResponse;
+import com.onethousandprojects.appoeira.serverStuff.leaveObject.ClientLeaveRequest;
+import com.onethousandprojects.appoeira.serverStuff.leaveObject.ServerLeaveResponse;
 import com.onethousandprojects.appoeira.serverStuff.ratedByUser.ClientRatedByUserRequest;
 import com.onethousandprojects.appoeira.serverStuff.ratedByUser.ServeRatedByUserResponse;
 import com.onethousandprojects.appoeira.serverStuff.joinObject.ClientJoinRequest;
 import com.onethousandprojects.appoeira.serverStuff.joinObject.ServerJoinResponse;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +46,7 @@ public class GroupDetailMoreServer {
         Server = Client.getServer();
     }
     public void getGroupDetailMore(GroupDetailMoreActivity GroupDetailMoreActivity, Integer groupId) {
-        ClientGroupDetailMoreRequest clientGroupDetailMoreRequest = new ClientGroupDetailMoreRequest(groupId);
+        ClientGroupDetailMoreRequest clientGroupDetailMoreRequest = new ClientGroupDetailMoreRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), groupId);
         Call<List<ServerGroupDetailMoreResponse>> call = Server.post_group_detail_more(clientGroupDetailMoreRequest);
         call.enqueue(new Callback<List<ServerGroupDetailMoreResponse>>() {
             @Override
@@ -70,7 +73,7 @@ public class GroupDetailMoreServer {
         return serverGroupDetailMoreResponse;
     }
     public void serverGroupCommentsResponse(GroupDetailMoreActivity GroupDetailMoreActivity, Integer groupId) {
-        ClientCommentsRequest clientGroupCommentsRequest = new ClientCommentsRequest(groupId);
+        ClientCommentsRequest clientGroupCommentsRequest = new ClientCommentsRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), groupId);
         Call<List<ServerCommentsResponse>> call1 = Server.post_group_comments(clientGroupCommentsRequest);
         call1.enqueue(new Callback<List<ServerCommentsResponse>>() {
             @Override
@@ -95,7 +98,7 @@ public class GroupDetailMoreServer {
         return serverCommentsResponse;
     }
     public void postComment(GroupDetailMoreActivity GroupDetailMoreActivity, Integer group_id, String comment) {
-        ClientNewCommentRequest clientNewCommentRequest = new ClientNewCommentRequest(group_id, SharedPreferencesManager.getIntegerValue(Constants.ID), comment);
+        ClientNewCommentRequest clientNewCommentRequest = new ClientNewCommentRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), group_id, SharedPreferencesManager.getIntegerValue(Constants.ID), comment);
         Call<ServerNewCommentResponse> call = Server.post_new_comment_group(clientNewCommentRequest);
         call.enqueue(new Callback<ServerNewCommentResponse>() {
             @Override
@@ -104,6 +107,8 @@ public class GroupDetailMoreServer {
                     assert response.body() != null;
                     if (response.body().isOk()) {
                         Toast.makeText(GroupDetailMoreActivity, "TU comentario se envió correctamente", Toast.LENGTH_SHORT).show();
+                        GroupDetailMoreActivity.killFragment();
+                        GroupDetailMoreActivity.refreshActivity();
                     } else {
                         Toast.makeText(GroupDetailMoreActivity, "TU comentario no pudo guardarse", Toast.LENGTH_SHORT).show();
                     }
@@ -118,7 +123,7 @@ public class GroupDetailMoreServer {
         });
     }
     public void joinGroup(GroupDetailMoreActivity GroupDetailMoreActivity, Integer group_id, Integer roleId) {
-        ClientJoinRequest clientJoinRequest = new ClientJoinRequest(group_id, SharedPreferencesManager.getIntegerValue(Constants.ID), roleId);
+        ClientJoinRequest clientJoinRequest = new ClientJoinRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), group_id, SharedPreferencesManager.getIntegerValue(Constants.ID), roleId);
         Call<ServerJoinResponse> call = Server.post_join_group(clientJoinRequest);
         call.enqueue(new Callback<ServerJoinResponse>() {
             @Override
@@ -127,11 +132,15 @@ public class GroupDetailMoreServer {
                     assert response.body() != null;
                     if (response.body().isOk()) {
                         Toast.makeText(GroupDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        GroupDetailMoreActivity.getIntent().removeExtra("member");
+                        GroupDetailMoreActivity.getIntent().putExtra("member", true);
+                        GroupDetailMoreActivity.killFragment();
+                        GroupDetailMoreActivity.refreshActivity();
                     } else {
                         Toast.makeText(GroupDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(GroupDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -141,8 +150,36 @@ public class GroupDetailMoreServer {
             }
         });
     }
+    public void leaveGroup(GroupDetailMoreActivity GroupDetailMoreActivity, Integer group_id) {
+        ClientLeaveRequest clientLeaveRequest = new ClientLeaveRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), group_id, SharedPreferencesManager.getIntegerValue(Constants.ID));
+        Call<ServerLeaveResponse> call = Server.post_leave_group(clientLeaveRequest);
+        call.enqueue(new Callback<ServerLeaveResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerLeaveResponse> callComments, @NonNull Response<ServerLeaveResponse> response) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    if (response.body().isOk()) {
+                        Toast.makeText(GroupDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        GroupDetailMoreActivity.getIntent().removeExtra("member");
+                        GroupDetailMoreActivity.getIntent().putExtra("member", false);
+                        GroupDetailMoreActivity.killFragment();
+                        GroupDetailMoreActivity.refreshActivity();
+                    } else {
+                        Toast.makeText(GroupDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerLeaveResponse> callComments, Throwable t) {
+                Toast.makeText(GroupDetailMoreActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     public void sendRating(GroupDetailMoreActivity GroupDetailMoreActivity, Integer group_id, Integer stars) {
-        ClientRatedByUserRequest clientRatedByUserRequest = new ClientRatedByUserRequest(SharedPreferencesManager.getIntegerValue(Constants.ID), group_id, stars);
+        ClientRatedByUserRequest clientRatedByUserRequest = new ClientRatedByUserRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), SharedPreferencesManager.getIntegerValue(Constants.ID), group_id, stars);
         Call<ServeRatedByUserResponse> call = Server.post_user_rated_group(clientRatedByUserRequest);
         call.enqueue(new Callback<ServeRatedByUserResponse>() {
             @Override
@@ -152,13 +189,18 @@ public class GroupDetailMoreServer {
                     assert serveRatedByUserResponse != null;
                     if (serveRatedByUserResponse.isOk()) {
                         Toast.makeText(GroupDetailMoreActivity, "Has dado " + stars + " estrellas a este grupo", Toast.LENGTH_SHORT).show();
+                        GroupDetailMoreActivity.getIntent().removeExtra("rating");
+                        GroupDetailMoreActivity.getIntent().putExtra("rating", serveRatedByUserResponse.getRating());
+                        int auxVotes = Objects.requireNonNull(GroupDetailMoreActivity.getIntent().getExtras()).getInt("votes");
+                        GroupDetailMoreActivity.getIntent().removeExtra("votes");
+                        GroupDetailMoreActivity.getIntent().putExtra("votes", auxVotes + 1);
                         GroupDetailMoreActivity.killFragment();
                         GroupDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(GroupDetailMoreActivity, "Ya valoraste este grupo con " + stars + " estrellas", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, "Ya valoraste este grupo con " + serveRatedByUserResponse.getStars() + " estrellas", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(GroupDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

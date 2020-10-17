@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
-import com.onethousandprojects.appoeira.searchView.content.UserSearchContent;
+import com.onethousandprojects.appoeira.searchView.content.SearchContent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,10 +22,10 @@ import java.util.List;
 public class MyEventModificationConvideMembersRecyclerViewAdapter extends RecyclerView.Adapter<MyEventModificationConvideMembersRecyclerViewAdapter.ViewHolder> {
 
     private Context ctx;
-    private List<UserSearchContent> mValues;
+    private List<SearchContent> mValues;
     private OnEventModificationConvideMembersListener myOnEventModificationInviteMembersListener;
 
-    public MyEventModificationConvideMembersRecyclerViewAdapter(Context context, List<UserSearchContent> items, OnEventModificationConvideMembersListener onEventModificationConvideMembersListener) {
+    public MyEventModificationConvideMembersRecyclerViewAdapter(Context context, List<SearchContent> items, OnEventModificationConvideMembersListener onEventModificationConvideMembersListener) {
         mValues = items;
         ctx = context;
         this.myOnEventModificationInviteMembersListener = onEventModificationConvideMembersListener;
@@ -39,12 +39,14 @@ public class MyEventModificationConvideMembersRecyclerViewAdapter extends Recycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivUserAvatar);
-        holder.tvUserApelhido.setText(holder.mItem.getApelhido());
+        if (!holder.mItem.getPicUrl().equals("")) {
+            Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivUserAvatar);
+        }
+        holder.tvUserApelhido.setText(holder.mItem.getName());
         holder.tvUserRank.setText(holder.mItem.getRank());
         holder.tvUSerPremium.setText(Constants.IS_PREMIUM);
 
-        if (holder.mItem.isPremium()) {
+        if (holder.mItem.isVerified()) {
             holder.tvUSerPremium.setVisibility(View.VISIBLE);
             holder.ivUserPremium.setVisibility(View.VISIBLE);
         } else {
@@ -69,7 +71,7 @@ public class MyEventModificationConvideMembersRecyclerViewAdapter extends Recycl
         public final TextView tvUserRank;
         public final TextView tvUSerPremium;
         public final ImageView ivAdd;
-        public UserSearchContent mItem;
+        public SearchContent mItem;
         final boolean[] invited = {false};
         OnEventModificationConvideMembersListener onEventModificationConvideMembersListener;
 
@@ -101,16 +103,16 @@ public class MyEventModificationConvideMembersRecyclerViewAdapter extends Recycl
             invited[0] = true;
             ((EventModificationActivity) ctx).addInvited(id, true);
             ivAdd.setImageResource(R.drawable.ic_close);
-            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
+            clLayout.setBackgroundColor(Color.parseColor("#ABFFA6"));
         } else {
             invited[0] = false;
             ((EventModificationActivity) ctx).deleteInvited(id, true);
             ivAdd.setImageResource(R.drawable.ic_add_plus);
-            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorWhite)));
+            clLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
     }
     private void iAmInvited(ImageView ivAdd, ConstraintLayout clLayout) {
         ivAdd.setImageResource(R.drawable.ic_close);
-        clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
+        clLayout.setBackgroundColor(Color.parseColor("#ABFFA6"));
     }
 }

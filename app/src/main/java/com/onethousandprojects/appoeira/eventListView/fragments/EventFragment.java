@@ -78,7 +78,8 @@ public class EventFragment extends Fragment {
                                                myResponseFromActivity.get(i).getLongitude(),
                                                myResponseFromActivity.get(i).getDistance(),
                                                myResponseFromActivity.get(i).getPlatform(),
-                                               myResponseFromActivity.get(i).getKey()));
+                                               myResponseFromActivity.get(i).getKey(),
+                                               myResponseFromActivity.get(i).getRating()));
             }
             adapterEvent = new MyEventListRecyclerViewAdapter(getActivity(), EventList, (EventListActivity) getActivity());
             recyclerView.setAdapter(adapterEvent);

@@ -230,7 +230,7 @@
         <item>@string/platformSpinner5</item>
         <item>@string/platformSpinner6</item>
     </string-array>
-    <string name="newImageReady">Nueva imagen lista para actualizar</string>
+    <string name="newImageReady">Nueva actualizada actualizar</string>
     <string name="selectRole">Selecciona un rol</string>
     <string name="savedPass">Contraseña guardada</string>
     <string name="imageUpdated">Hemos actualizado tu imagen de perfil</string>
@@ -250,4 +250,48 @@
     <string name="requestSent">Tu petición se envió correctamente</string>
     <string name="requestNotSaved">Tu petición no pudo guardarse</string>
     <string name="participants"><u>Participantes</u></string>
+    <string name="searchUserButton">Personas</string>
+    <string name="searcGroupButton">Grupos</string>
+    <string name="searcRodaButton">Rodas</string>
+    <string name="searcOnlineButton">Online</string>
+    <string name="searcEventButton">Eventos</string>
+    <string name="searchInstructions">Selecciona al menos una opción para buscar en APPoeira</string>
+    <string name="objectRodaName">Roda</string>
+    <string name="objectGroupName">Grupo</string>
+    <string name="objectEventName">Evento</string>
+    <string name="objectOnlineName">Online</string>
+    <string name="groupDetailMoreLeaveGroup">Dejar este grupo</string>
+    <string name="loginFailed">Email o contraseña no válidos</string>
+    <string name="leaveGroup">Abandonar</string>
+    <string name="leaveGroupExplanation">Estás a punto de abandonar este grupo</string>
+    <string name="leaveEventExplanation">Estás a punto de abandonar este evento</string>
+    <string name="joinEventExplanation">Estás a punto de unirte a este evento</string>
+    <string name="groupDetailMoreLeaveRoda">Dejar esta roda</string>
+    <string name="groupDetailMoreJoinRoda">Unirse a esta roda</string>
+    <string name="leaveRodaExplanation">Estás a punto de abandonar esta roda</string>
+    <string name="joinRodaExplanation">Estás a punto de unirte a esta roda</string>
+    <string name="groupDetailMoreLeaveEvent">Abandonar este evento</string>
+    <string name="groupDetailMoreJoinEvent">Unirse a este evento</string>
+    <string name="leaveOnlineExplanation">Estás a punto de abandonar este evento online</string>
+    <string name="joinOnlineExplanation">Estás a punto de unirte a este evento online</string>
+    <string name="groupDetailMoreLeaveOnline">Dejar este evento online</string>
+    <string name="groupDetailMoreJoinOnline">Unirse a este evento online</string>
+    <string name="activityWasFollowed">" fue segiudo por "</string>
+    <string name="activityFollowed">" siguió a "</string>
+    <string name="activityJoinedGroup">" se unió al grupo "</string>
+    <string name="activityJoinedEvent">" se unió al evento "</string>
+    <string name="activityjoinedRoda">" se unió a la roda "</string>
+    <string name="activityJoinedOnline">" se unió al evento online "</string>
+    <string name="convided"><u>Convidados</u></string>
+    <string name="leaveEventOwnerExplanation">¡CUIDADO! Si abandonas el evento que has creado, no aparecerás en la lista de \"Responsables\". ¿Seguro que quieres abandonar el evento?</string>
+    <string name="leaveGroupOwnerExplanation">¡CUIDADO! Si abandonas el grupo en el que eres responsable, no aparecerás en la lista de \"Responsables\". ¿Seguro que quieres abandonar el grupo?</string>
+    <string name="leaveOnlineOwnerExplanation">¡CUIDADO! Si abandonas el evento online que has creado, no aparecerás en la lista de \"Responsables\". ¿Seguro que quieres abandonar el evento online?</string>
+    <string name="leaveRodaOwnerExplanation">¡CUIDADO! Si abandonas la roda que has creado, no aparecerás en la lista de \"Responsables\". ¿Seguro que quieres abandonar la roda?</string>
+    <string name="newGroupInfo">¿No lo encuentras? Haz click en el siguiente botón</string>
+    <string name="groupURLHint">URL del grupo</string>
+    <string name="newGroupDisclaimer">Te recomendamos que busques tu grupo antes de crearlo. Es posible que ya exista en nuestra base de datos</string>
+    <string name="TakePicture">Hacer una foto</string>
+    <string name="SelectPicture">Seleccionar foto</string>
+    <string name="choseImagePlease">Por favor, selecciona una imagen antes de guardar</string>
+    <string name="create_group">Crear grupo</string>
 </resources>

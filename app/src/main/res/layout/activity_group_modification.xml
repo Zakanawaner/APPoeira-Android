@@ -5,7 +5,130 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".groupModificationView.GroupModificationActivity">
+
     <include layout="@layout/common_top_navigation"/>
+
+    <TextView
+        android:id="@+id/newGroupDisclaimer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/newGroupDisclaimer"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topMenuLayout" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newGroupDisclaimer"
+        app:layout_constraintBottom_toTopOf="@+id/newGroupInformation" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newGroupInformation"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/newGroupInfo"
+        app:layout_constraintBottom_toTopOf="@+id/newGroupBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newGroupBtn"
+        android:ems="14"
+        android:layout_marginTop="10dp"
+        android:text="@string/create_group"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"/>
+
+    <com.onethousandprojects.appoeira.commonThings.CustomScrollView
+        android:id="@+id/modifScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topMenuLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/common_object_modification_header"/>
+
+            <include layout="@layout/common_search_user"/>
+
+            <TextView
+                android:id="@+id/locationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/locationTitle"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@+id/searchUserLayout"
+                app:layout_constraintEnd_toEndOf="@+id/searchUserLayout"
+                app:layout_constraintStart_toStartOf="@+id/searchUserLayout"/>
+
+            <fragment
+                android:id="@+id/detailMap"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationTitle" />
+
+            <TextView
+                android:id="@+id/locationAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@+id/detailMap"
+                app:layout_constraintEnd_toEndOf="@+id/detailMap"
+                app:layout_constraintStart_toStartOf="@+id/detailMap"/>
+
+            <Button
+                android:id="@+id/modifySave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ModifyProfile"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/locationAddress"
+                app:layout_constraintEnd_toEndOf="@+id/locationAddress"
+                app:layout_constraintStart_toStartOf="@+id/locationAddress" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.onethousandprojects.appoeira.commonThings.CustomScrollView>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/modifyAvatarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        tools:layout_editor_absoluteX="10dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

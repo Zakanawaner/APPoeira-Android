@@ -1,7 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.userModification;
 
 public class ServerUserModificationResponse {
-    private String picUrl;
+
     private String apelhido;
     private String name;
     private String lastName;
@@ -10,8 +10,7 @@ public class ServerUserModificationResponse {
     private String email;
     private String token;
 
-    public ServerUserModificationResponse(String picUrl,
-                                          String apelhido,
+    public ServerUserModificationResponse(String apelhido,
                                           String name,
                                           String lastName,
                                           Integer rank,
@@ -19,7 +18,6 @@ public class ServerUserModificationResponse {
                                           String email,
                                           String token) {
         super();
-        this.picUrl = picUrl;
         this.apelhido = apelhido;
         this.name = name;
         this.lastName = lastName;
@@ -27,14 +25,6 @@ public class ServerUserModificationResponse {
         this.error = error;
         this.email = email;
         this.token = token;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
     }
 
     public String getApelhido() {

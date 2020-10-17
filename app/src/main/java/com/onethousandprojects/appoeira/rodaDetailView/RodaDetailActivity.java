@@ -182,6 +182,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
                 goToDetailMore.putExtra("member", myResponse.getIsMember());
                 goToDetailMore.putExtra("voted", myResponse.getHasVoted());
                 goToDetailMore.putExtra("isOwner", myResponse.isOwner());
+                goToDetailMore.putExtra("date", fromRodaListActivity.getString("date"));
                 startActivity(goToDetailMore);
             }
         });

@@ -1,4 +1,4 @@
-package com.onethousandprojects.appoeira.serverStuff.userSearch;
+package com.onethousandprojects.appoeira.serverStuff.news;
 
 import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailEventResponse.ServerUserDetailEventCommentResponse;
 import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailEventResponse.ServerUserDetailEventVotesResponse;
@@ -16,61 +16,19 @@ import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailRodaRes
 
 import java.util.List;
 
-public class ServerUserSearchResponse {
-    private Integer id;
-    private String apelhido;
-    private String picUrl;
-    private boolean premium;
-    private String rank;
+public class ServerAreThereNewsResponse {
+    private boolean response;
 
-    public ServerUserSearchResponse(Integer id, String apelhido,
-                                    String picUrl, boolean premium,
-                                    String rank) {
+    public ServerAreThereNewsResponse(boolean response) {
         super();
-        this.id = id;
-        this.apelhido = apelhido;
-        this.picUrl = picUrl;
-        this.premium = premium;
-        this.rank = rank;
+        this.response = response;
     }
 
-    public Integer getId() {
-        return id;
+    public boolean isResponse() {
+        return response;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getApelhido() {
-        return apelhido;
-    }
-
-    public void setApelhido(String apelhido) {
-        this.apelhido = apelhido;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
-    }
-
-    public boolean isPremium() {
-        return premium;
-    }
-
-    public void setPremium(boolean premium) {
-        this.premium = premium;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public void setRank(String rank) {
-        this.rank = rank;
+    public void setResponse(boolean response) {
+        this.response = response;
     }
 }

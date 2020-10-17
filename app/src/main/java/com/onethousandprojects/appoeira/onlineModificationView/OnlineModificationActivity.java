@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,19 +27,23 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
+import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
+import com.onethousandprojects.appoeira.onlineListView.OnlineListActivity;
 import com.onethousandprojects.appoeira.onlineModificationView.adapters.MyOnlineModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.onlineModificationView.fragments.ModifyOnlineAvatarFragment;
 import com.onethousandprojects.appoeira.serverStuff.methods.OnlineModificationServer;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class OnlineModificationActivity extends AppCompatActivity implements MyOnlineModificationInviteMembersRecyclerViewAdapter.OnOnlineModificationInviteMembersListener {
     private ModifyOnlineAvatarFragment modifyOnlineAvatarFragment;
-    public String newUrl = "";
     public ImageView ivAvatar;
+    public Bitmap imageBitmap;
+    public Integer onlineId;
     private Button btnSave;
     public OnlineModificationServer onlineModificationServer = new OnlineModificationServer();
     private List<Integer> ownerMembers = new ArrayList<>();
@@ -85,7 +91,10 @@ public class OnlineModificationActivity extends AppCompatActivity implements MyO
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_modification);
+        Bundle fromOnlineDetail = getIntent().getExtras();
 
+        assert fromOnlineDetail != null;
+        onlineId = fromOnlineDetail.getInt("onlineId");
         ivAvatar = findViewById(R.id.avatar);
         TextView tvModifyAvatar = findViewById(R.id.modifyAvatar);
         EditText etName = findViewById(R.id.name);
@@ -148,12 +157,20 @@ public class OnlineModificationActivity extends AppCompatActivity implements MyO
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                ownerMembers.clear();
-                ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
-                onlineModificationServer.sendModificationsToServer(OnlineModificationActivity.this,
-                        ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
-                        createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
-                        newUrl, invitedMembers, platform, String.valueOf(etPhone.getText()), String.valueOf(etKey.getText()));
+                if (imageBitmap != null) {
+                    ownerMembers.clear();
+                    ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
+                    try {
+                        onlineModificationServer.sendModificationsToServer(OnlineModificationActivity.this,
+                                ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
+                                createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
+                                invitedMembers, platform, String.valueOf(etPhone.getText()), String.valueOf(etKey.getText()), imageBitmap, onlineId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(OnlineModificationActivity.this, R.string.choseImagePlease, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -165,12 +182,9 @@ public class OnlineModificationActivity extends AppCompatActivity implements MyO
         modifyOnlineAvatarFragment = null;
         btnSave.setVisibility(View.VISIBLE);
     }
-    public void chargeImage(){
-        Picasso.with(this).load(newUrl).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatarImage(ivAvatar));
-    }
     @Override
     public void OnOnlineInviteMemberClick(int position) {
-        invitedMembers.add(onlineModificationServer.getUserSearchResponse().get(position).getId());
+        invitedMembers.add(onlineModificationServer.getSearchResponse().getUserResponses().get(position).getId());
     }
     public void addInvited(Integer id) {
         invitedMembers.add(id);

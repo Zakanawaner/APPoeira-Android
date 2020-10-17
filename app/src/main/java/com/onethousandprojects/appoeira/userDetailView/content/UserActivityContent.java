@@ -6,13 +6,15 @@ public class UserActivityContent {
     private String PicUrl;
     private String Date;
     private String description;
+    private Integer type;
 
-    public UserActivityContent(Integer Id, String Name, String PicUrl, String Date, String description) {
+    public UserActivityContent(Integer Id, String Name, String PicUrl, String Date, String description, Integer type) {
         this.Id = Id;
         this.Name = Name;
         this.PicUrl = PicUrl;
         this.Date = Date;
         this.description = description;
+        this.type = type;
     }
 
     public Integer getId() {
@@ -53,5 +55,12 @@ public class UserActivityContent {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

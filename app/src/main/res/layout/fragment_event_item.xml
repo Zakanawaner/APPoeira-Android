@@ -88,6 +88,47 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageViewAvatar"
         app:layout_constraintStart_toEndOf="@+id/imageViewAvatar"/>
 
+    <LinearLayout
+        android:id="@+id/groupBottomLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewAvatar"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/groupStar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:foregroundGravity="right"/>
+
+        <ImageButton
+            android:id="@+id/groupStar2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/groupStar3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/groupStar4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/groupStar5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/eventDate"
         android:layout_width="wrap_content"
@@ -96,7 +137,7 @@
         android:textSize="10sp"
         android:layout_marginEnd="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewAvatar"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@+id/groupBottomLayout"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

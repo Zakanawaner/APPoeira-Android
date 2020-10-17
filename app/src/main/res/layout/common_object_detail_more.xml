@@ -44,14 +44,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/groupDetailVerification"/>
 
+        <TextView
+            android:id="@+id/groupDetailDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#454545"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/groupDetailAbout"/>
+
         <LinearLayout
             android:id="@+id/commentsMembersLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupDetailAbout">
+            app:layout_constraintTop_toBottomOf="@+id/groupDetailDate">
 
             <TextView
                 android:id="@+id/groupDetailMoreJoinGroup"

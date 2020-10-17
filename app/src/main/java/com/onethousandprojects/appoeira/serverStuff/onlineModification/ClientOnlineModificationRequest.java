@@ -3,30 +3,35 @@ package com.onethousandprojects.appoeira.serverStuff.onlineModification;
 import java.util.List;
 
 public class ClientOnlineModificationRequest {
+    private String token;
     private List<Integer> owners;
     private String name;
     private String description;
     private String date;
-    private String picUrl;
     private List<Integer> invited;
     private Integer platform;
     private String phone;
     private String key;
 
-    public ClientOnlineModificationRequest(List<Integer> owners, String name, String description,
-                                           String date, String picUrl, List<Integer> invited,
-                                           Integer platform, String phone, String key) {
+    public ClientOnlineModificationRequest(String token, List<Integer> owners, String name,
+                                           String description, String date,
+                                           List<Integer> invited, Integer platform, String phone,
+                                           String key) {
         super();
+        this.token = token;
         this.owners = owners;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.picUrl = picUrl;
         this.invited = invited;
         this.platform = platform;
         this.phone = phone;
         this.key = key;
     }
+
+    public String getToken() { return token; }
+
+    public void setToken(String token) { this.token = token; }
 
     public List<Integer> getOwners() {
         return owners;
@@ -58,14 +63,6 @@ public class ClientOnlineModificationRequest {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
     }
 
     public List<Integer> getInvited() {

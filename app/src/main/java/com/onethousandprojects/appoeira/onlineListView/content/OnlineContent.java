@@ -1,0 +1,109 @@
+package com.onethousandprojects.appoeira.onlineListView.content;
+
+public class OnlineContent {
+    private Integer id;
+    private String name;
+    private String date;
+    private String picUrl;
+    private boolean verified;
+    private String ownerApelhido;
+    private String ownerRank;
+    private Integer platform;
+    private String key;
+    private Double rating;
+
+    public OnlineContent(Integer id, String name, String date, String picUrl,
+                         String ownerApelhido, String ownerRank, boolean verified,
+                         Integer platform, String key, Double rating) {
+        this.id = id;
+        this.name = name;
+        this.date  = date;
+        this.picUrl = picUrl;
+        this.ownerApelhido = ownerApelhido;
+        this.ownerRank = ownerRank;
+        this.verified = verified;
+        this.platform = platform;
+        this.key = key;
+        this.rating = rating;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
+
+    public String getOwnerApelhido() {
+        return ownerApelhido;
+    }
+
+    public void setOwnerApelhido(String ownerApelhido) {
+        this.ownerApelhido = ownerApelhido;
+    }
+
+    public String getOwnerRank() {
+        return ownerRank;
+    }
+
+    public void setOwnerRank(String ownerApelhido) {
+        this.ownerRank = ownerRank;
+    }
+
+    public boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public Integer getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(Integer platform) {
+        this.platform = platform;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+}

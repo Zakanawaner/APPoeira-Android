@@ -10,11 +10,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.onethousandprojects.appoeira.R;
+import com.onethousandprojects.appoeira.commonThings.CommonMethods;
+import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
 import com.onethousandprojects.appoeira.groupListView.fragments.GroupFragment;
 import com.onethousandprojects.appoeira.groupListView.fragments.GroupMapsFragment;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
+import com.onethousandprojects.appoeira.serverStuff.news.ClientAreThereNewsRequest;
+import com.onethousandprojects.appoeira.serverStuff.news.ServerAreThereNewsResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 
@@ -49,12 +54,6 @@ public class GroupListServer {
                 if (response.isSuccessful()){
                     serverLocationGroupResponse = response.body();
                     assert serverLocationGroupResponse != null;
-                    Collections.sort(serverLocationGroupResponse, new Comparator<ServerLocationGroupResponse>() {
-                        @Override
-                        public int compare(ServerLocationGroupResponse lhs, ServerLocationGroupResponse rhs) {
-                            return lhs.getDistance().compareTo(rhs.getDistance());
-                        }
-                    });
                     if (!createdFragment) {
                         createdFragment = true;
                         GroupListActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new GroupFragment(), "GroupListFragment").commit();
@@ -84,9 +83,10 @@ public class GroupListServer {
         Call<List<ServerLocationGroupResponse>> call = Server.post_location_groups(clientLocationGroupsRequest);
         call.enqueue(new Callback<List<ServerLocationGroupResponse>>() {
             @Override
-            public void onResponse(Call<List<ServerLocationGroupResponse>> call, Response<List<ServerLocationGroupResponse>> response) {
+            public void onResponse(@NonNull Call<List<ServerLocationGroupResponse>> call, @NonNull Response<List<ServerLocationGroupResponse>> response) {
                 if (response.isSuccessful()){
                     serverLocationGroupMapsResponse = response.body();
+                    assert serverLocationGroupMapsResponse != null;
                     for(int i = 0; i < serverLocationGroupMapsResponse.size(); i++) {
                         // googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(image)).position(marker).title(myResponse.get(i).getName()));
                         Marker marker = groupMapsFragment.groupsMap.addMarker(new MarkerOptions().position(new LatLng(serverLocationGroupMapsResponse.get(i).getLatitude(), serverLocationGroupMapsResponse.get(i).getLongitude())).title(serverLocationGroupMapsResponse.get(i).getName()));
@@ -96,7 +96,7 @@ public class GroupListServer {
                 }
             }
             @Override
-            public void onFailure(Call<List<ServerLocationGroupResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ServerLocationGroupResponse>> call, @NonNull Throwable t) {
             }
         });
     }

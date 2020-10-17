@@ -41,11 +41,13 @@ import com.onethousandprojects.appoeira.groupModificationView.GroupModificationA
 import com.onethousandprojects.appoeira.serverStuff.methods.GroupListServer;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
+import com.onethousandprojects.appoeira.serverStuff.methods.NewsServer;
 import com.squareup.picasso.Picasso;
 
 public class GroupListActivity extends AppCompatActivity implements MyGroupListRecyclerViewAdapter.OnGroupListener {
     private FusedLocationProviderClient fusedLocationClient;
     public GroupListServer groupListServer = new GroupListServer();
+    public NewsServer newsServer = new NewsServer();
     public SwipeRefreshLayout srGroupList;
     public SeekBar sbDistance;
     public FloatingActionButton fbtnDistance, fbtnAdd;
@@ -113,12 +115,22 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
         bottomNavigationView.setSelectedItemId(R.id.groups_menu);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavListener);
 
-        ActionMenuItemView ivTopMenuLogin = (ActionMenuItemView) findViewById(R.id.login);
+        ActionMenuItemView ivTopMenuLogin = findViewById(R.id.login);
         MaterialToolbar topNavigationView = findViewById(R.id.topMenu);
         topNavigationView.setTitle(R.string.page_title_group_list);
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(GroupListActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
+            newsServer.sendNewsRequest();
         }
 
         fbtnDistance = findViewById(R.id.distanceButton);
@@ -160,6 +172,7 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
             @Override
             public void onClick(View view) {
                 Intent toCreateGroup = new Intent(GroupListActivity.this, GroupModificationActivity.class);
+                toCreateGroup.putExtra("groupId", 0);
                 startActivity(toCreateGroup);
             }
         });

@@ -1,6 +1,8 @@
 package com.onethousandprojects.appoeira.groupListView.content;
 
-public class GroupContent {
+import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
+
+public class GroupContent implements Comparable<GroupContent> {
     private Integer id;
     private String name;
     private String picUrl;
@@ -85,5 +87,10 @@ public class GroupContent {
 
     public void setDistance(Double distance) {
         this.distance = distance;
+    }
+
+    @Override
+    public int compareTo(GroupContent groupContent) {
+        return this.distance > groupContent.distance? 1 : -1;
     }
 }

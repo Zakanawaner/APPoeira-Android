@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
-import com.onethousandprojects.appoeira.searchView.content.UserSearchContent;
+import com.onethousandprojects.appoeira.searchView.content.SearchContent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,10 +22,10 @@ import java.util.List;
 public class MyRodaModificationInviteMembersRecyclerViewAdapter extends RecyclerView.Adapter<MyRodaModificationInviteMembersRecyclerViewAdapter.ViewHolder> {
 
     private Context ctx;
-    private List<UserSearchContent> mValues;
+    private List<SearchContent> mValues;
     private OnRodaModificationInviteMembersListener myOnRodaModificationInviteMembersListener;
 
-    public MyRodaModificationInviteMembersRecyclerViewAdapter(Context context, List<UserSearchContent> items, OnRodaModificationInviteMembersListener onGroupDetailListener) {
+    public MyRodaModificationInviteMembersRecyclerViewAdapter(Context context, List<SearchContent> items, OnRodaModificationInviteMembersListener onGroupDetailListener) {
         mValues = items;
         ctx = context;
         this.myOnRodaModificationInviteMembersListener = onGroupDetailListener;
@@ -42,12 +42,14 @@ public class MyRodaModificationInviteMembersRecyclerViewAdapter extends Recycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivUserAvatar);
-        holder.tvUserApelhido.setText(holder.mItem.getApelhido());
+        if (!holder.mItem.getPicUrl().equals("")) {
+            Picasso.with(ctx).load(holder.mItem.getPicUrl()).fit().into(holder.ivUserAvatar);
+        }
+        holder.tvUserApelhido.setText(holder.mItem.getName());
         holder.tvUserRank.setText(holder.mItem.getRank());
         holder.tvUSerPremium.setText(Constants.IS_PREMIUM);
 
-        if (holder.mItem.isPremium()) {
+        if (holder.mItem.isVerified()) {
             holder.tvUSerPremium.setVisibility(View.VISIBLE);
             holder.ivUserPremium.setVisibility(View.VISIBLE);
         } else {
@@ -74,7 +76,7 @@ public class MyRodaModificationInviteMembersRecyclerViewAdapter extends Recycler
         public final TextView tvUserRank;
         public final TextView tvUSerPremium;
         public final ImageView ivAdd;
-        public UserSearchContent mItem;
+        public SearchContent mItem;
         final boolean[] invited = {false};
         OnRodaModificationInviteMembersListener onRodaModificationInviteMembersListener;
 
@@ -106,16 +108,16 @@ public class MyRodaModificationInviteMembersRecyclerViewAdapter extends Recycler
             invited[0] = true;
             ((RodaModificationActivity) ctx).addInvited(id);
             ivAdd.setImageResource(R.drawable.ic_close);
-            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
+            clLayout.setBackgroundColor(Color.parseColor("#ABFFA6"));
         } else {
             invited[0] = false;
             ((RodaModificationActivity) ctx).deleteInvited(id);
             ivAdd.setImageResource(R.drawable.ic_add_plus);
-            clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorWhite)));
+            clLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
     }
     private void iAmInvited(ImageView ivAdd, ConstraintLayout clLayout) {
         ivAdd.setImageResource(R.drawable.ic_close);
-        clLayout.setBackgroundColor(Color.parseColor(String.valueOf(R.color.selected)));
+        clLayout.setBackgroundColor(Color.parseColor("#ABFFA6"));
     }
 }

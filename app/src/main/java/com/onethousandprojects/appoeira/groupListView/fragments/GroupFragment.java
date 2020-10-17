@@ -19,6 +19,7 @@ import com.onethousandprojects.appoeira.groupListView.adapter.MyGroupListRecycle
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GroupFragment extends Fragment {
@@ -73,6 +74,7 @@ public class GroupFragment extends Fragment {
                                                myResponseFromActivity.get(i).getVotes(),
                                                myResponseFromActivity.get(i).getDistance()));
             }
+            //Collections.sort(GroupList);
             adapterGroup = new MyGroupListRecyclerViewAdapter(getActivity(), GroupList, (GroupListActivity) getActivity());
             recyclerView.setAdapter(adapterGroup);
         }

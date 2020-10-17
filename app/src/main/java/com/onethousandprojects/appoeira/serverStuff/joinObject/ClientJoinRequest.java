@@ -2,16 +2,22 @@ package com.onethousandprojects.appoeira.serverStuff.joinObject;
 
 
 public class ClientJoinRequest {
+    private String token;
     private Integer groupId;
     private Integer userId;
     private Integer roleId;
 
-    public ClientJoinRequest(Integer groupId, Integer userId, Integer roleId) {
+    public ClientJoinRequest(String token, Integer groupId, Integer userId, Integer roleId) {
         super();
+        this.token = token;
         this.groupId = groupId;
         this.userId = userId;
         this.roleId = roleId;
     }
+
+    public String getToken() { return token; }
+
+    public void setToken(String token) { this.token = token; }
 
     public Integer getGroupId() {
         return groupId;

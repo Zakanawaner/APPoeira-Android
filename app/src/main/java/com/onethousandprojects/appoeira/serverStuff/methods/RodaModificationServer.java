@@ -1,6 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,13 @@ import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationAct
 import com.onethousandprojects.appoeira.rodaModificationView.fragments.RodaMembersInvitedFragment;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ServerRodaModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ClientUserSearchRequest;
-import com.onethousandprojects.appoeira.serverStuff.userSearch.ServerUserSearchResponse;
+import com.onethousandprojects.appoeira.serverStuff.search.ClientSearchRequest;
+import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +31,7 @@ import retrofit2.Response;
 
 public class RodaModificationServer {
     private ServerRodaModificationResponse serverRodaModificationResponse;
-    private List<ServerUserSearchResponse> serverUserSearchResponse;
+    private ServerSearchResponse serverSearchResponse;
     public boolean createdFragment = false;
     Client Client;
     Server Server;
@@ -41,10 +44,11 @@ public class RodaModificationServer {
 
     public void sendModificationsToServer(RodaModificationActivity RodaModificationActivity,
                                           List<Integer> owners, String name, String description,
-                                          String date, String picUrl, List<Integer> invited,
-                                          Double latitude, Double longitude, String phone) {
-        ClientRodaModificationRequest clientRodaModificationRequest = new ClientRodaModificationRequest(owners, name, description, date, picUrl, invited, latitude, longitude, phone);
-        Call<ServerRodaModificationResponse> call = Server.post_roda_update(clientRodaModificationRequest);
+                                          String date, List<Integer> invited,
+                                          Double latitude, Double longitude, String phone,
+                                          Bitmap imageBitmap, Integer rodaId) throws IOException {
+        ClientRodaModificationRequest clientRodaModificationRequest = new ClientRodaModificationRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), owners, name, description, date, invited, latitude, longitude, phone);
+        Call<ServerRodaModificationResponse> call = Server.post_roda_update(clientRodaModificationRequest, CommonMethods.fromBitmapToFile(RodaModificationActivity, imageBitmap, "roda", "avatar", rodaId, 0));
         call.enqueue(new Callback<ServerRodaModificationResponse>() {
             @Override
             public void onResponse(@NonNull Call<ServerRodaModificationResponse> call, @NonNull Response<ServerRodaModificationResponse> response) {
@@ -74,19 +78,19 @@ public class RodaModificationServer {
     }
     public void sendUserSearchToServer(RodaModificationActivity RodaModificationActivity,
                                        String search) {
-        ClientUserSearchRequest clientUserSearchRequest = new ClientUserSearchRequest(search);
-        Call<List<ServerUserSearchResponse>> call = Server.post_user_search(clientUserSearchRequest);
-        call.enqueue(new Callback<List<ServerUserSearchResponse>>() {
+        ClientSearchRequest clientSearchRequest = new ClientSearchRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), search, "10000");
+        Call<ServerSearchResponse> call = Server.post_search(clientSearchRequest);
+        call.enqueue(new Callback<ServerSearchResponse>() {
             @Override
-            public void onResponse(@NonNull Call<List<ServerUserSearchResponse>> call, @NonNull Response<List<ServerUserSearchResponse>> response) {
+            public void onResponse(@NonNull Call<ServerSearchResponse> call, @NonNull Response<ServerSearchResponse> response) {
                 if (response.isSuccessful()){
-                    serverUserSearchResponse = response.body();
+                    serverSearchResponse = response.body();
                     if (!createdFragment) {
                         createdFragment = true;
                         RodaModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaMembersInvitedFragment(), "UserListFragment").commit();
                     } else {
                         RodaModificationActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(RodaModificationActivity.getSupportFragmentManager().findFragmentByTag("UserListFragment"))).commit();
-                        if (serverUserSearchResponse.get(0).getId() != null) {
+                        if (serverSearchResponse.getUserResponses().get(0).getId() != null) {
                             RodaModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaMembersInvitedFragment(), "UserListFragment").commit();
                         } else {
                             createdFragment = false;
@@ -98,14 +102,14 @@ public class RodaModificationServer {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<ServerUserSearchResponse>> call,
+            public void onFailure(@NonNull Call<ServerSearchResponse> call,
                                   @NonNull Throwable t) {
                 Toast.makeText(RodaModificationActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
         });
     }
-    public List<ServerUserSearchResponse> getUserSearchResponse() {
-        return serverUserSearchResponse;
+    public ServerSearchResponse getSearchResponse() {
+        return serverSearchResponse;
     }
 }

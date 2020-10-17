@@ -1,15 +1,17 @@
-package com.onethousandprojects.appoeira.searchView.content;
+package com.onethousandprojects.appoeira.serverStuff.search.objects;
 
-public class UserSearchContent {
+
+public class ServerSearchUserResponse {
     private Integer id;
     private String apelhido;
     private String picUrl;
     private boolean premium;
     private String rank;
 
-    public UserSearchContent(Integer id, String apelhido,
-                             String picUrl, boolean premium,
-                             String rank) {
+    public ServerSearchUserResponse(Integer id, String apelhido,
+                                    String picUrl, boolean premium,
+                                    String rank) {
+        super();
         this.id = id;
         this.apelhido = apelhido;
         this.picUrl = picUrl;

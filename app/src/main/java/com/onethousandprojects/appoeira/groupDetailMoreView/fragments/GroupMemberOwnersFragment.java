@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
+import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.groupDetailMoreView.content.GroupMembersContent;
 import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
 import com.onethousandprojects.appoeira.groupDetailMoreView.adapter.MyGroupMembersRecyclerViewAdapter;
@@ -27,6 +29,7 @@ public class GroupMemberOwnersFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
+    private boolean isOwner =false;
 
     public GroupMemberOwnersFragment() {
     }
@@ -68,6 +71,9 @@ public class GroupMemberOwnersFragment extends Fragment {
             MemberList = new ArrayList<>();
             for (int i = 0; i < myResponseFromActivity.size(); i++) {
                 if (String.valueOf(myResponseFromActivity.get(i).getUserGroupRole()).equals("owner")) {
+                    if (myResponseFromActivity.get(i).getUserId().equals(SharedPreferencesManager.getIntegerValue(Constants.ID))) {
+                        isOwner = true;
+                    }
                     MemberList.add(new GroupMembersContent(String.valueOf(myResponseFromActivity.get(i).getGroupSchool()),
                             myResponseFromActivity.get(i).getUserId(),
                             String.valueOf(myResponseFromActivity.get(i).getUserApelhido()),
@@ -77,6 +83,7 @@ public class GroupMemberOwnersFragment extends Fragment {
                             String.valueOf(myResponseFromActivity.get(i).getUserGroupRole())));
                 }
             }
+            ((GroupDetailMoreActivity) getActivity()).fromGroupDetailActivity.putBoolean("isOwner", isOwner);
             adapterGroupDetail = new MyGroupMembersRecyclerViewAdapter(getActivity(), MemberList, (GroupDetailMoreActivity) getActivity());
             recyclerView.setAdapter(adapterGroupDetail);
         }

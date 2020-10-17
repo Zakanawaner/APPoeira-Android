@@ -5,30 +5,36 @@ import android.widget.DatePicker;
 import java.util.List;
 
 public class ClientRodaModificationRequest {
+    private String token;
     private List<Integer> owners;
     private String name;
     private String description;
     private String date;
-    private String picUrl;
     private List<Integer> invited;
     private Double latitude;
     private Double longitude;
     private String phone;
 
-    public ClientRodaModificationRequest(List<Integer> owners, String name, String description,
-                                         String date, String picUrl, List<Integer> invited,
-                                         Double latitude, Double longitude, String phone) {
+    public ClientRodaModificationRequest(String token, List<Integer> owners, String name,
+                                         String description, String date,
+                                         List<Integer> invited, Double latitude, Double longitude,
+                                         String phone) {
         super();
+        this.token = token;
         this.owners = owners;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.picUrl = picUrl;
         this.invited = invited;
         this.latitude = latitude;
         this.longitude = longitude;
         this.phone = phone;
     }
+
+    public String getToken() { return token; }
+
+    public void setToken(String token) { this.token = token; }
+
     public List<Integer> getOwners() {
         return owners;
     }
@@ -59,14 +65,6 @@ public class ClientRodaModificationRequest {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
     }
 
     public List<Integer> getInvited() {

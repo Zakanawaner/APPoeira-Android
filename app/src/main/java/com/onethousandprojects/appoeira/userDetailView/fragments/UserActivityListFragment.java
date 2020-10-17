@@ -62,7 +62,7 @@ public class UserActivityListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_detail_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_activity_item_list, container, false);
         UserDetailActivity activity = (UserDetailActivity) getActivity();
         assert activity != null;
         List<UserActivityContent> activityContents = activity.getActivity();
@@ -82,9 +82,10 @@ public class UserActivityListFragment extends Fragment {
                         String.valueOf(activityContents.get(i).getName()),
                         String.valueOf(activityContents.get(i).getPicUrl()),
                         String.valueOf(activityContents.get(i).getDate()),
-                        String.valueOf(activityContents.get(i).getDescription())));
+                        String.valueOf(activityContents.get(i).getDescription()),
+                        activityContents.get(i).getType()));
             }
-            adapterUserDetail = new UserActivityRecyclerViewAdapter(getActivity(), ActivityList, (UserDetailActivity) getActivity());
+            adapterUserDetail = new UserActivityRecyclerViewAdapter(getActivity(), ActivityList, (UserDetailActivity) getActivity(), (UserDetailActivity) getActivity());
             recyclerView.setAdapter(adapterUserDetail);
         }
         return view;

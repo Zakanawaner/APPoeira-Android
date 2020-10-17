@@ -44,12 +44,6 @@ public class EventListServer {
                 if (response.isSuccessful()){
                     serverLocationEventResponse = response.body();
                     assert serverLocationEventResponse != null;
-                    Collections.sort(serverLocationEventResponse, new Comparator<ServerLocationEventResponse>() {
-                        @Override
-                        public int compare(ServerLocationEventResponse lhs, ServerLocationEventResponse rhs) {
-                            return lhs.getDistance().compareTo(rhs.getDistance());
-                        }
-                    });
                     if (!createdFragment) {
                         createdFragment = true;
                         EventListActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new EventFragment(), "EventListFragment").commit();

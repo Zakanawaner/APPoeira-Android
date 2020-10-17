@@ -115,6 +115,17 @@
                     android:layout_marginStart="10dp" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/userLogOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:text="@string/userLogOut"
+                app:layout_constraintEnd_toEndOf="@+id/userDetailMeta"
+                app:layout_constraintStart_toStartOf="@+id/userDetailMeta"
+                app:layout_constraintTop_toBottomOf="@+id/userDetailMeta"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -405,16 +416,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/userDetailOnlines"
                         tools:context=".groupDetailMoreView.UserDetailActivity" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <TextView
-                    android:id="@+id/userLogOut"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/userLogOut"
-                    app:layout_constraintEnd_toEndOf="@+id/SecondConstraint"
-                    app:layout_constraintStart_toStartOf="@+id/SecondConstraint"
-                    app:layout_constraintTop_toBottomOf="@+id/SecondConstraint"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

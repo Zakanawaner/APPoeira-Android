@@ -44,7 +44,7 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
     TextView tvNumberComments;
     TextView tvRodaDetailVerification;
     public TextView tvNumberCommentsNum;
-    TextView tvJoinRoda;
+    public TextView tvJoinRoda;
     ConstraintLayout groupDetails;
     ConstraintLayout groupComments;
     public int NUM_PAGES = 0;
@@ -93,8 +93,11 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
                 onComments = false;
                 String numComments = "(" + NUM_PAGES + ")";
                 tvNumberCommentsNum.setText(numComments);
-                tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);
-                tvJoinRoda.setText(R.string.groupDetailMoreJoinGroup);
+                tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);if (fromRodaDetailActivity.getBoolean("member")) {
+                    tvJoinRoda.setText(R.string.groupDetailMoreLeaveRoda);
+                } else {
+                    tvJoinRoda.setText(R.string.groupDetailMoreJoinRoda);
+                }
                 groupDetails.setVisibility(View.VISIBLE);
                 groupComments.setVisibility(View.GONE);
             }
@@ -111,6 +114,8 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString("groupImage", fromRodaDetailActivity.getString("image"));
+                bundle.putBoolean("member", fromRodaDetailActivity.getBoolean("member"));
+                bundle.putBoolean("isOwner", fromRodaDetailActivity.getBoolean("isOwner"));
                 JoinRodaFragment joinRodaFragment = new JoinRodaFragment();
                 joinRodaFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().add(R.id.joinGroupFragment, joinRodaFragment, "JoinRodaFragment").commit();
@@ -143,6 +148,7 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
         groupComments = findViewById(R.id.ThirdConstraint);
         tvRodaDetailVerification = findViewById(R.id.groupDetailVerification);
         TextView tvRodaAbout = findViewById(R.id.groupDetailAbout);
+        TextView tvRodaDate = findViewById(R.id.groupDetailDate);
         LinearLayout llRodaRating = findViewById(R.id.groupDetailMoreRating);
         TextView tvFrontLineTitle = findViewById(R.id.groupDetailMoreFronline);
         TextView tvStudentsTitle = findViewById(R.id.groupDetailMoreStudents);
@@ -161,13 +167,18 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
             Picasso.with(this).load(fromRodaDetailActivity.getString("image")).fit().into(ivRodaAvatar);
         }
         tvRodaName.setText(fromRodaDetailActivity.getString("name"));
-        tvRodaAbout.setText(fromRodaDetailActivity.getString("description"));
         tvStudentsTitle.setVisibility(View.GONE);
         rlStudentsFragment.setVisibility(View.GONE);
         tvFriendsTitle.setVisibility(View.GONE);
         rlFriendsFragment.setVisibility(View.GONE);
         tvFrontLineTitle.setText(R.string.participants);
         tvNumberComments.setOnClickListener(showCommentsListener);
+        tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);
+        if (fromRodaDetailActivity.getBoolean("member")) {
+            tvJoinRoda.setText(R.string.groupDetailMoreLeaveRoda);
+        } else {
+            tvJoinRoda.setText(R.string.groupDetailMoreJoinRoda);
+        }
         tvJoinRoda.setOnClickListener(joinRodaListener);
         tvRodaDetailVerification.setOnClickListener(groupDetailVerification);
 
@@ -186,8 +197,17 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
         if (fromRodaDetailActivity.getInt("voted") > 0) {
             tvRodaDetailVerification.setVisibility(View.GONE);
         }
-        if (fromRodaDetailActivity.getString("about")==null) {
+        if (fromRodaDetailActivity.getString("description")==null) {
             tvRodaAbout.setVisibility(View.GONE);
+        } else {
+            tvRodaAbout.setVisibility(View.VISIBLE);
+            tvRodaAbout.setText(fromRodaDetailActivity.getString("description"));
+        }
+        if (fromRodaDetailActivity.getString("date")==null) {
+            tvRodaDate.setVisibility(View.GONE);
+        } else {
+            tvRodaDate.setVisibility(View.VISIBLE);
+            tvRodaDate.setText(fromRodaDetailActivity.getString("date"));
         }
 
         rodaDetailMoreServer.getRodaDetailMore(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("id"));

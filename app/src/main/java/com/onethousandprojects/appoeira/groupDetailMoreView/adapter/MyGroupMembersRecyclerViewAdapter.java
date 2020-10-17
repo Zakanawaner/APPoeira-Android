@@ -39,7 +39,9 @@ public class MyGroupMembersRecyclerViewAdapter extends RecyclerView.Adapter<MyGr
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Picasso.with(ctx).load(holder.mItem.getUserPicUrl()).fit().into(holder.ivUserAvatar);
+        if (!holder.mItem.getUserPicUrl().equals("")) {
+            Picasso.with(ctx).load(holder.mItem.getUserPicUrl()).fit().into(holder.ivUserAvatar);
+        }
         holder.tvUserApelhido.setText(holder.mItem.getUserApelhido());
         holder.tvUserRank.setText(holder.mItem.getUserRank());
         holder.tvUSerPremium.setText(Constants.IS_PREMIUM);

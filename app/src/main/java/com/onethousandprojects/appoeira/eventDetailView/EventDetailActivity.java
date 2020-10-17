@@ -197,6 +197,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 goToDetailMore.putExtra("voted", myResponse.getHasVoted());
                 goToDetailMore.putExtra("isOwner", myResponse.isOwner());
                 goToDetailMore.putExtra("platform", myResponse.getPlatform());
+                goToDetailMore.putExtra("date", fromEventListActivity.getString("date"));
                 startActivity(goToDetailMore);
             }
         });

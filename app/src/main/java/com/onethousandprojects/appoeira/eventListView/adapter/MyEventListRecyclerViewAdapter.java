@@ -50,9 +50,25 @@ public class MyEventListRecyclerViewAdapter extends RecyclerView.Adapter<MyEvent
             holder.tvEventDistance.setText(String.valueOf(holder.mItem.getDistance()));
             holder.tvDistanceKm.setVisibility(View.VISIBLE);
         } else {
-            String f =CommonMethods.fromPlatformIdToPlatformName(holder.mItem.getPlatform(), ctx);
             holder.tvEventDistance.setText(CommonMethods.fromPlatformIdToPlatformName(holder.mItem.getPlatform(), ctx));
             holder.tvDistanceKm.setText("");
+        }
+        if (holder.mItem.getVerified()) {
+            holder.ivEventVerified.setVisibility(View.VISIBLE);
+            holder.ivEventVerified.setImageResource(R.drawable.verified);
+            List<ImageView> stars = CommonMethods.SetStars(holder.mItem.getRating(), holder.ivGroupStar1, holder.ivGroupStar2, holder.ivGroupStar3, holder.ivGroupStar4, holder.ivGroupStar5);
+            holder.ivGroupStar1 = stars.get(0);
+            holder.ivGroupStar2 = stars.get(1);
+            holder.ivGroupStar3 = stars.get(2);
+            holder.ivGroupStar4 = stars.get(3);
+            holder.ivGroupStar5 = stars.get(4);
+        } else {
+            holder.ivGroupStar1.setVisibility(View.GONE);
+            holder.ivGroupStar2.setVisibility(View.GONE);
+            holder.ivGroupStar3.setVisibility(View.GONE);
+            holder.ivGroupStar4.setVisibility(View.GONE);
+            holder.ivGroupStar5.setVisibility(View.GONE);
+            holder.ivEventVerified.setVisibility(View.GONE);
         }
         holder.tvEventDate.setText(String.valueOf(holder.mItem.getDate()));
     }
@@ -71,6 +87,11 @@ public class MyEventListRecyclerViewAdapter extends RecyclerView.Adapter<MyEvent
         public final TextView tvEventDistance;
         public final TextView tvDistanceKm;
         public final TextView tvEventDate;
+        public ImageView ivGroupStar1;
+        public ImageView ivGroupStar2;
+        public ImageView ivGroupStar3;
+        public ImageView ivGroupStar4;
+        public ImageView ivGroupStar5;
         public EventContent mItem;
         OnEventListener onEventListener;
 
@@ -83,7 +104,12 @@ public class MyEventListRecyclerViewAdapter extends RecyclerView.Adapter<MyEvent
             tvEventOwnerRank = (TextView) view.findViewById(R.id.eventOwnerRank);
             ivEventVerified = (ImageView) view.findViewById(R.id.checkBoxVerified);
             tvEventDistance = (TextView) view.findViewById(R.id.eventDistance);
-            tvDistanceKm = (TextView) view.findViewById(R.id.textViewKm) ;
+            tvDistanceKm = (TextView) view.findViewById(R.id.textViewKm);
+            ivGroupStar1 = (ImageView) view.findViewById(R.id.groupStar1);
+            ivGroupStar2 = (ImageView) view.findViewById(R.id.groupStar2);
+            ivGroupStar3 = (ImageView) view.findViewById(R.id.groupStar3);
+            ivGroupStar4 = (ImageView) view.findViewById(R.id.groupStar4);
+            ivGroupStar5 = (ImageView) view.findViewById(R.id.groupStar5);
             tvEventDate = (TextView) view.findViewById(R.id.eventDate);
             this.onEventListener = onEventListener;
             view.setOnClickListener(this);

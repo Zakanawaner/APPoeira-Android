@@ -50,10 +50,21 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 
 public class CommonMethods {
@@ -103,6 +114,29 @@ public class CommonMethods {
         if (platform == 5) {return ctx.getResources().getString(R.string.platformSpinner5);}
         if (platform == 6) {return ctx.getResources().getString(R.string.platformSpinner6);}
         return "";
+    }
+    public static class NewsVariable {
+        public boolean gotNews;
+        private ChangeListener listener;
+        public NewsVariable(boolean gotNews) {
+            this.gotNews = gotNews;
+        }
+        public boolean isGotNews() {
+            return gotNews;
+        }
+        public void setGotNews(boolean gotNews) {
+            this.gotNews = gotNews;
+            if (listener != null) listener.onChange();
+        }
+        public ChangeListener getListener() {
+            return listener;
+        }
+        public void setListener(ChangeListener listener) {
+            this.listener = listener;
+        }
+        public interface ChangeListener {
+            void onChange();
+        }
     }
     public static ImageView fromPlatformNameToPlatformLogo(String platform, Context ctx, ImageView imageView) {
         if (platform.equals(ctx.getResources().getString(R.string.platformSpinner1))) {imageView.setImageResource(R.drawable.ic_launcher_foreground);}
@@ -864,37 +898,27 @@ public class CommonMethods {
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
                                     Intent goToUserProfileActivity = new Intent(groupListActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
                                     groupListActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(groupListActivity, LoginActivity.class);
-                                    groupListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                if (CommonMethods.AmILogged()) {
+                                    break;
+                                case R.id.search:
                                     Intent goToSearchActivity = new Intent(groupListActivity, SearchActivity.class);
                                     groupListActivity.startActivity(goToSearchActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(groupListActivity, LoginActivity.class);
-                                    groupListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.news:
-                                if (CommonMethods.AmILogged()) {
+                                    break;
+                                case R.id.news:
                                     Intent goToNewsActivity = new Intent(groupListActivity, NewsActivity.class);
                                     groupListActivity.startActivity(goToNewsActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(groupListActivity, LoginActivity.class);
-                                    groupListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            default:
-                                break;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(groupListActivity, LoginActivity.class);
+                            groupListActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
@@ -904,65 +928,57 @@ public class CommonMethods {
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
                                     Intent goToUserProfileActivity = new Intent(groupDetailActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
                                     groupDetailActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(groupDetailActivity, LoginActivity.class);
-                                    groupDetailActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                Intent goToSearchActivity = new Intent(groupDetailActivity, SearchActivity.class);
-                                groupDetailActivity.startActivity(goToSearchActivity);
-                                break;
-                            case R.id.news:
-                                Intent goToNewsActivity = new Intent(groupDetailActivity, NewsActivity.class);
-                                groupDetailActivity.startActivity(goToNewsActivity);
-                                break;
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(groupDetailActivity, SearchActivity.class);
+                                    groupDetailActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(groupDetailActivity, NewsActivity.class);
+                                    groupDetailActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(groupDetailActivity, LoginActivity.class);
+                            groupDetailActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
                 };
-            case "EventListActivity":
-                eventListActivity = activities.getEventList();
+            case "GroupModificationActivity":
+                groupModificationActivity = activities.getGroupModification();
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
-                                    Intent goToUserProfileActivity = new Intent(eventListActivity, UserDetailActivity.class);
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(groupModificationActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
-                                    eventListActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(eventListActivity, LoginActivity.class);
-                                    eventListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                if (CommonMethods.AmILogged()) {
-                                    Intent goToSearchActivity = new Intent(eventListActivity, SearchActivity.class);
-                                    eventListActivity.startActivity(goToSearchActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(eventListActivity, LoginActivity.class);
-                                    eventListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.news:
-                                if (CommonMethods.AmILogged()) {
-                                    Intent goToNewsActivity = new Intent(eventListActivity, NewsActivity.class);
-                                    eventListActivity.startActivity(goToNewsActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(eventListActivity, LoginActivity.class);
-                                    eventListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            default:
-                                break;
+                                    groupModificationActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(groupModificationActivity, SearchActivity.class);
+                                    groupModificationActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(groupModificationActivity, NewsActivity.class);
+                                    groupModificationActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(groupModificationActivity, LoginActivity.class);
+                            groupModificationActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
@@ -972,25 +988,147 @@ public class CommonMethods {
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
                                     Intent goToUserProfileActivity = new Intent(groupDetailMoreActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
                                     groupDetailMoreActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(groupDetailMoreActivity, LoginActivity.class);
-                                    groupDetailMoreActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                Intent goToSearchActivity = new Intent(groupDetailMoreActivity, SearchActivity.class);
-                                groupDetailMoreActivity.startActivity(goToSearchActivity);
-                                break;
-                            case R.id.news:
-                                Intent goToNewsActivity = new Intent(groupDetailMoreActivity, NewsActivity.class);
-                                groupDetailMoreActivity.startActivity(goToNewsActivity);
-                                break;
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(groupDetailMoreActivity, SearchActivity.class);
+                                    groupDetailMoreActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(groupDetailMoreActivity, NewsActivity.class);
+                                    groupDetailMoreActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(groupDetailMoreActivity, LoginActivity.class);
+                            groupDetailMoreActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "EventListActivity":
+                eventListActivity = activities.getEventList();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(eventListActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    eventListActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(eventListActivity, SearchActivity.class);
+                                    eventListActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(eventListActivity, NewsActivity.class);
+                                    eventListActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(eventListActivity, LoginActivity.class);
+                            eventListActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "EventDetailActivity":
+                eventDetailActivity = activities.getEventDetail();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(eventDetailActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    eventDetailActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(eventDetailActivity, SearchActivity.class);
+                                    eventDetailActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(eventDetailActivity, NewsActivity.class);
+                                    eventDetailActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(eventDetailActivity, LoginActivity.class);
+                            eventDetailActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "EventDetailMoreActivity":
+                eventDetailMoreActivity = activities.getEventDetailMore();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(eventDetailMoreActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    eventDetailMoreActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(eventDetailMoreActivity, SearchActivity.class);
+                                    eventDetailMoreActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(eventDetailMoreActivity, NewsActivity.class);
+                                    eventDetailMoreActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(eventDetailMoreActivity, LoginActivity.class);
+                            eventDetailMoreActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "EventModificationActivity":
+                eventModificationActivity = activities.getEventModification();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(eventModificationActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    eventModificationActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(eventModificationActivity, SearchActivity.class);
+                                    eventModificationActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(eventModificationActivity, NewsActivity.class);
+                                    eventModificationActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(eventModificationActivity, LoginActivity.class);
+                            eventModificationActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
@@ -1000,25 +1138,57 @@ public class CommonMethods {
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
                                     Intent goToUserProfileActivity = new Intent(userDetailActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
                                     userDetailActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(userDetailActivity, LoginActivity.class);
-                                    userDetailActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                Intent goToSearchActivity = new Intent(userDetailActivity, SearchActivity.class);
-                                userDetailActivity.startActivity(goToSearchActivity);
-                                break;
-                            case R.id.news:
-                                Intent goToNewsActivity = new Intent(userDetailActivity, NewsActivity.class);
-                                userDetailActivity.startActivity(goToNewsActivity);
-                                break;
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(userDetailActivity, SearchActivity.class);
+                                    userDetailActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(userDetailActivity, NewsActivity.class);
+                                    userDetailActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(userDetailActivity, LoginActivity.class);
+                            userDetailActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "ProfileModificationActivity":
+                profileModificationActivity = activities.getProfileModification();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(profileModificationActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    profileModificationActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(profileModificationActivity, SearchActivity.class);
+                                    profileModificationActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(profileModificationActivity, NewsActivity.class);
+                                    profileModificationActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(profileModificationActivity, LoginActivity.class);
+                            profileModificationActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
@@ -1028,37 +1198,117 @@ public class CommonMethods {
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
                                     Intent goToUserProfileActivity = new Intent(rodaListActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
                                     rodaListActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(rodaListActivity, LoginActivity.class);
-                                    rodaListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                if (CommonMethods.AmILogged()) {
+                                    break;
+                                case R.id.search:
                                     Intent goToSearchActivity = new Intent(rodaListActivity, SearchActivity.class);
                                     rodaListActivity.startActivity(goToSearchActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(rodaListActivity, LoginActivity.class);
-                                    rodaListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.news:
-                                if (CommonMethods.AmILogged()) {
+                                    break;
+                                case R.id.news:
                                     Intent goToNewsActivity = new Intent(rodaListActivity, NewsActivity.class);
                                     rodaListActivity.startActivity(goToNewsActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(rodaListActivity, LoginActivity.class);
-                                    rodaListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            default:
-                                break;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(rodaListActivity, LoginActivity.class);
+                            rodaListActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "RodaDetailActivity":
+                rodaDetailActivity = activities.getRodaDetail();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(rodaDetailActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    rodaDetailActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(rodaDetailActivity, SearchActivity.class);
+                                    rodaDetailActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(rodaDetailActivity, NewsActivity.class);
+                                    rodaDetailActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(rodaDetailActivity, LoginActivity.class);
+                            rodaDetailActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "RodaDetailMoreActivity":
+                rodaDetailMoreActivity = activities.getRodaDetailMore();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(rodaDetailMoreActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    rodaDetailMoreActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(rodaDetailMoreActivity, SearchActivity.class);
+                                    rodaDetailMoreActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(rodaDetailMoreActivity, NewsActivity.class);
+                                    rodaDetailMoreActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(rodaDetailMoreActivity, LoginActivity.class);
+                            rodaDetailMoreActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "RodaModificationActivity":
+                rodaModificationActivity = activities.getRodaModification();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(rodaModificationActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    rodaModificationActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(rodaModificationActivity, SearchActivity.class);
+                                    rodaModificationActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(rodaModificationActivity, NewsActivity.class);
+                                    rodaModificationActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(rodaModificationActivity, LoginActivity.class);
+                            rodaModificationActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
@@ -1068,42 +1318,215 @@ public class CommonMethods {
                 return new MaterialToolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.login:
-                                if (CommonMethods.AmILogged()) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
                                     Intent goToUserProfileActivity = new Intent(onlineListActivity, UserDetailActivity.class);
                                     goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
                                     onlineListActivity.startActivity(goToUserProfileActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(onlineListActivity, LoginActivity.class);
-                                    onlineListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.search:
-                                if (CommonMethods.AmILogged()) {
+                                    break;
+                                case R.id.search:
                                     Intent goToSearchActivity = new Intent(onlineListActivity, SearchActivity.class);
                                     onlineListActivity.startActivity(goToSearchActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(onlineListActivity, LoginActivity.class);
-                                    onlineListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            case R.id.news:
-                                if (CommonMethods.AmILogged()) {
+                                    break;
+                                case R.id.news:
                                     Intent goToNewsActivity = new Intent(onlineListActivity, NewsActivity.class);
                                     onlineListActivity.startActivity(goToNewsActivity);
-                                } else {
-                                    Intent goToLoginActivity = new Intent(onlineListActivity, LoginActivity.class);
-                                    onlineListActivity.startActivity(goToLoginActivity);
-                                }
-                                break;
-                            default:
-                                break;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(onlineListActivity, LoginActivity.class);
+                            onlineListActivity.startActivity(goToLoginActivity);
                         }
                         return false;
                     }
                 };
-            default: break;
+            case "OnlineDetailActivity":
+                onlineDetailActivity = activities.getOnlineDetail();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(onlineDetailActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    onlineDetailActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(onlineDetailActivity, SearchActivity.class);
+                                    onlineDetailActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(onlineDetailActivity, NewsActivity.class);
+                                    onlineDetailActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(onlineDetailActivity, LoginActivity.class);
+                            onlineDetailActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "OnlineDetailMoreActivity":
+                onlineDetailMoreActivity = activities.getOnlineDetailMore();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(onlineDetailMoreActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    onlineDetailMoreActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(onlineDetailMoreActivity, SearchActivity.class);
+                                    onlineDetailMoreActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(onlineDetailMoreActivity, NewsActivity.class);
+                                    onlineDetailMoreActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(onlineDetailMoreActivity, LoginActivity.class);
+                            onlineDetailMoreActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "OnlineModificationActivity":
+                onlineModificationActivity = activities.getOnlineModification();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(onlineModificationActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    onlineModificationActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(onlineModificationActivity, SearchActivity.class);
+                                    onlineModificationActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(onlineModificationActivity, NewsActivity.class);
+                                    onlineModificationActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(onlineModificationActivity, LoginActivity.class);
+                            onlineModificationActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "SearchActivity":
+                searchActivity = activities.getSearch();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(searchActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    searchActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(searchActivity, NewsActivity.class);
+                                    searchActivity.startActivity(goToNewsActivity);
+                                    break;
+                                case R.id.search:
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(searchActivity, LoginActivity.class);
+                            searchActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "NewsActivity":
+                newsActivity = activities.getNews();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(newsActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    newsActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(newsActivity, SearchActivity.class);
+                                    newsActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(newsActivity, LoginActivity.class);
+                            newsActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "HelpActivity":
+                helpActivity = activities.getHelp();
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (CommonMethods.AmILogged()) {
+                            switch (item.getItemId()) {
+                                case R.id.login:
+                                    Intent goToUserProfileActivity = new Intent(helpActivity, UserDetailActivity.class);
+                                    goToUserProfileActivity.putExtra("id", SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    helpActivity.startActivity(goToUserProfileActivity);
+                                    break;
+                                case R.id.search:
+                                    Intent goToSearchActivity = new Intent(helpActivity, SearchActivity.class);
+                                    helpActivity.startActivity(goToSearchActivity);
+                                    break;
+                                case R.id.news:
+                                    Intent goToNewsActivity = new Intent(helpActivity, NewsActivity.class);
+                                    helpActivity.startActivity(goToNewsActivity);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } else {
+                            Intent goToLoginActivity = new Intent(helpActivity, LoginActivity.class);
+                            helpActivity.startActivity(goToLoginActivity);
+                        }
+                        return false;
+                    }
+                };
+            case "LoginActivity":
+            case "SignUpActivity":
+                return new MaterialToolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        return false;
+                    }
+                };
+            default:
+                System.exit(0);
         }
         return null;
     }
@@ -1199,6 +1622,39 @@ public class CommonMethods {
         stars.add(ivGroupStar5);
         return stars;
     }
+    public static MultipartBody.Part fromBitmapToFile(Context ctx, Bitmap bitmapImage, String objectType, String objectSubType, Integer typeId, Integer subTypeId) throws IOException {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy-HH:mm:ss", Locale.getDefault());
+        String formattedDate = df.format(Calendar.getInstance().getTime());
+        String auxSubTypeId;
+        if (subTypeId == 0) {
+            auxSubTypeId = "";
+        } else {
+            auxSubTypeId = String.valueOf(subTypeId);
+        }
+        File f = new File(ctx.getCacheDir(), objectType + "_" + objectSubType + "_" + typeId + "_" + auxSubTypeId + "_" + formattedDate);
+        f.createNewFile();
+        //Convert bitmap to byte array
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] bitmapdata = bos.toByteArray();
 
+        //write the bytes in file
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            assert fos != null;
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
+        return MultipartBody.Part.createFormData("upload", f.getName(), reqFile);
+    }
 }
 
