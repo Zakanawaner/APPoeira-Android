@@ -10,21 +10,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.commonThings.CommonMethods;
-import com.onethousandprojects.appoeira.commonThings.Constants;
-import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
 import com.onethousandprojects.appoeira.groupListView.fragments.GroupFragment;
 import com.onethousandprojects.appoeira.groupListView.fragments.GroupMapsFragment;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
-import com.onethousandprojects.appoeira.serverStuff.news.ClientAreThereNewsRequest;
-import com.onethousandprojects.appoeira.serverStuff.news.ServerAreThereNewsResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,7 +56,7 @@ public class GroupListServer {
                     }
                     GroupListActivity.srGroupList.setRefreshing(false);
                 } else {
-                    Toast.makeText(GroupListActivity,"Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupListActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 

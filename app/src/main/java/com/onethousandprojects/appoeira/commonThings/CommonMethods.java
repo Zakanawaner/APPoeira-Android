@@ -115,6 +115,15 @@ public class CommonMethods {
         if (platform == 6) {return ctx.getResources().getString(R.string.platformSpinner6);}
         return "";
     }
+    public static Integer fromPlatformNameToPlatformId(String platform, Context ctx) {
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner1))) {return 1;}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner2))) {return 2;}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner3))) {return 3;}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner4))) {return 4;}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner5))) {return 5;}
+        if (platform.equals(ctx.getResources().getString(R.string.platformSpinner6))) {return 6;}
+        return 0;
+    }
     public static class NewsVariable {
         public boolean gotNews;
         private ChangeListener listener;
@@ -138,13 +147,12 @@ public class CommonMethods {
             void onChange();
         }
     }
-    public static ImageView fromPlatformNameToPlatformLogo(String platform, Context ctx, ImageView imageView) {
+    public static void fromPlatformNameToPlatformLogo(String platform, Context ctx, ImageView imageView) {
         if (platform.equals(ctx.getResources().getString(R.string.platformSpinner1))) {imageView.setImageResource(R.drawable.ic_launcher_foreground);}
         if (platform.equals(ctx.getResources().getString(R.string.platformSpinner2))) {imageView.setImageResource(R.drawable.ic_zoom_logo);}
         if (platform.equals(ctx.getResources().getString(R.string.platformSpinner3))) {imageView.setImageResource(R.drawable.ic_instagram_logo);}
         if (platform.equals(ctx.getResources().getString(R.string.platformSpinner4))) {imageView.setImageResource(R.drawable.ic_skype);}
         if (platform.equals(ctx.getResources().getString(R.string.platformSpinner5))) {imageView.setImageResource(R.drawable.ic_jitsi_logo);}
-        return imageView;
     }
     public static class CircleTransform  implements Transformation {
         @Override

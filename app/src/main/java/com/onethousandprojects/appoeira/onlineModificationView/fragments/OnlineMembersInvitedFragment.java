@@ -14,7 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
 import com.onethousandprojects.appoeira.onlineModificationView.adapters.MyOnlineModificationInviteMembersRecyclerViewAdapter;
+import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
+import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.searchView.content.SearchContent;
+import com.onethousandprojects.appoeira.serverStuff.onlineDetailMore.ServerOnlineDetailMoreResponse;
+import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 
 import java.util.ArrayList;
@@ -55,29 +59,57 @@ public class OnlineMembersInvitedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         OnlineModificationActivity activity = (OnlineModificationActivity) getActivity();
         assert activity != null;
-        List<ServerSearchUserResponse> myResponseFromActivity = activity.onlineModificationServer.getSearchResponse().getUserResponses();
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        if (activity.fromOnlineDetail.getBoolean("modification") && !activity.flagFirstFragment) {
+            activity.flagFirstFragment = true;
+            List<ServerOnlineDetailMoreResponse> myResponseFromActivity = activity.onlineModificationServer.getMyResponse();
+            // Set the adapter
+            if (view instanceof RecyclerView) {
+                Context context = view.getContext();
+                recyclerView = (RecyclerView) view;
+                if (mColumnCount <= 1) {
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                } else {
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                }
+                // Lista de miembros del grupo
+                MemberList = new ArrayList<>();
+                for (int i = 0; i < myResponseFromActivity.size(); i++) {
+                    MemberList.add(new SearchContent(1,
+                            myResponseFromActivity.get(i).getUserId(),
+                            String.valueOf(myResponseFromActivity.get(i).getUserApelhido()),
+                            String.valueOf(myResponseFromActivity.get(i).getUserPicUrl()),
+                            false,
+                            String.valueOf(myResponseFromActivity.get(i).getUserRank()),
+                            null, null, null));
+                }
+                adapterGroupDetail = new MyOnlineModificationInviteMembersRecyclerViewAdapter(getActivity(), MemberList, (OnlineModificationActivity) getActivity());
+                recyclerView.setAdapter(adapterGroupDetail);
             }
-            // Lista de miembros del grupo
-            MemberList = new ArrayList<>();
-            for (int i = 0; i < myResponseFromActivity.size(); i++) {
-                MemberList.add(new SearchContent(1,
-                        myResponseFromActivity.get(i).getId(),
-                        String.valueOf(myResponseFromActivity.get(i).getApelhido()),
-                        String.valueOf(myResponseFromActivity.get(i).getPicUrl()),
-                        myResponseFromActivity.get(i).isPremium(),
-                        String.valueOf(myResponseFromActivity.get(i).getRank()),
-                        null, null, null));
+        } else {
+            List<ServerSearchUserResponse> myResponseFromActivity = activity.onlineModificationServer.getSearchResponse().getUserResponses();
+            // Set the adapter
+            if (view instanceof RecyclerView) {
+                Context context = view.getContext();
+                recyclerView = (RecyclerView) view;
+                if (mColumnCount <= 1) {
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                } else {
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                }
+                // Lista de miembros del grupo
+                MemberList = new ArrayList<>();
+                for (int i = 0; i < myResponseFromActivity.size(); i++) {
+                    MemberList.add(new SearchContent(1,
+                            myResponseFromActivity.get(i).getId(),
+                            String.valueOf(myResponseFromActivity.get(i).getApelhido()),
+                            String.valueOf(myResponseFromActivity.get(i).getPicUrl()),
+                            myResponseFromActivity.get(i).isPremium(),
+                            String.valueOf(myResponseFromActivity.get(i).getRank()),
+                            null, null, null));
+                }
+                adapterGroupDetail = new MyOnlineModificationInviteMembersRecyclerViewAdapter(getActivity(), MemberList, (OnlineModificationActivity) getActivity());
+                recyclerView.setAdapter(adapterGroupDetail);
             }
-            adapterGroupDetail = new MyOnlineModificationInviteMembersRecyclerViewAdapter(getActivity(), MemberList, (OnlineModificationActivity) getActivity());
-            recyclerView.setAdapter(adapterGroupDetail);
         }
         return view;
     }

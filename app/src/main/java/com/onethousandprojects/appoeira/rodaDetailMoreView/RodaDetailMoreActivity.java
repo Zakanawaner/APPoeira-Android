@@ -3,10 +3,10 @@ package com.onethousandprojects.appoeira.rodaDetailMoreView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.viewpager.widget.PagerAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
@@ -25,6 +26,7 @@ import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaComment
 import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.BeenHereRatingRoda;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.JoinRodaFragment;
+import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.methods.RodaDetailMoreServer;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -36,6 +38,7 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
                                                                          MyRodaCommentsRecyclerViewAdapter.OnRodaDetailListener{
     public RodaDetailMoreServer rodaDetailMoreServer = new RodaDetailMoreServer();
     public Bundle fromRodaDetailActivity;
+    public FloatingActionButton fbtnAdd;
     ImageView ivRodaStar1;
     ImageView ivRodaStar2;
     ImageView ivRodaStar3;
@@ -49,7 +52,6 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
     ConstraintLayout groupComments;
     public int NUM_PAGES = 0;
     public int NUM_MEMBERS = 0;
-    private PagerAdapter pagerAdapter;
     static boolean onComments = false;
     String origin = "RodaDetailMoreActivity";
     NavParams navParams = new NavParams(
@@ -132,6 +134,15 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
             groupComments.setVisibility(View.GONE);
         }
     };
+    public View.OnClickListener groupModificationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent toRodaModification = new Intent(RodaDetailMoreActivity.this, RodaModificationActivity.class);
+            toRodaModification.putExtra("details", fromRodaDetailActivity);
+            toRodaModification.putExtra("users", (Parcelable) rodaDetailMoreServer.getMyResponse());
+            startActivity(toRodaModification);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +166,7 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
         RelativeLayout rlStudentsFragment = findViewById(R.id.groupDetailStudentsLayout);
         TextView tvFriendsTitle = findViewById(R.id.groupDetailMoreFriends);
         RelativeLayout rlFriendsFragment = findViewById(R.id.groupDetailFriendsLayout);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivRodaStar1 = findViewById(R.id.groupDetailMoreStar1);
         ivRodaStar2 = findViewById(R.id.groupDetailMoreStar2);
@@ -210,8 +222,8 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
             tvRodaDate.setText(fromRodaDetailActivity.getString("date"));
         }
 
-        rodaDetailMoreServer.getRodaDetailMore(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("id"));
-        rodaDetailMoreServer.serverRodaCommentsResponse(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("id"));
+        rodaDetailMoreServer.getRodaDetailMore(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("rodaId"));
+        rodaDetailMoreServer.serverRodaCommentsResponse(RodaDetailMoreActivity.this, fromRodaDetailActivity.getInt("rodaId"));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.addItem);
@@ -228,7 +240,7 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
     @Override
     public void OnRodaDetailClick(int userId) {
         Intent toUserDetailActivity = new Intent(this, UserDetailActivity.class);
-        toUserDetailActivity.putExtra("id", userId);
+        toUserDetailActivity.putExtra("rodaId", userId);
         startActivity(toUserDetailActivity);
     }
     public void refreshActivity() {

@@ -1,4 +1,4 @@
-package com.onethousandprojects.appoeira.serverStuff.news;
+package com.onethousandprojects.appoeira.serverStuff.areThereNews;
 
 
 public class ClientAreThereNewsRequest {

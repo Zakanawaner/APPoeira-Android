@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.authView.LoginActivity;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
@@ -21,6 +22,9 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.OnlineDetailMoreActivity;
+import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
+import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
+import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ClientOnlineDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ServerOnlineDetailResponse;
 import com.squareup.picasso.Picasso;
@@ -33,6 +37,7 @@ import retrofit2.Response;
 
 public class OnlineDetailActivity extends AppCompatActivity {
 
+    public FloatingActionButton fbtnAdd;
     public Bundle fromOnlineListActivity;
     ImageView ivOnlineStar1;
     ImageView ivOnlineStar2;
@@ -90,6 +95,7 @@ public class OnlineDetailActivity extends AppCompatActivity {
         View maps = findViewById(R.id.detailMap);
         ivPlatform = findViewById(R.id.detailPlatform);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivOnlineStar1 = findViewById(R.id.detailStar1);
         ivOnlineStar2 = findViewById(R.id.detailStar2);
@@ -97,7 +103,7 @@ public class OnlineDetailActivity extends AppCompatActivity {
         ivOnlineStar4 = findViewById(R.id.detailStar4);
         ivOnlineStar5 = findViewById(R.id.detailStar5);
 
-        ClientOnlineDetailRequest clientOnlineDetailRequest = new ClientOnlineDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromOnlineListActivity.getInt("id"), SharedPreferencesManager.getIntegerValue(Constants.ID));
+        ClientOnlineDetailRequest clientOnlineDetailRequest = new ClientOnlineDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromOnlineListActivity.getInt("onlineId"), SharedPreferencesManager.getIntegerValue(Constants.ID));
         Call<ServerOnlineDetailResponse> call = Server.post_online_detail(clientOnlineDetailRequest);
         call.enqueue(new Callback<ServerOnlineDetailResponse>() {
             @Override
@@ -113,6 +119,30 @@ public class OnlineDetailActivity extends AppCompatActivity {
                         String onlineUrl = fromOnlineListActivity.getString("ownerRank") + " " + fromOnlineListActivity.getString("owner");
                         tvOnlineUrl.setText(onlineUrl);
                         tvOnlinePhone.setText(myResponse.getPhone());
+                        if (myResponse.isOwner()) {
+                            fbtnAdd.setImageResource(R.drawable.ic_edit);
+                            fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent toCreateOnline = new Intent(OnlineDetailActivity.this, OnlineModificationActivity.class);
+                                    toCreateOnline.putExtra("onlineId", myResponse.getId());
+                                    toCreateOnline.putExtra("modification", true);
+                                    toCreateOnline.putExtra("name", myResponse.getName());
+                                    toCreateOnline.putExtra("image", myResponse.getPicUrl());
+                                    toCreateOnline.putExtra("description", myResponse.getDescription());
+                                    toCreateOnline.putExtra("phone", myResponse.getPhone());
+                                    toCreateOnline.putExtra("verified", myResponse.getVerified());
+                                    toCreateOnline.putExtra("rating", myResponse.getRating());
+                                    toCreateOnline.putExtra("votes", myResponse.getVotes());
+                                    toCreateOnline.putExtra("member", myResponse.getIsMember());
+                                    toCreateOnline.putExtra("voted", myResponse.getHasVoted());
+                                    toCreateOnline.putExtra("isOwner", myResponse.isOwner());
+                                    toCreateOnline.putExtra("platform", myResponse.getPlatform());
+                                    toCreateOnline.putExtra("date", fromOnlineListActivity.getString("date"));
+                                    startActivity(toCreateOnline);
+                                }
+                            });
+                        }
 
                         if (myResponse.getVerified()) {
                             ivVerifiedOnline.setImageResource(R.drawable.verified);
@@ -157,7 +187,7 @@ public class OnlineDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent goToDetailMore = new Intent(OnlineDetailActivity.this,
                         OnlineDetailMoreActivity.class);
-                goToDetailMore.putExtra("id", myResponse.getId());
+                goToDetailMore.putExtra("onlineId", myResponse.getId());
                 goToDetailMore.putExtra("name", myResponse.getName());
                 goToDetailMore.putExtra("image", myResponse.getPicUrl());
                 goToDetailMore.putExtra("description", myResponse.getDescription());

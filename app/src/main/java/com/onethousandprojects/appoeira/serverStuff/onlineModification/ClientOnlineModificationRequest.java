@@ -12,11 +12,12 @@ public class ClientOnlineModificationRequest {
     private Integer platform;
     private String phone;
     private String key;
+    private Integer id;
 
     public ClientOnlineModificationRequest(String token, List<Integer> owners, String name,
                                            String description, String date,
                                            List<Integer> invited, Integer platform, String phone,
-                                           String key) {
+                                           String key, Integer id) {
         super();
         this.token = token;
         this.owners = owners;
@@ -27,6 +28,7 @@ public class ClientOnlineModificationRequest {
         this.platform = platform;
         this.phone = phone;
         this.key = key;
+        this.id = id;
     }
 
     public String getToken() { return token; }
@@ -95,6 +97,14 @@ public class ClientOnlineModificationRequest {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

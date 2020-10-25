@@ -1,4 +1,4 @@
-package com.onethousandprojects.appoeira.userModificationView.fragments;
+package com.onethousandprojects.appoeira.groupModificationView.fragments;
 
 import android.Manifest;
 import android.content.Intent;
@@ -22,26 +22,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
-import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
-import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ClientUploadPictureRequest;
-import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ServerUploadPictureResponse;
-import com.onethousandprojects.appoeira.userModificationView.ProfileModificationActivity;
+import com.onethousandprojects.appoeira.groupModificationView.GroupModificationActivity;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ModifyAvatarFragment extends DialogFragment {
+public class ModifyGroupAvatarFragment extends DialogFragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +43,6 @@ public class ModifyAvatarFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        ProfileModificationActivity profileModificationActivity = (ProfileModificationActivity) requireActivity();
         View view = inflater.inflate(R.layout.fragment_modify_avatar, container, false);
         ImageView ivClose = view.findViewById(R.id.modifyAvatarClose);
         Button btnUploadPic = view.findViewById(R.id.modifyAvatarSend);
@@ -63,7 +52,7 @@ public class ModifyAvatarFragment extends DialogFragment {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                profileModificationActivity.killAvatarFragment();
+                ((GroupModificationActivity) requireActivity()).killAvatarFragment();
             }
         });
         btnTakePic.setOnClickListener(new View.OnClickListener() {
@@ -101,27 +90,26 @@ public class ModifyAvatarFragment extends DialogFragment {
         btnUploadPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (profileModificationActivity.imageBitmap != null) {
-                    ((ProfileModificationActivity) requireActivity()).killAvatarFragment();
+                if (((GroupModificationActivity) requireActivity()).imageBitmap != null) {
+                    ((GroupModificationActivity) requireActivity()).killAvatarFragment();
                     Toast.makeText(getContext(), R.string.newImageReady, Toast.LENGTH_SHORT).show();
                 }
             }
         });
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ProfileModificationActivity activity = (ProfileModificationActivity) getActivity();
+        GroupModificationActivity activity = (GroupModificationActivity) getActivity();
         if (resultCode == RESULT_OK) {
             if (requestCode == Constants.CAMERA_REQUEST_CODE_INTENT) {
                 assert data != null;
                 Bundle extras = data.getExtras();
                 assert extras != null;
+                ((GroupModificationActivity) requireActivity()).imageBitmap = (Bitmap) extras.get("data");
                 assert activity != null;
-                activity.imageBitmap = (Bitmap) extras.get("data");
-                activity.ivUserAvatar.setImageBitmap(activity.imageBitmap);
+                activity.ivAvatar.setImageBitmap(((GroupModificationActivity) requireActivity()).imageBitmap);
             }
             if (requestCode == Constants.GALLERY_REQUEST_CODE_INTENT) {
                 assert data != null;
@@ -133,9 +121,9 @@ public class ModifyAvatarFragment extends DialogFragment {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+                ((GroupModificationActivity) requireActivity()).imageBitmap = BitmapFactory.decodeStream(inputStream);
                 assert activity != null;
-                activity.imageBitmap = BitmapFactory.decodeStream(inputStream);
-                activity.ivUserAvatar.setImageBitmap(activity.imageBitmap);
+                activity.ivAvatar.setImageBitmap(((GroupModificationActivity) requireActivity()).imageBitmap);
             }
         }
     }

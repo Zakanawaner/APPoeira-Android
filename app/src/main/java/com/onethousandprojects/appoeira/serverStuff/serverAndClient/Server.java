@@ -8,10 +8,14 @@ import com.onethousandprojects.appoeira.serverStuff.eventList.ClientLocationEven
 import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ClientEventModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventModification.ServerEventModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.groupModification.ClientGroupModificationRequest;
+import com.onethousandprojects.appoeira.serverStuff.groupModification.ServerGroupModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.leaveObject.ClientLeaveRequest;
 import com.onethousandprojects.appoeira.serverStuff.leaveObject.ServerLeaveResponse;
-import com.onethousandprojects.appoeira.serverStuff.news.ClientAreThereNewsRequest;
-import com.onethousandprojects.appoeira.serverStuff.news.ServerAreThereNewsResponse;
+import com.onethousandprojects.appoeira.serverStuff.areThereNews.ClientAreThereNewsRequest;
+import com.onethousandprojects.appoeira.serverStuff.areThereNews.ServerAreThereNewsResponse;
+import com.onethousandprojects.appoeira.serverStuff.newsList.ClientNewsRequest;
+import com.onethousandprojects.appoeira.serverStuff.newsList.ServerNewsResponse;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ClientOnlineDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ServerOnlineDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetailMore.ClientOnlineDetailMoreRequest;
@@ -34,14 +38,14 @@ import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ClientLogin
 import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ServerLoginResponse;
 import com.onethousandprojects.appoeira.serverStuff.onlineModification.ClientOnlineModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.onlineModification.ServerOnlineModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.deleteObject.ClientDeleteRequest;
+import com.onethousandprojects.appoeira.serverStuff.deleteObject.ServerDeleteResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ClientRodaDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ServerRodaDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ClientRodaDetailMoreRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ServerRodaModificationResponse;
-import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ClientUploadPictureRequest;
-import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ServerUploadPictureResponse;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ClientUserModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ServerUserModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
@@ -109,6 +113,10 @@ public interface Server {
     @POST("/event-create")
     Call<ServerEventModificationResponse> post_event_update(@Part("body") ClientEventModificationRequest clientEventModificationRequest, @Part MultipartBody.Part image);
 
+    @Multipart
+    @POST("/group-create")
+    Call<ServerGroupModificationResponse> post_group_update(@Part("body") ClientGroupModificationRequest clientGroupModificationRequest, @Part MultipartBody.Part image);
+
     @POST("/roda-detail")
     Call<ServerRodaDetailResponse> post_roda_detail(@Body ClientRodaDetailRequest clientRodaDetailRequest);
 
@@ -133,8 +141,9 @@ public interface Server {
     @POST("/user-unfollow")
     Call<ServerUserUnFollowUserResponse> post_user_unfollow_user(@Body ClientUserUnFollowUserRequest clientUserUnFollowUserRequest);
 
+    @Multipart
     @POST("/profile-update")
-    Call<ServerUserModificationResponse> post_user_update_profile(@Body ClientUserModificationRequest clientUserModificationRequest);
+    Call<ServerUserModificationResponse> post_user_update_profile(@Part("body") ClientUserModificationRequest clientUserModificationRequest, @Part MultipartBody.Part image);
 
     @POST("/search")
     Call<ServerSearchResponse> post_search(@Body ClientSearchRequest clientSearchRequest);
@@ -178,6 +187,9 @@ public interface Server {
     @POST("/are-there-news")
     Call<ServerAreThereNewsResponse> post_are_there_news(@Body ClientAreThereNewsRequest clientAreThereNewsRequest);
 
+    @POST("/news")
+    Call<List<ServerNewsResponse>> post_news(@Body ClientNewsRequest clientNewsRequest);
+
     @POST("/location-online")
     Call<List<ServerLocationOnlineResponse>> post_location_online(@Body ClientLocationOnlineRequest clientLocationOnlineRequest);
 
@@ -202,7 +214,18 @@ public interface Server {
     @POST("/online-comments")
     Call<List<ServerCommentsResponse>> post_online_comments(@Body ClientCommentsRequest clientGroupCommentsRequest);
 
-    @Multipart
-    @POST("/upload-picture")
-    Call<ServerUploadPictureResponse> post_picture(@Part("token") ClientUploadPictureRequest clientUploadPictureRequest, @Part MultipartBody.Part image);
+    @POST("/roda-delete")
+    Call<ServerDeleteResponse> post_roda_delete(@Body ClientDeleteRequest clientDeleteRequest);
+
+    @POST("/group-delete")
+    Call<ServerDeleteResponse> post_group_delete(@Body ClientDeleteRequest clientDeleteRequest);
+
+    @POST("/user-delete")
+    Call<ServerDeleteResponse> post_user_delete(@Body ClientDeleteRequest clientDeleteRequest);
+
+    @POST("/event-delete")
+    Call<ServerDeleteResponse> post_event_delete(@Body ClientDeleteRequest clientDeleteRequest);
+
+    @POST("/online-delete")
+    Call<ServerDeleteResponse> post_online_delete(@Body ClientDeleteRequest clientDeleteRequest);
 }

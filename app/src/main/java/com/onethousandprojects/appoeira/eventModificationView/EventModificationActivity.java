@@ -40,6 +40,7 @@ import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActiv
 import com.onethousandprojects.appoeira.eventModificationView.adapters.MyEventModificationConvideMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.eventModificationView.adapters.MyEventModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.eventModificationView.fragments.ModifyEventAvatarFragment;
+import com.onethousandprojects.appoeira.groupModificationView.GroupModificationActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaModificationView.fragments.ModifyRodaAvatarFragment;
@@ -150,6 +151,8 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         mapFragment.getMapAsync(EventModificationActivity.this);
         geocoder = new Geocoder(this, Locale.getDefault());
 
+        ivAvatar.setImageResource(R.drawable.ic_add_plus);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.addItem);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavListener);
@@ -217,16 +220,32 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
             @Override
             public void onClick(View view) {
                 if (imageBitmap != null) {
-                    ownerMembers.clear();
-                    ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
-                    try {
-                        eventModificationServer.sendModificationsToServer(EventModificationActivity.this,
-                                ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
-                                createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
-                                invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()), convidedMembers,
-                                String.valueOf(etKey.getText()), platform, imageBitmap, eventId);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (!String.valueOf(etName.getText()).equals("")) {
+                        if (platform > 0) {
+                            if (platform == 6 && latitude != null) {
+                                if (!String.valueOf(etPhone.getText()).equals("")) {
+                                    ownerMembers.clear();
+                                    ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                    try {
+                                        eventModificationServer.sendModificationsToServer(EventModificationActivity.this,
+                                                ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
+                                                createDate(dpDate.getYear(), dpDate.getMonth(), dpDate.getDayOfMonth(), tpTime.getHour(), tpTime.getMinute()),
+                                                invitedMembers, latitude, longitude, String.valueOf(etPhone.getText()), convidedMembers,
+                                                String.valueOf(etKey.getText()), platform, imageBitmap, eventId);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Toast.makeText(EventModificationActivity.this, R.string.selectPhonePlease, Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(EventModificationActivity.this, R.string.selectPlacePlease, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(EventModificationActivity.this, R.string.selectPlatformPlease, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(EventModificationActivity.this, R.string.selectNamePlease, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(EventModificationActivity.this, R.string.choseImagePlease, Toast.LENGTH_SHORT).show();

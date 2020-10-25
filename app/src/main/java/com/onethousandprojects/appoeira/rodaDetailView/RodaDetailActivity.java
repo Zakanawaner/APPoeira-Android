@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.authView.LoginActivity;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
@@ -27,6 +28,8 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.RodaDetailMoreActivity;
+import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
+import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ClientRodaDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetail.ServerRodaDetailResponse;
 import com.squareup.picasso.Picasso;
@@ -41,12 +44,12 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
     public Double latitude;
     public Double longitude;
     public Bundle fromRodaListActivity;
+    public FloatingActionButton fbtnAdd;
     ImageView ivRodaStar1;
     ImageView ivRodaStar2;
     ImageView ivRodaStar3;
     ImageView ivRodaStar4;
     ImageView ivRodaStar5;
-    private String platform;
     com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client Client;
     com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server Server;
     private ServerRodaDetailResponse myResponse;
@@ -95,6 +98,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
         TextView tvVotes = findViewById(R.id.detailVotes);
         TextView tvMore = findViewById(R.id.detailMore);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivRodaStar1 = findViewById(R.id.detailStar1);
         ivRodaStar2 = findViewById(R.id.detailStar2);
@@ -104,7 +108,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
 
-        ClientRodaDetailRequest clientRodaDetailRequest = new ClientRodaDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromRodaListActivity.getInt("id"), SharedPreferencesManager.getIntegerValue(Constants.ID));
+        ClientRodaDetailRequest clientRodaDetailRequest = new ClientRodaDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromRodaListActivity.getInt("rodaId"), SharedPreferencesManager.getIntegerValue(Constants.ID));
         Call<ServerRodaDetailResponse> call = Server.post_roda_detail(clientRodaDetailRequest);
         call.enqueue(new Callback<ServerRodaDetailResponse>() {
             @Override
@@ -121,6 +125,34 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
                         tvRodaUrl.setText(url);
                         tvRodaPhone.setText(myResponse.getPhone());
                         tvRodaAddress.setText(myResponse.getAddress());
+                        if (myResponse.isOwner()) {
+                            fbtnAdd.setImageResource(R.drawable.ic_edit);
+                            fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent toCreateRoda = new Intent(RodaDetailActivity.this, RodaModificationActivity.class);
+                                    toCreateRoda.putExtra("rodaId", myResponse.getId());
+                                    toCreateRoda.putExtra("modification", true);
+                                    toCreateRoda.putExtra("name", myResponse.getName());
+                                    toCreateRoda.putExtra("image", myResponse.getPicUrl());
+                                    toCreateRoda.putExtra("description", myResponse.getDescription());
+                                    toCreateRoda.putExtra("phone", myResponse.getPhone());
+                                    toCreateRoda.putExtra("verified", myResponse.getVerified());
+                                    toCreateRoda.putExtra("rating", myResponse.getRating());
+                                    toCreateRoda.putExtra("votes", myResponse.getVotes());
+                                    toCreateRoda.putExtra("address", myResponse.getAddress());
+                                    toCreateRoda.putExtra("city", myResponse.getCity());
+                                    toCreateRoda.putExtra("country", myResponse.getCountry());
+                                    toCreateRoda.putExtra("latitude", myResponse.getLatitude());
+                                    toCreateRoda.putExtra("longitude", myResponse.getLongitude());
+                                    toCreateRoda.putExtra("member", myResponse.getIsMember());
+                                    toCreateRoda.putExtra("voted", myResponse.getHasVoted());
+                                    toCreateRoda.putExtra("isOwner", myResponse.isOwner());
+                                    toCreateRoda.putExtra("date", fromRodaListActivity.getString("date"));
+                                    startActivity(toCreateRoda);
+                                }
+                            });
+                        }
 
                         if (myResponse.getVerified()) {
                             ivVerifiedRoda.setImageResource(R.drawable.verified);
@@ -166,7 +198,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onClick(View view) {
                 Intent goToDetailMore = new Intent(RodaDetailActivity.this, RodaDetailMoreActivity.class);
-                goToDetailMore.putExtra("id", myResponse.getId());
+                goToDetailMore.putExtra("rodaId", myResponse.getId());
                 goToDetailMore.putExtra("name", myResponse.getName());
                 goToDetailMore.putExtra("image", myResponse.getPicUrl());
                 goToDetailMore.putExtra("description", myResponse.getDescription());

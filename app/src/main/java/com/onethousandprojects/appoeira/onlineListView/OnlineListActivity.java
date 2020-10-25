@@ -98,6 +98,7 @@ public class OnlineListActivity extends AppCompatActivity implements MyOnlineLis
             public void onClick(View view) {
                 Intent toNewOnlineActivity = new Intent(OnlineListActivity.this, OnlineModificationActivity.class);
                 toNewOnlineActivity.putExtra("onlineId", 0);
+                toNewOnlineActivity.putExtra("modification", false);
                 startActivity(toNewOnlineActivity);
             }
         });
@@ -109,7 +110,7 @@ public class OnlineListActivity extends AppCompatActivity implements MyOnlineLis
         if (CommonMethods.AmILogged()) {
             ServerLocationOnlineResponse online = onlineListServer.getServerLocationOnlineResponse().get(position);
             Intent toOnlineDetailActivity = new Intent(this, OnlineDetailActivity.class);
-            toOnlineDetailActivity.putExtra("id", online.getId());
+            toOnlineDetailActivity.putExtra("onlineId", online.getId());
             toOnlineDetailActivity.putExtra("date", online.getDate());
             toOnlineDetailActivity.putExtra("owner", online.getOwnerApelhido());
             toOnlineDetailActivity.putExtra("ownerRank", online.getOwnerRank());

@@ -160,6 +160,7 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
             public void onClick(View view) {
                 Intent toCreateRoda = new Intent(RodaListActivity.this, RodaModificationActivity.class);
                 toCreateRoda.putExtra("rodaId", 0);
+                toCreateRoda.putExtra("modification", false);
                 startActivity(toCreateRoda);
             }
         });
@@ -211,7 +212,7 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
         if (CommonMethods.AmILogged()) {
             ServerLocationRodaResponse roda = rodaListServer.getServerLocationRodaResponse().get(position);
             Intent toRodaDetailActivity = new Intent(this, RodaDetailActivity.class);
-            toRodaDetailActivity.putExtra("id", roda.getId());
+            toRodaDetailActivity.putExtra("rodaId", roda.getId());
             toRodaDetailActivity.putExtra("date", roda.getDate());
             toRodaDetailActivity.putExtra("owner", roda.getOwnerApelhido());
             toRodaDetailActivity.putExtra("ownerRank", roda.getOwnerRank());

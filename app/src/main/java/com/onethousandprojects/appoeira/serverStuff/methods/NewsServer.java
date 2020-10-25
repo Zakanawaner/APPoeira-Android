@@ -3,8 +3,8 @@ package com.onethousandprojects.appoeira.serverStuff.methods;
 import androidx.annotation.NonNull;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.serverStuff.news.ClientAreThereNewsRequest;
-import com.onethousandprojects.appoeira.serverStuff.news.ServerAreThereNewsResponse;
+import com.onethousandprojects.appoeira.serverStuff.areThereNews.ClientAreThereNewsRequest;
+import com.onethousandprojects.appoeira.serverStuff.areThereNews.ServerAreThereNewsResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 

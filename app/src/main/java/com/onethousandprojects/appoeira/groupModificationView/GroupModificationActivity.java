@@ -1,8 +1,10 @@
 package com.onethousandprojects.appoeira.groupModificationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,17 +12,16 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,35 +45,23 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.CustomScrollView;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
+import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.fragments.ModifyRodaAvatarFragment;
-import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
-import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
-import com.onethousandprojects.appoeira.serverStuff.methods.RodaModificationServer;
-import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
-import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
+import com.onethousandprojects.appoeira.groupModificationView.fragments.ModifyGroupAvatarFragment;
+import com.onethousandprojects.appoeira.serverStuff.methods.GroupModificationServer;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GroupModificationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MyLogTag";
     private FusedLocationProviderClient fusedLocationClient;
-
-    private List<ServerLocationGroupResponse> serverLocationGroupMapsResponse;
-    public Client Client;
-    public Server Server;
-
-    private ModifyRodaAvatarFragment modifyRodaAvatarFragment;
+    private ModifyGroupAvatarFragment modifyGroupAvatarFragment;
     public ImageView ivAvatar;
     public Bitmap imageBitmap;
     public Integer groupId;
@@ -80,10 +69,11 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
     private CustomScrollView nsvModifView;
     private MapFragment mapFragment;
     private Double latitude, longitude;
+    private List<Integer> ownerMembers = new ArrayList<>();
     private TextView address;
     Geocoder geocoder;
     private GoogleMap myGoogleMap;
-    public RodaModificationServer rodaModificationServer = new RodaModificationServer();
+    public GroupModificationServer groupModificationServer = new GroupModificationServer();
     private Double distance;
     public GoogleMap groupsMap;
     String origin = "GroupModificationActivity";
@@ -120,26 +110,7 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
             location.setLongitude(groupsMap.getCameraPosition().target.longitude);
             location.setLatitude(groupsMap.getCameraPosition().target.latitude);
             distance = SphericalUtil.computeDistanceBetween(groupsMap.getProjection().getVisibleRegion().farLeft, groupsMap.getCameraPosition().target);
-            ClientLocationGroupsRequest clientLocationGroupsRequest = new ClientLocationGroupsRequest(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), (int) Math.round(distance/1000));
-            Call<List<ServerLocationGroupResponse>> call = Server.post_location_groups(clientLocationGroupsRequest);
-            call.enqueue(new Callback<List<ServerLocationGroupResponse>>() {
-                @Override
-                public void onResponse(@NonNull Call<List<ServerLocationGroupResponse>> call, @NonNull Response<List<ServerLocationGroupResponse>> response) {
-                    if (response.isSuccessful()){
-                        serverLocationGroupMapsResponse = response.body();
-                        assert serverLocationGroupMapsResponse != null;
-                        for(int i = 0; i < serverLocationGroupMapsResponse.size(); i++) {
-                            // googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(image)).position(marker).title(myResponse.get(i).getName()));
-                            Marker marker = groupsMap.addMarker(new MarkerOptions().position(new LatLng(serverLocationGroupMapsResponse.get(i).getLatitude(), serverLocationGroupMapsResponse.get(i).getLongitude())).title(serverLocationGroupMapsResponse.get(i).getName()));
-                            Pair<String, Integer> pair = new Pair<> (serverLocationGroupMapsResponse.get(i).getPicUrl(), serverLocationGroupMapsResponse.get(i).getId());
-                            marker.setTag(pair);
-                        }
-                    }
-                }
-                @Override
-                public void onFailure(@NonNull Call<List<ServerLocationGroupResponse>> call, @NonNull Throwable t) {
-                }
-            });
+            groupModificationServer.getListOfGroupsFromMap(GroupModificationActivity.this, location, distance);
         }
     };
     GoogleMap.OnInfoWindowClickListener mapListener = new GoogleMap.OnInfoWindowClickListener() {
@@ -189,9 +160,6 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         Bundle fromGroupDetail = getIntent().getExtras();
 
-        Client = Client.getInstance();
-        Server = Client.getServer();
-
         assert fromGroupDetail != null;
         groupId = fromGroupDetail.getInt("groupId");
         nsvModifView = findViewById(R.id.modifScrollView);
@@ -200,14 +168,13 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
         EditText etName = findViewById(R.id.name);
         EditText etDescription = findViewById(R.id.description);
         EditText etPhone = findViewById(R.id.phone);
-        DatePicker dpDate = findViewById(R.id.date);
-        TimePicker tpTime = findViewById(R.id.hour);
-        SearchView svUsers = findViewById(R.id.searchUsers);
+        EditText etKey = findViewById(R.id.key);
         MapFragment mapFragment2 = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
         address = findViewById(R.id.locationAddress);
         btnSave = findViewById(R.id.modifySave);
-        Button etNewGroupURL = findViewById(R.id.newGroupBtn);
+        Button btnNewGroup = findViewById(R.id.newGroupBtn);
 
+        ConstraintLayout findGroupLayout = findViewById(R.id.findGroupLayout);
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
@@ -215,6 +182,8 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
 
         mapFragment2.getMapAsync(GroupModificationActivity.this);
         geocoder = new Geocoder(this, Locale.getDefault());
+        etKey.setVisibility(View.GONE);
+        ivAvatar.setImageResource(R.drawable.ic_add_plus);
 
         ActionMenuItemView ivTopMenuLogin = (ActionMenuItemView) findViewById(R.id.login);
         MaterialToolbar topNavigationView = findViewById(R.id.topMenu);
@@ -228,11 +197,52 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
         bottomNavigationView.setSelectedItemId(R.id.addItem);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavListener);
 
-        etNewGroupURL.setOnClickListener(new View.OnClickListener() {
+        btnNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 nsvModifView.setVisibility(View.VISIBLE);
-                mapFragment.onDestroy();
+                findGroupLayout.setVisibility(View.GONE);
+            }
+        });
+        tvModifyAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (modifyGroupAvatarFragment==null) {
+                    modifyGroupAvatarFragment = new ModifyGroupAvatarFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.modifyAvatarFragment, modifyGroupAvatarFragment, "ModifyAvatarFragment").commit();
+                }
+            }
+        });
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View view) {
+                if (imageBitmap != null) {
+                    if (!String.valueOf(etName.getText()).equals("")) {
+                        if (latitude != null) {
+                            if (!String.valueOf(etPhone.getText()).equals("")) {
+                                ownerMembers.clear();
+                                ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
+                                try {
+                                    groupModificationServer.sendModificationsToServer(GroupModificationActivity.this,
+                                            ownerMembers, String.valueOf(etName.getText()), String.valueOf(etDescription.getText()),
+                                            latitude, longitude, String.valueOf(etPhone.getText()),
+                                            imageBitmap, groupId);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(GroupModificationActivity.this, R.string.selectPhonePlease, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(GroupModificationActivity.this, R.string.selectPlacePlease, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(GroupModificationActivity.this, R.string.selectNamePlease, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(GroupModificationActivity.this, R.string.choseImagePlease, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -258,8 +268,7 @@ public class GroupModificationActivity extends AppCompatActivity implements OnMa
     }
     public void killAvatarFragment() {
         getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyAvatarFragment"))).commit();
-        modifyRodaAvatarFragment = null;
-        btnSave.setVisibility(View.VISIBLE);
+        modifyGroupAvatarFragment = null;
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {

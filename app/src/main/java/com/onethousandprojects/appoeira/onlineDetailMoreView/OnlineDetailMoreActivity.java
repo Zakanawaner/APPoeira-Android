@@ -7,6 +7,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
@@ -25,6 +27,7 @@ import com.onethousandprojects.appoeira.onlineDetailMoreView.adapter.MyOnlineMem
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.BeenHereRatingOnline;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.JoinOnlineFragment;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.NewCommentFragment;
+import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.methods.OnlineDetailMoreServer;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -34,8 +37,8 @@ import java.util.Objects;
 
 public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnlineMembersRecyclerViewAdapter.OnOnlineDetailListener,
                                                                            MyOnlineCommentsRecyclerViewAdapter.OnOnlineDetailListener{
-
-    public OnlineDetailMoreServer onlineDetailMoreServer = new OnlineDetailMoreServer();
+    public FloatingActionButton fbtnAdd;
+    public OnlineDetailMoreServer  onlineDetailMoreServer = new OnlineDetailMoreServer();
     public Bundle fromOnlineDetailActivity;
     ImageView ivOnlineStar1;
     ImageView ivOnlineStar2;
@@ -135,6 +138,15 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
             groupComments.setVisibility(View.GONE);
         }
     };
+    public View.OnClickListener groupModificationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent toOnlineModification = new Intent(OnlineDetailMoreActivity.this, OnlineModificationActivity.class);
+            toOnlineModification.putExtra("details", fromOnlineDetailActivity);
+            toOnlineModification.putExtra("users", (Parcelable) onlineDetailMoreServer.getMyResponse());
+            startActivity(toOnlineModification);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +171,7 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
         RelativeLayout rlStudentsFragment = findViewById(R.id.groupDetailStudentsLayout);
         TextView tvFriendsTitle = findViewById(R.id.groupDetailMoreFriends);
         RelativeLayout rlFriendsFragment = findViewById(R.id.groupDetailFriendsLayout);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivOnlineStar1 = findViewById(R.id.groupDetailMoreStar1);
         ivOnlineStar2 = findViewById(R.id.groupDetailMoreStar2);
@@ -215,10 +228,8 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
             tvOnlineDate.setText(fromOnlineDetailActivity.getString("date"));
         }
 
-        onlineDetailMoreServer.getOnlineDetailMore(OnlineDetailMoreActivity.this, fromOnlineDetailActivity.getInt("id"));
-        onlineDetailMoreServer.serverOnlineCommentsResponse(OnlineDetailMoreActivity.this, fromOnlineDetailActivity.getInt("id"));
-
-
+        onlineDetailMoreServer.getOnlineDetailMore(OnlineDetailMoreActivity.this, fromOnlineDetailActivity.getInt("onlineId"));
+        onlineDetailMoreServer.serverOnlineCommentsResponse(OnlineDetailMoreActivity.this, fromOnlineDetailActivity.getInt("onlineId"));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.addItem);
@@ -235,7 +246,7 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
     @Override
     public void OnOnlineDetailClick(int userId) {
         Intent toUserDetailActivity = new Intent(this, UserDetailActivity.class);
-        toUserDetailActivity.putExtra("id", userId);
+        toUserDetailActivity.putExtra("onlineId", userId);
         startActivity(toUserDetailActivity);
     }
     public void refreshActivity() {
@@ -243,7 +254,6 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
         overridePendingTransition( 0, 0);
         startActivity(getIntent());
         overridePendingTransition( 0, 0);
-        //this.recreate();
     }
     public void killFragment() {
         if (getSupportFragmentManager().findFragmentByTag("JoinOnlineFragment") != null) {

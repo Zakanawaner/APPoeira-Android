@@ -294,4 +294,18 @@
     <string name="SelectPicture">Seleccionar foto</string>
     <string name="choseImagePlease">Por favor, selecciona una imagen antes de guardar</string>
     <string name="create_group">Crear grupo</string>
+    <string name="selectNamePlease">Por favor, introduce un nombre antes de guardar</string>
+    <string name="selectPlacePlease">Por favor, selecciona un punto del mapa antes de guardar</string>
+    <string name="selectPhonePlease">Por favor, introduce un teléfono válido antes de guardar</string>
+    <string name="selectPlatformPlease">Por favor, selecciona una plataforma antes de guardar</string>
+    <string name="selectNotPresentialPlease">Un evento online no puede ser presencial. Por favor, selecciona otra opción</string>
+    <string name="failedToSavePassword">La contraseña no se guardó porque la antigua contraseña no coincide</string>
+    <string name="profileUpdated">Hemos actualizado tus datos</string>
+    <string name="failedToSaveEmail">El email que has introducido ya existe. Selecciona otro diferente</string>
+    <string name="groupDetailModification">Modificar</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="Confirm">Eliminar</string>
+    <string name="carefulBeforDelete">"¡Cuidado! Estás a punto de eliminar de manera permanente. "</string>
+    <string name="rodaDeleted">Roda eliminada</string>
+    <string name="onlineDeleted">Evento online eliminado</string>
 </resources>

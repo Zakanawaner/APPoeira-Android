@@ -1,5 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
+import android.content.Intent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,8 @@ import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.CommentFr
 import com.onethousandprojects.appoeira.onlineDetailMoreView.OnlineDetailMoreActivity;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.OnlineMemberMembersFragment;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.OnlineMemberOwnersFragment;
+import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
+import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientNewCommentRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsResponse;
@@ -51,6 +55,30 @@ public class OnlineDetailMoreServer {
                 if (response.isSuccessful()){
                     serverOnlineDetailMoreResponse = response.body();
                     assert serverOnlineDetailMoreResponse != null;
+                    if (OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("isOwner")) {
+                        OnlineDetailMoreActivity.fbtnAdd.setImageResource(R.drawable.ic_edit);
+                        OnlineDetailMoreActivity.fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent toCreateRoda = new Intent(OnlineDetailMoreActivity, OnlineModificationActivity.class);
+                                toCreateRoda.putExtra("onlineId", OnlineDetailMoreActivity.fromOnlineDetailActivity.getInt("onlineId"));
+                                toCreateRoda.putExtra("modification", true);
+                                toCreateRoda.putExtra("name", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("name"));
+                                toCreateRoda.putExtra("image", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("image"));
+                                toCreateRoda.putExtra("description", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("description"));
+                                toCreateRoda.putExtra("phone", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("phone"));
+                                toCreateRoda.putExtra("verified", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("verified"));
+                                toCreateRoda.putExtra("rating", OnlineDetailMoreActivity.fromOnlineDetailActivity.getDouble("rating"));
+                                toCreateRoda.putExtra("votes", OnlineDetailMoreActivity.fromOnlineDetailActivity.getInt("votes"));
+                                toCreateRoda.putExtra("member", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("member"));
+                                toCreateRoda.putExtra("voted", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("voted"));
+                                toCreateRoda.putExtra("isOwner", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("isOwner"));
+                                toCreateRoda.putExtra("platform", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("platform"));
+                                toCreateRoda.putExtra("date", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("date"));
+                                OnlineDetailMoreActivity.startActivity(toCreateRoda);
+                            }
+                        });
+                    }
                     OnlineDetailMoreActivity.NUM_MEMBERS = serverOnlineDetailMoreResponse.size();
                     OnlineDetailMoreActivity.getSupportFragmentManager().beginTransaction().add(R.id.groupDetailOwnerLayout, new OnlineMemberOwnersFragment(), "OnlineMemberOwnersFragment").commit();
                     OnlineDetailMoreActivity.getSupportFragmentManager().beginTransaction().add(R.id.groupDetailFrontlineLayout, new OnlineMemberMembersFragment(), "OnlineMemberMembersFragment").commit();

@@ -1,36 +1,27 @@
-package com.onethousandprojects.appoeira.serverStuff.rodaModification;
-
-import android.widget.DatePicker;
+package com.onethousandprojects.appoeira.serverStuff.groupModification;
 
 import java.util.List;
 
-public class ClientRodaModificationRequest {
+public class ClientGroupModificationRequest {
     private String token;
     private List<Integer> owners;
     private String name;
     private String description;
-    private String date;
-    private List<Integer> invited;
     private Double latitude;
     private Double longitude;
     private String phone;
-    private Integer id;
 
-    public ClientRodaModificationRequest(String token, List<Integer> owners, String name,
-                                         String description, String date,
-                                         List<Integer> invited, Double latitude, Double longitude,
-                                         String phone, Integer id) {
+    public ClientGroupModificationRequest(String token, List<Integer> owners, String name,
+                                          String description, Double latitude, Double longitude,
+                                          String phone) {
         super();
         this.token = token;
         this.owners = owners;
         this.name = name;
         this.description = description;
-        this.date = date;
-        this.invited = invited;
         this.latitude = latitude;
         this.longitude = longitude;
         this.phone = phone;
-        this.id = id;
     }
 
     public String getToken() { return token; }
@@ -61,22 +52,6 @@ public class ClientRodaModificationRequest {
         this.description = description;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public List<Integer> getInvited() {
-        return invited;
-    }
-
-    public void setInvited(List<Integer> invited) {
-        this.invited = invited;
-    }
-
     public Double getLatitude() {
         return latitude;
     }
@@ -99,13 +74,5 @@ public class ClientRodaModificationRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 }
