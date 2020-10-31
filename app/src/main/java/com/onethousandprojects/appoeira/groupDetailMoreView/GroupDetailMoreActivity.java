@@ -1,11 +1,13 @@
 package com.onethousandprojects.appoeira.groupDetailMoreView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
@@ -35,6 +38,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
                                                                           MyGroupCommentsRecyclerViewAdapter.OnGroupDetailListener {
     public GroupDetailMoreServer groupDetailMoreServer = new GroupDetailMoreServer();
     public Bundle fromGroupDetailActivity;
+    public FloatingActionButton fbtnAdd;
     ImageView ivGroupStar1;
     ImageView ivGroupStar2;
     ImageView ivGroupStar3;
@@ -48,7 +52,6 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
     ConstraintLayout groupComments;
     public int NUM_PAGES = 0;
     public int NUM_MEMBERS = 0;
-    private PagerAdapter pagerAdapter;
     static boolean onComments = false;
     String origin = "GroupDetailMoreActivity";
     NavParams navParams = new NavParams(
@@ -133,6 +136,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
             groupComments.setVisibility(View.GONE);
         }
     };
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +154,7 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         tvGroupDetailVerification = findViewById(R.id.groupDetailVerification);
         TextView tvGroupAbout = findViewById(R.id.groupDetailAbout);
         LinearLayout llGroupRating = findViewById(R.id.groupDetailMoreRating);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivGroupStar1 = findViewById(R.id.groupDetailMoreStar1);
         ivGroupStar2 = findViewById(R.id.groupDetailMoreStar2);
@@ -158,7 +163,9 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         ivGroupStar5 = findViewById(R.id.groupDetailMoreStar5);
 
         groupComments.setVisibility(View.GONE);
-        Picasso.with(this).load(fromGroupDetailActivity.getString("image")).fit().into(ivGroupAvatar);
+        if (!Objects.equals(fromGroupDetailActivity.getString("image"), "")) {
+            Picasso.with(this).load(fromGroupDetailActivity.getString("image")).fit().into(ivGroupAvatar);
+        }
         tvGroupName.setText(fromGroupDetailActivity.getString("name"));
         tvGroupAbout.setText(fromGroupDetailActivity.getString("about"));
         tvNumberComments.setOnClickListener(showCommentsListener);
@@ -189,8 +196,8 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
             tvGroupAbout.setVisibility(View.GONE);
         }
 
-        groupDetailMoreServer.getGroupDetailMore(GroupDetailMoreActivity.this, fromGroupDetailActivity.getInt("id"));
-        groupDetailMoreServer.serverGroupCommentsResponse(GroupDetailMoreActivity.this, fromGroupDetailActivity.getInt("id"));
+        groupDetailMoreServer.getGroupDetailMore(GroupDetailMoreActivity.this, fromGroupDetailActivity.getInt("groupId"));
+        groupDetailMoreServer.serverGroupCommentsResponse(GroupDetailMoreActivity.this, fromGroupDetailActivity.getInt("groupId"));
 
         ActionMenuItemView ivTopMenuLogin = (ActionMenuItemView) findViewById(R.id.login);
         MaterialToolbar topNavigationView = findViewById(R.id.topMenu);
@@ -198,6 +205,15 @@ public class GroupDetailMoreActivity extends AppCompatActivity implements MyGrou
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(GroupDetailMoreActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);

@@ -3,10 +3,9 @@ package com.onethousandprojects.appoeira.eventDetailView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
-import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.authView.LoginActivity;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
@@ -29,7 +29,7 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActivity;
-import com.onethousandprojects.appoeira.eventListView.EventListActivity;
+import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ClientEventDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ServerEventDetailResponse;
 import com.squareup.picasso.Picasso;
@@ -41,6 +41,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    public FloatingActionButton fbtnAdd;
     public Double latitude;
     public Double longitude;
     public Bundle fromEventListActivity;
@@ -100,6 +102,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         View maps = findViewById(R.id.detailMap);
         ivPlatform = findViewById(R.id.detailPlatform);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivEventStar1 = findViewById(R.id.detailStar1);
         ivEventStar2 = findViewById(R.id.detailStar2);
@@ -109,7 +112,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
 
-        ClientEventDetailRequest clientEventDetailRequest = new ClientEventDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromEventListActivity.getInt("id"), SharedPreferencesManager.getIntegerValue(Constants.ID));
+        ClientEventDetailRequest clientEventDetailRequest = new ClientEventDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromEventListActivity.getInt("eventId"), SharedPreferencesManager.getIntegerValue(Constants.ID));
         Call<ServerEventDetailResponse> call = Server.post_event_detail(clientEventDetailRequest);
         call.enqueue(new Callback<ServerEventDetailResponse>() {
             @Override
@@ -126,7 +129,35 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                         tvEventUrl.setText(eventUrl);
                         tvEventPhone.setText(myResponse.getPhone());
                         tvEventAddress.setText(myResponse.getAddress());
-
+                        if (myResponse.isOwner()) {
+                            fbtnAdd.setImageResource(R.drawable.ic_edit);
+                            fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent toCreateOnline = new Intent(EventDetailActivity.this, EventModificationActivity.class);
+                                    toCreateOnline.putExtra("eventId", myResponse.getId());
+                                    toCreateOnline.putExtra("modification", true);
+                                    toCreateOnline.putExtra("name", myResponse.getName());
+                                    toCreateOnline.putExtra("image", myResponse.getPicUrl());
+                                    toCreateOnline.putExtra("description", myResponse.getDescription());
+                                    toCreateOnline.putExtra("phone", myResponse.getPhone());
+                                    toCreateOnline.putExtra("verified", myResponse.getVerified());
+                                    toCreateOnline.putExtra("rating", myResponse.getRating());
+                                    toCreateOnline.putExtra("votes", myResponse.getVotes());
+                                    toCreateOnline.putExtra("address", myResponse.getAddress());
+                                    toCreateOnline.putExtra("city", myResponse.getCity());
+                                    toCreateOnline.putExtra("country", myResponse.getCountry());
+                                    toCreateOnline.putExtra("latitude", myResponse.getLatitude());
+                                    toCreateOnline.putExtra("longitude", myResponse.getLongitude());
+                                    toCreateOnline.putExtra("member", myResponse.getIsMember());
+                                    toCreateOnline.putExtra("voted", myResponse.getHasVoted());
+                                    toCreateOnline.putExtra("isOwner", myResponse.isOwner());
+                                    toCreateOnline.putExtra("platform", myResponse.getPlatform());
+                                    toCreateOnline.putExtra("date", fromEventListActivity.getString("date"));
+                                    startActivity(toCreateOnline);
+                                }
+                            });
+                        }
                         if (myResponse.getVerified()) {
                             ivVerifiedEvent.setImageResource(R.drawable.verified);
                             List<ImageView> stars = CommonMethods.SetStars(myResponse.getRating(), ivEventStar1, ivEventStar2, ivEventStar3, ivEventStar4, ivEventStar5);
@@ -180,7 +211,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
             public void onClick(View view) {
                 Intent goToDetailMore = new Intent(EventDetailActivity.this,
                         EventDetailMoreActivity.class);
-                goToDetailMore.putExtra("id", myResponse.getId());
+                goToDetailMore.putExtra("eventId", myResponse.getId());
                 goToDetailMore.putExtra("name", myResponse.getName());
                 goToDetailMore.putExtra("image", myResponse.getPicUrl());
                 goToDetailMore.putExtra("description", myResponse.getDescription());
@@ -215,6 +246,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                     getStringValue(Constants.PIC_URL)).
                     transform(new CommonMethods.CircleTransform()).
                     into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(EventDetailActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
     }
     private void retrofitinit() {

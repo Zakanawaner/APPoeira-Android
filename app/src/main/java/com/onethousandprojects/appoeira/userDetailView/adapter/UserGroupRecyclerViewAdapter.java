@@ -80,7 +80,6 @@ public class UserGroupRecyclerViewAdapter extends RecyclerView.Adapter<UserGroup
             onGroupDetailListener.OnGroupDetailClick(mItem.getId());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnGroupDetailListener {
         void OnGroupDetailClick(int position);
     }

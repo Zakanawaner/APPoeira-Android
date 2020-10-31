@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -48,7 +47,9 @@ public class GroupMapsFragment extends Fragment {
             location.setLatitude(groupsMap.getCameraPosition().target.latitude);
             distance = SphericalUtil.computeDistanceBetween(groupsMap.getProjection().getVisibleRegion().farLeft, groupsMap.getCameraPosition().target);
             GroupListActivity groupListActivity = (GroupListActivity) requireActivity();
-            groupListActivity.groupListServer.sendMapsLocationToServer(GroupMapsFragment.this, location, (int) Math.round(distance/1000));
+            if (groupsMap.getCameraPosition().zoom >= 5.0) {
+                groupListActivity.groupListServer.sendMapsLocationToServer(GroupMapsFragment.this, location, (int) Math.round(distance / 1000));
+            }
         }
     };
     GoogleMap.OnInfoWindowClickListener mapListener = new GoogleMap.OnInfoWindowClickListener() {
@@ -57,7 +58,7 @@ public class GroupMapsFragment extends Fragment {
             Pair<String, Integer> pair = (Pair<String, Integer>) marker.getTag();
             Intent toGroupDetailActivity = new Intent(getContext(), GroupDetailActivity.class);
             assert pair != null;
-            toGroupDetailActivity.putExtra("id", pair.second);
+            toGroupDetailActivity.putExtra("groupId", pair.second);
             startActivity(toGroupDetailActivity);
         }
     };

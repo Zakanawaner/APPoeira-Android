@@ -14,7 +14,6 @@ import com.onethousandprojects.appoeira.onlineDetailMoreView.OnlineDetailMoreAct
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.OnlineMemberMembersFragment;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.fragments.OnlineMemberOwnersFragment;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientNewCommentRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsResponse;
@@ -71,7 +70,7 @@ public class OnlineDetailMoreServer {
                                 toCreateRoda.putExtra("rating", OnlineDetailMoreActivity.fromOnlineDetailActivity.getDouble("rating"));
                                 toCreateRoda.putExtra("votes", OnlineDetailMoreActivity.fromOnlineDetailActivity.getInt("votes"));
                                 toCreateRoda.putExtra("member", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("member"));
-                                toCreateRoda.putExtra("voted", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("voted"));
+                                toCreateRoda.putExtra("voted", OnlineDetailMoreActivity.fromOnlineDetailActivity.getInt("voted"));
                                 toCreateRoda.putExtra("isOwner", OnlineDetailMoreActivity.fromOnlineDetailActivity.getBoolean("isOwner"));
                                 toCreateRoda.putExtra("platform", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("platform"));
                                 toCreateRoda.putExtra("date", OnlineDetailMoreActivity.fromOnlineDetailActivity.getString("date"));
@@ -129,14 +128,14 @@ public class OnlineDetailMoreServer {
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(OnlineDetailMoreActivity, "TU comentario se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.commentSent, Toast.LENGTH_SHORT).show();
                         OnlineDetailMoreActivity.killFragment();
                         OnlineDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(OnlineDetailMoreActivity, "TU comentario no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.commentNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(OnlineDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OnlineDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -154,21 +153,21 @@ public class OnlineDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(OnlineDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         OnlineDetailMoreActivity.getIntent().removeExtra("member");
                         OnlineDetailMoreActivity.getIntent().putExtra("member", true);
                         OnlineDetailMoreActivity.killFragment();
                         OnlineDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(OnlineDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(OnlineDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OnlineDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ServerJoinResponse> callComments, Throwable t) {
+            public void onFailure(@NonNull Call<ServerJoinResponse> callComments, @NonNull Throwable t) {
                 Toast.makeText(OnlineDetailMoreActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -182,13 +181,13 @@ public class OnlineDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(OnlineDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         OnlineDetailMoreActivity.getIntent().removeExtra("member");
                         OnlineDetailMoreActivity.getIntent().putExtra("member", false);
                         OnlineDetailMoreActivity.killFragment();
                         OnlineDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(OnlineDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(OnlineDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
@@ -196,7 +195,7 @@ public class OnlineDetailMoreServer {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ServerLeaveResponse> callComments, Throwable t) {
+            public void onFailure(@NonNull Call<ServerLeaveResponse> callComments, @NonNull Throwable t) {
                 Toast.makeText(OnlineDetailMoreActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -211,14 +210,14 @@ public class OnlineDetailMoreServer {
                     serveOnlineRatedByUserResponse = response.body();
                     assert serveOnlineRatedByUserResponse != null;
                     if (serveOnlineRatedByUserResponse.isOk()) {
-                        Toast.makeText(OnlineDetailMoreActivity, "Has dado " + stars + " estrellas a este grupo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.youHaveGiven + stars + R.string.starsToThisOnline, Toast.LENGTH_SHORT).show();
                         OnlineDetailMoreActivity.killFragment();
                         OnlineDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(OnlineDetailMoreActivity, "Ya valoraste este grupo con " + stars + " estrellas", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OnlineDetailMoreActivity, R.string.youAlreadyRatedOnline + stars + R.string.stars, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(OnlineDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OnlineDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

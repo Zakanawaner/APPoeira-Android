@@ -3,6 +3,7 @@ package com.onethousandprojects.appoeira.onlineDetailView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +24,6 @@ import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.OnlineDetailMoreActivity;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
-import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ClientOnlineDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetail.ServerOnlineDetailResponse;
 import com.squareup.picasso.Picasso;
@@ -214,6 +213,15 @@ public class OnlineDetailActivity extends AppCompatActivity {
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(OnlineDetailActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
     }
     private void retrofitinit() {

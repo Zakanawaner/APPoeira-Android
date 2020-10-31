@@ -5,27 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailEventResponse.ServerUserDetailEventsResponse;
-import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailGroupResponse.ServerUserDetailGroupsResponse;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.onethousandprojects.appoeira.userDetailView.adapter.UserActivityRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.userDetailView.adapter.UserEventRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.userDetailView.adapter.UserGroupRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.userDetailView.content.UserActivityContent;
-import com.onethousandprojects.appoeira.userDetailView.content.UserEventContent;
-import com.onethousandprojects.appoeira.userDetailView.content.UserGroupContent;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;

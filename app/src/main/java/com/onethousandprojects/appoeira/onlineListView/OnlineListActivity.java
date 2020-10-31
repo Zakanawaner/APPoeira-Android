@@ -2,6 +2,7 @@ package com.onethousandprojects.appoeira.onlineListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
@@ -19,21 +20,21 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
-import com.onethousandprojects.appoeira.eventListView.EventListActivity;
+import com.onethousandprojects.appoeira.onlineListView.fragments.VerifyEmailFragment;
 import com.onethousandprojects.appoeira.onlineDetailView.OnlineDetailActivity;
 import com.onethousandprojects.appoeira.onlineListView.adapter.MyOnlineListRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
-import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
-import com.onethousandprojects.appoeira.serverStuff.methods.EventListServer;
 import com.onethousandprojects.appoeira.serverStuff.methods.OnlineListServer;
 import com.onethousandprojects.appoeira.serverStuff.onlineList.ServerLocationOnlineResponse;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 public class OnlineListActivity extends AppCompatActivity implements MyOnlineListRecyclerViewAdapter.OnOnlineListener {
 
     public FloatingActionButton fbtnAdd, fbtnDistance;
     public OnlineListServer onlineListServer = new OnlineListServer();
+    private VerifyEmailFragment verifyEmailFragment;
     public SwipeRefreshLayout srOnlineList;
     public TextView tvDistance;
     public SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -85,6 +86,15 @@ public class OnlineListActivity extends AppCompatActivity implements MyOnlineLis
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(OnlineListActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
         onlineListServer.sendLocationToServer(OnlineListActivity.this);
 
@@ -96,10 +106,22 @@ public class OnlineListActivity extends AppCompatActivity implements MyOnlineLis
         fbtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toNewOnlineActivity = new Intent(OnlineListActivity.this, OnlineModificationActivity.class);
-                toNewOnlineActivity.putExtra("onlineId", 0);
-                toNewOnlineActivity.putExtra("modification", false);
-                startActivity(toNewOnlineActivity);
+                if (CommonMethods.AmILogged()) {
+                    if (CommonMethods.AmIVerified()) {
+                        Intent toNewOnlineActivity = new Intent(OnlineListActivity.this, OnlineModificationActivity.class);
+                        toNewOnlineActivity.putExtra("onlineId", 0);
+                        toNewOnlineActivity.putExtra("modification", false);
+                        startActivity(toNewOnlineActivity);
+                    } else {
+                        if (verifyEmailFragment==null) {
+                            verifyEmailFragment = new VerifyEmailFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                        }
+                    }
+                } else {
+                    Intent toLogin = new Intent(OnlineListActivity.this, LoginActivity.class);
+                    startActivity(toLogin);
+                }
             }
         });
         srOnlineList = findViewById(R.id.swipeRefreshList);
@@ -108,16 +130,29 @@ public class OnlineListActivity extends AppCompatActivity implements MyOnlineLis
     @Override
     public void OnOnlineClick(int position) {
         if (CommonMethods.AmILogged()) {
-            ServerLocationOnlineResponse online = onlineListServer.getServerLocationOnlineResponse().get(position);
-            Intent toOnlineDetailActivity = new Intent(this, OnlineDetailActivity.class);
-            toOnlineDetailActivity.putExtra("onlineId", online.getId());
-            toOnlineDetailActivity.putExtra("date", online.getDate());
-            toOnlineDetailActivity.putExtra("owner", online.getOwnerApelhido());
-            toOnlineDetailActivity.putExtra("ownerRank", online.getOwnerRank());
-            startActivity(toOnlineDetailActivity);
+            if (CommonMethods.AmIVerified()) {
+                ServerLocationOnlineResponse online = onlineListServer.getServerLocationOnlineResponse().get(position);
+                Intent toOnlineDetailActivity = new Intent(this, OnlineDetailActivity.class);
+                toOnlineDetailActivity.putExtra("onlineId", online.getId());
+                toOnlineDetailActivity.putExtra("date", online.getDate());
+                toOnlineDetailActivity.putExtra("owner", online.getOwnerApelhido());
+                toOnlineDetailActivity.putExtra("ownerRank", online.getOwnerRank());
+                startActivity(toOnlineDetailActivity);
+            } else {
+                if (verifyEmailFragment==null) {
+                    verifyEmailFragment = new VerifyEmailFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                }
+            }
         } else {
             Intent toLogin = new Intent(this, LoginActivity.class);
             startActivity(toLogin);
         }
+    }
+    public void killVerifyFragment() {
+        if (verifyEmailFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("VerifyEmailFragment"))).commit();
+        }
+        verifyEmailFragment = null;
     }
 }

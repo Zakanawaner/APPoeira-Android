@@ -1,5 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
+import android.content.Intent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import com.onethousandprojects.appoeira.groupDetailMoreView.fragments.GroupMembe
 import com.onethousandprojects.appoeira.groupDetailMoreView.fragments.GroupMemberFrontlineFragment;
 import com.onethousandprojects.appoeira.groupDetailMoreView.fragments.GroupMemberOwnersFragment;
 import com.onethousandprojects.appoeira.groupDetailMoreView.fragments.GroupMemberStudentsFragment;
+import com.onethousandprojects.appoeira.groupModificationView.GroupModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientNewCommentRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsResponse;
@@ -54,6 +57,29 @@ public class GroupDetailMoreServer {
                 if (response.isSuccessful()){
                     serverGroupDetailMoreResponse = response.body();
                     assert serverGroupDetailMoreResponse != null;
+                    if (GroupDetailMoreActivity.fromGroupDetailActivity.getBoolean("isOwner")) {
+                        GroupDetailMoreActivity.fbtnAdd.setImageResource(R.drawable.ic_edit);
+                        GroupDetailMoreActivity.fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent toCreateGroup = new Intent(GroupDetailMoreActivity, GroupModificationActivity.class);
+                                toCreateGroup.putExtra("groupId", GroupDetailMoreActivity.fromGroupDetailActivity.getInt("groupId"));
+                                toCreateGroup.putExtra("modification", true);
+                                toCreateGroup.putExtra("name", GroupDetailMoreActivity.fromGroupDetailActivity.getString("name"));
+                                toCreateGroup.putExtra("image", GroupDetailMoreActivity.fromGroupDetailActivity.getString("image"));
+                                toCreateGroup.putExtra("url", GroupDetailMoreActivity.fromGroupDetailActivity.getString("url"));
+                                toCreateGroup.putExtra("phone", GroupDetailMoreActivity.fromGroupDetailActivity.getString("phone"));
+                                toCreateGroup.putExtra("about", GroupDetailMoreActivity.fromGroupDetailActivity.getString("about"));
+                                toCreateGroup.putExtra("address", GroupDetailMoreActivity.fromGroupDetailActivity.getString("address"));
+                                toCreateGroup.putExtra("city", GroupDetailMoreActivity.fromGroupDetailActivity.getString("city"));
+                                toCreateGroup.putExtra("country", GroupDetailMoreActivity.fromGroupDetailActivity.getString("country"));
+                                toCreateGroup.putExtra("latitude", GroupDetailMoreActivity.fromGroupDetailActivity.getDouble("latitude"));
+                                toCreateGroup.putExtra("longitude", GroupDetailMoreActivity.fromGroupDetailActivity.getDouble("longitude"));
+                                toCreateGroup.putExtra("member", GroupDetailMoreActivity.fromGroupDetailActivity.getBoolean("isMember"));
+                                GroupDetailMoreActivity.startActivity(toCreateGroup);
+                            }
+                        });
+                    }
                     GroupDetailMoreActivity.NUM_MEMBERS = serverGroupDetailMoreResponse.size();
                     GroupDetailMoreActivity.getSupportFragmentManager().beginTransaction().add(R.id.groupDetailOwnerLayout, new GroupMemberOwnersFragment(), "RodaMemberOwnersFragment").commit();
                     GroupDetailMoreActivity.getSupportFragmentManager().beginTransaction().add(R.id.groupDetailFrontlineLayout, new GroupMemberFrontlineFragment(), "GroupMemberFrontlineFragment").commit();
@@ -106,14 +132,14 @@ public class GroupDetailMoreServer {
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(GroupDetailMoreActivity, "TU comentario se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.commentSent, Toast.LENGTH_SHORT).show();
                         GroupDetailMoreActivity.killFragment();
                         GroupDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(GroupDetailMoreActivity, "TU comentario no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.commentNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(GroupDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -131,13 +157,13 @@ public class GroupDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(GroupDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         GroupDetailMoreActivity.getIntent().removeExtra("member");
                         GroupDetailMoreActivity.getIntent().putExtra("member", true);
                         GroupDetailMoreActivity.killFragment();
                         GroupDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(GroupDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
@@ -159,13 +185,13 @@ public class GroupDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(GroupDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         GroupDetailMoreActivity.getIntent().removeExtra("member");
                         GroupDetailMoreActivity.getIntent().putExtra("member", false);
                         GroupDetailMoreActivity.killFragment();
                         GroupDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(GroupDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
@@ -188,7 +214,7 @@ public class GroupDetailMoreServer {
                     serveRatedByUserResponse = response.body();
                     assert serveRatedByUserResponse != null;
                     if (serveRatedByUserResponse.isOk()) {
-                        Toast.makeText(GroupDetailMoreActivity, "Has dado " + stars + " estrellas a este grupo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.youHaveGiven + stars + R.string.starsToThisGroup, Toast.LENGTH_SHORT).show();
                         GroupDetailMoreActivity.getIntent().removeExtra("rating");
                         GroupDetailMoreActivity.getIntent().putExtra("rating", serveRatedByUserResponse.getRating());
                         int auxVotes = Objects.requireNonNull(GroupDetailMoreActivity.getIntent().getExtras()).getInt("votes");
@@ -197,7 +223,7 @@ public class GroupDetailMoreServer {
                         GroupDetailMoreActivity.killFragment();
                         GroupDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(GroupDetailMoreActivity, "Ya valoraste este grupo con " + serveRatedByUserResponse.getStars() + " estrellas", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GroupDetailMoreActivity, R.string.youAlreadyRatedGroup + serveRatedByUserResponse.getStars() + R.string.stars, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(GroupDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();

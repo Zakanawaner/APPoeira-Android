@@ -43,7 +43,7 @@ public class BeenHereRatingGroup extends DialogFragment {
         Button btnBeenHere = view.findViewById(R.id.haveYouBeenHereButton);
 
         llStars.setVisibility(View.GONE);
-        tvWouldYouRate.setVisibility(view.GONE);
+        tvWouldYouRate.setVisibility(View.GONE);
 
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +57,7 @@ public class BeenHereRatingGroup extends DialogFragment {
                 if (!beenHere) {
                     beenHere = true;
                     llStars.setVisibility(View.VISIBLE);
-                    tvWouldYouRate.setVisibility(view.VISIBLE);
+                    tvWouldYouRate.setVisibility(View.VISIBLE);
                     btnStar1.setImageResource(R.drawable.ic_star_void);
                     btnStar2.setImageResource(R.drawable.ic_star_void);
                     btnStar3.setImageResource(R.drawable.ic_star_void);
@@ -121,7 +121,7 @@ public class BeenHereRatingGroup extends DialogFragment {
                     });
                     btnBeenHere.setText(R.string.sendRating);
                 } else {
-                    groupDetailMoreActivity.groupDetailMoreServer.sendRating(groupDetailMoreActivity, groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"), stars);
+                    groupDetailMoreActivity.groupDetailMoreServer.sendRating(groupDetailMoreActivity, groupDetailMoreActivity.fromGroupDetailActivity.getInt("groupId"), stars);
                 }
             }
         });

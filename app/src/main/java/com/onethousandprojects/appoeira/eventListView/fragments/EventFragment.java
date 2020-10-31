@@ -15,11 +15,7 @@ import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.eventListView.EventListActivity;
 import com.onethousandprojects.appoeira.eventListView.adapter.MyEventListRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.eventListView.content.EventContent;
-import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
-import com.onethousandprojects.appoeira.rodaListView.adapter.MyRodaListRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.rodaListView.content.RodaContent;
 import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
-import com.onethousandprojects.appoeira.serverStuff.rodaList.ServerLocationRodaResponse;
 
 import java.util.ArrayList;
 import java.util.List;

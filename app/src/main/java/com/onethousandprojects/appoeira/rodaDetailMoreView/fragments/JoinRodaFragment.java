@@ -73,7 +73,7 @@ public class JoinRodaFragment extends DialogFragment {
                 if (!member) {
                     if (roleId > 0) {
                         rodaDetailMoreActivity.rodaDetailMoreServer.joinRoda(rodaDetailMoreActivity,
-                                rodaDetailMoreActivity.fromRodaDetailActivity.getInt("id"),
+                                rodaDetailMoreActivity.fromRodaDetailActivity.getInt("rodaId"),
                                 roleId);
                         rodaDetailMoreActivity.refreshActivity();
                         rodaDetailMoreActivity.killFragment();
@@ -82,7 +82,7 @@ public class JoinRodaFragment extends DialogFragment {
                     }
                 } else {
                     rodaDetailMoreActivity.rodaDetailMoreServer.leaveRoda(rodaDetailMoreActivity,
-                            rodaDetailMoreActivity.fromRodaDetailActivity.getInt("id"));
+                            rodaDetailMoreActivity.fromRodaDetailActivity.getInt("rodaId"));
                 }
             }
         });

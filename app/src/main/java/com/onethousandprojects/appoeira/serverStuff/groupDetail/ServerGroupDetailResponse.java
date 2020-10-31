@@ -1,5 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.groupDetail;
 
+import com.onethousandprojects.appoeira.R;
+
 public class ServerGroupDetailResponse {
     private String error;
     private Integer id;
@@ -22,12 +24,13 @@ public class ServerGroupDetailResponse {
     private boolean isMember;
     private Integer hasVoted;
     private String comment;
+    private boolean isOwner;
 
 
     public ServerGroupDetailResponse(String error, Integer id, String name, String picUrl, String url, String phone,
                                      boolean verified, Double rating, Integer votes, String opening, String about, String address,
                                      String city, String country, Double latitude, Double longitude,
-                                     String facebook, String google, boolean isMember, Integer hasVoted, String comment) {
+                                     String facebook, String google, boolean isMember, Integer hasVoted, String comment, boolean isOwner) {
         super();
         this.error = error;
         this.id = id;
@@ -50,6 +53,7 @@ public class ServerGroupDetailResponse {
         this.isMember = isMember;
         this.hasVoted = hasVoted;
         this.comment = comment;
+        this.isOwner = isOwner;
     }
 
     public String getError() {
@@ -218,6 +222,14 @@ public class ServerGroupDetailResponse {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public boolean getIsOwner() {
+        return isOwner;
+    }
+
+    public void setIsOwner(boolean isOwner) {
+        this.isOwner = isOwner;
     }
 
 }

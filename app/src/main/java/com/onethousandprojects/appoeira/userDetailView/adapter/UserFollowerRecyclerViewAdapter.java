@@ -72,7 +72,6 @@ public class UserFollowerRecyclerViewAdapter extends RecyclerView.Adapter<UserFo
             onUserDetailListener.OnUserDetailClick(mItem.getUserId());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnUserDetailListener {
         void OnUserDetailClick(int position);
     }

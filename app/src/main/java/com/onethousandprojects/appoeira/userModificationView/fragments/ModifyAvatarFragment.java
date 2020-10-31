@@ -22,22 +22,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
-import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
-import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ClientUploadPictureRequest;
-import com.onethousandprojects.appoeira.serverStuff.uploadPicture.ServerUploadPictureResponse;
 import com.onethousandprojects.appoeira.userModificationView.ProfileModificationActivity;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 

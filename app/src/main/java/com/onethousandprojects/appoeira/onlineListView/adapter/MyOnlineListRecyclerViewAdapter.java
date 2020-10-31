@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
-import com.onethousandprojects.appoeira.eventListView.content.EventContent;
 import com.onethousandprojects.appoeira.onlineListView.content.OnlineContent;
 import com.squareup.picasso.Picasso;
 

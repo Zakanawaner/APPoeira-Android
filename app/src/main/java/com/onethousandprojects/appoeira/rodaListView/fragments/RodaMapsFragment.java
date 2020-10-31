@@ -55,7 +55,7 @@ public class RodaMapsFragment extends Fragment {
             Pair<String, Integer> pair = (Pair<String, Integer>) marker.getTag();
             Intent toRodaDetailActivity = new Intent(getContext(), RodaDetailActivity.class);
             assert pair != null;
-            toRodaDetailActivity.putExtra("id", pair.second);
+            toRodaDetailActivity.putExtra("rodaId", pair.second);
             startActivity(toRodaDetailActivity);
         }
     };

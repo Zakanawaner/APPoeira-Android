@@ -33,6 +33,7 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
+import com.onethousandprojects.appoeira.rodaListView.fragments.VerifyEmailFragment;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
 import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
 import com.onethousandprojects.appoeira.rodaListView.adapter.MyRodaListRecyclerViewAdapter;
@@ -41,10 +42,12 @@ import com.onethousandprojects.appoeira.serverStuff.methods.RodaListServer;
 import com.onethousandprojects.appoeira.serverStuff.rodaList.ServerLocationRodaResponse;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
 
 public class RodaListActivity extends AppCompatActivity implements MyRodaListRecyclerViewAdapter.OnRodaListener {
     private FusedLocationProviderClient fusedLocationClient;
     public RodaListServer rodaListServer = new RodaListServer();
+    private VerifyEmailFragment verifyEmailFragment;
     public SwipeRefreshLayout srRodaList;
     public SeekBar sbDistance;
     public FloatingActionButton fbtnDistance, fbtnAdd;
@@ -118,6 +121,15 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(RodaListActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         fbtnDistance = findViewById(R.id.distanceButton);
@@ -158,10 +170,22 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
         fbtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toCreateRoda = new Intent(RodaListActivity.this, RodaModificationActivity.class);
-                toCreateRoda.putExtra("rodaId", 0);
-                toCreateRoda.putExtra("modification", false);
-                startActivity(toCreateRoda);
+                if (CommonMethods.AmILogged()) {
+                    if (CommonMethods.AmIVerified()) {
+                        Intent toCreateRoda = new Intent(RodaListActivity.this, RodaModificationActivity.class);
+                        toCreateRoda.putExtra("rodaId", 0);
+                        toCreateRoda.putExtra("modification", false);
+                        startActivity(toCreateRoda);
+                    } else {
+                        if (verifyEmailFragment==null) {
+                            verifyEmailFragment = new VerifyEmailFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                        }
+                    }
+                } else {
+                    Intent toLogin = new Intent(RodaListActivity.this, LoginActivity.class);
+                    startActivity(toLogin);
+                }
             }
         });
         srRodaList = findViewById(R.id.swipeRefreshList);
@@ -210,17 +234,32 @@ public class RodaListActivity extends AppCompatActivity implements MyRodaListRec
     @Override
     public void OnRodaClick(int position) {
         if (CommonMethods.AmILogged()) {
-            ServerLocationRodaResponse roda = rodaListServer.getServerLocationRodaResponse().get(position);
-            Intent toRodaDetailActivity = new Intent(this, RodaDetailActivity.class);
-            toRodaDetailActivity.putExtra("rodaId", roda.getId());
-            toRodaDetailActivity.putExtra("date", roda.getDate());
-            toRodaDetailActivity.putExtra("owner", roda.getOwnerApelhido());
-            toRodaDetailActivity.putExtra("ownerRank", roda.getOwnerRank());
-
-            startActivity(toRodaDetailActivity);
+            if (CommonMethods.AmIVerified()) {
+                ServerLocationRodaResponse roda = rodaListServer.getServerLocationRodaResponse().get(position);
+                Intent toRodaDetailActivity = new Intent(this, RodaDetailActivity.class);
+                toRodaDetailActivity.putExtra("rodaId", roda.getId());
+                toRodaDetailActivity.putExtra("date", roda.getDate());
+                toRodaDetailActivity.putExtra("owner", roda.getOwnerApelhido());
+                toRodaDetailActivity.putExtra("ownerRank", roda.getOwnerRank());
+                startActivity(toRodaDetailActivity);
+            } else {
+                if (verifyEmailFragment==null) {
+                    fbtnDistance.setVisibility(View.GONE);
+                    sbDistance.setVisibility(View.GONE);
+                    verifyEmailFragment = new VerifyEmailFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                }
+            }
         } else {
             Intent toLogin = new Intent(this, LoginActivity.class);
             startActivity(toLogin);
         }
+    }
+    public void killVerifyFragment() {
+        if (verifyEmailFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("VerifyEmailFragment"))).commit();
+        }
+        verifyEmailFragment = null;
+        fbtnDistance.setVisibility(View.VISIBLE);
     }
 }

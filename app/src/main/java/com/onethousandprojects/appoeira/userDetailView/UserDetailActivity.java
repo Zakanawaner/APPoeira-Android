@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,9 +22,11 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
+import com.onethousandprojects.appoeira.userDetailView.fragments.VerifyEmailFragment;
 import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
 import com.onethousandprojects.appoeira.onlineDetailView.OnlineDetailActivity;
-import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ClientSendEmailRequest;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ServerSendEmailResponse;
 import com.onethousandprojects.appoeira.userModificationView.ProfileModificationActivity;
 import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.AuthClient;
@@ -56,6 +59,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,6 +82,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
     private List<ServerUserDetailFollowResponse> followed;
     private List<UserActivityContent> activity = new ArrayList<>();
     private List<ServerUserDetailEventCommentResponse> eventComments;
+    private VerifyEmailFragment verifyEmailFragment;
     public ServerUserDetailResponse myResponse;
     private boolean alreadyFollowing = false;
     private ImageView ivFollow;
@@ -290,6 +295,15 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(UserDetailActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         tvLogOut.setOnClickListener(new View.OnClickListener() {
@@ -448,33 +462,68 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
     }
     @Override
     public void OnGroupDetailClick(int groupId) {
-        Intent toGroupDetailActivity = new Intent(this, GroupDetailActivity.class);
-        toGroupDetailActivity.putExtra("id", groupId);
-        startActivity(toGroupDetailActivity);
+        if (CommonMethods.AmIVerified()) {
+            Intent toGroupDetailActivity = new Intent(this, GroupDetailActivity.class);
+            toGroupDetailActivity.putExtra("groupId", groupId);
+            startActivity(toGroupDetailActivity);
+        } else {
+            if (verifyEmailFragment==null) {
+                verifyEmailFragment = new VerifyEmailFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+            }
+    }
     }
     @Override
     public void OnUserDetailClick(int userId) {
-        Intent toUserDetailActivity = new Intent(this, UserDetailActivity.class);
-        toUserDetailActivity.putExtra("id", userId);
-        startActivity(toUserDetailActivity);
+        if (CommonMethods.AmIVerified()) {
+            Intent toUserDetailActivity = new Intent(this, UserDetailActivity.class);
+            toUserDetailActivity.putExtra("id", userId);
+            startActivity(toUserDetailActivity);
+        } else {
+            if (verifyEmailFragment==null) {
+                verifyEmailFragment = new VerifyEmailFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+            }
+        }
     }
     @Override
     public void OnEventDetailClick(int eventId) {
-        Intent toEventDetailActivity = new Intent(this, EventDetailActivity.class);
-        toEventDetailActivity.putExtra("id", eventId);
-        startActivity(toEventDetailActivity);
+        if (CommonMethods.AmIVerified()) {
+            Intent toEventDetailActivity = new Intent(this, EventDetailActivity.class);
+            toEventDetailActivity.putExtra("eventId", eventId);
+            startActivity(toEventDetailActivity);
+        } else {
+            if (verifyEmailFragment==null) {
+                verifyEmailFragment = new VerifyEmailFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+            }
+        }
     }
     @Override
     public void OnRodaDetailClick(int rodaId) {
-        Intent toRodaDetailActivity = new Intent(this, RodaDetailActivity.class);
-        toRodaDetailActivity.putExtra("id", rodaId);
-        startActivity(toRodaDetailActivity);
+        if (CommonMethods.AmIVerified()) {
+            Intent toRodaDetailActivity = new Intent(this, RodaDetailActivity.class);
+            toRodaDetailActivity.putExtra("rodaId", rodaId);
+            startActivity(toRodaDetailActivity);
+        } else {
+            if (verifyEmailFragment==null) {
+                verifyEmailFragment = new VerifyEmailFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+            }
+        }
     }
     @Override
     public void OnOnlineDetailClick(int onlineId) {
-        Intent toOnlineDetailActivity = new Intent(this, OnlineDetailActivity.class);
-        toOnlineDetailActivity.putExtra("id", onlineId);
-        startActivity(toOnlineDetailActivity);
+        if (CommonMethods.AmIVerified()) {
+            Intent toOnlineDetailActivity = new Intent(this, OnlineDetailActivity.class);
+            toOnlineDetailActivity.putExtra("onlineId", onlineId);
+            startActivity(toOnlineDetailActivity);
+        } else {
+            if (verifyEmailFragment==null) {
+                verifyEmailFragment = new VerifyEmailFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+            }
+        }
     }
 
     @Override
@@ -507,5 +556,37 @@ public class UserDetailActivity extends AppCompatActivity implements UserGroupRe
     }
     public List<ServerUserDetailFollowResponse> getFollowed(){
         return followed;
+    }
+
+    public void sendVerificationEmail() {
+        ClientSendEmailRequest clientSendEmailRequest = new ClientSendEmailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), 1, SharedPreferencesManager.getIntegerValue(Constants.ID), 0);
+        Call<ServerSendEmailResponse> call = Server.post_send_email(clientSendEmailRequest);
+        call.enqueue(new Callback<ServerSendEmailResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerSendEmailResponse> call, @NonNull Response<ServerSendEmailResponse> response) {
+                if (response.isSuccessful()){
+                    ServerSendEmailResponse serverSendEmailResponse = response.body();
+                    assert serverSendEmailResponse != null;
+                    if (serverSendEmailResponse.isOk()) {
+                        Toast.makeText(UserDetailActivity.this,R.string.checkYourEmail, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(UserDetailActivity.this,R.string.failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerSendEmailResponse> call,
+                                  @NonNull Throwable t) {
+                Toast.makeText(UserDetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
+    public void killVerifyFragment() {
+        if (verifyEmailFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("VerifyEmailFragment"))).commit();
+        }
+        verifyEmailFragment = null;
     }
 }

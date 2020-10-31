@@ -117,7 +117,7 @@ public class NavParams {
         return groupDetailMore;
     }
 
-    public void setGroupDetailMore(GroupDetailMoreActivity gç) {
+    public void setGroupDetailMore(GroupDetailMoreActivity groupDetailMore) {
         this.groupDetailMore = groupDetailMore;
     }
 
@@ -149,7 +149,7 @@ public class NavParams {
         return eventDetailMore;
     }
 
-    public void setEventDetailMore(EventDetailMoreActivity gç) {
+    public void setEventDetailMore(EventDetailMoreActivity eventDetailMore) {
         this.eventDetailMore = eventDetailMore;
     }
 
@@ -181,7 +181,7 @@ public class NavParams {
         return rodaDetailMore;
     }
 
-    public void setRodaDetailMore(RodaDetailMoreActivity gç) {
+    public void setRodaDetailMore(RodaDetailMoreActivity rodaDetailMore) {
         this.rodaDetailMore = rodaDetailMore;
     }
 
@@ -213,7 +213,7 @@ public class NavParams {
         return onlineDetailMore;
     }
 
-    public void setOnlineDetailMore(OnlineDetailMoreActivity gç) {
+    public void setOnlineDetailMore(OnlineDetailMoreActivity onlineDetailMore) {
         this.onlineDetailMore = onlineDetailMore;
     }
 

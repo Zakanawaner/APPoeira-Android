@@ -15,15 +15,11 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.groupListView.fragments.GroupFragment;
 import com.onethousandprojects.appoeira.newsView.fragments.NewsFragment;
-import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
-import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
 import com.onethousandprojects.appoeira.serverStuff.newsList.ClientNewsRequest;
 import com.onethousandprojects.appoeira.serverStuff.newsList.ServerNewsResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
-import com.onethousandprojects.appoeira.userModificationView.ProfileModificationActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

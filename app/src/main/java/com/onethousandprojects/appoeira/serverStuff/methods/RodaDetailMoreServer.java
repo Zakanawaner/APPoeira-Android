@@ -9,12 +9,10 @@ import androidx.annotation.NonNull;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActivity;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.CommentFragment;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.RodaDetailMoreActivity;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.RodaMemberMembersFragment;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.RodaMemberOwnersFragment;
-import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientNewCommentRequest;
@@ -77,7 +75,7 @@ public class RodaDetailMoreServer {
                                 toCreateRoda.putExtra("latitude", RodaDetailMoreActivity.fromRodaDetailActivity.getDouble("latitude"));
                                 toCreateRoda.putExtra("longitude", RodaDetailMoreActivity.fromRodaDetailActivity.getDouble("longitude"));
                                 toCreateRoda.putExtra("member", RodaDetailMoreActivity.fromRodaDetailActivity.getBoolean("member"));
-                                toCreateRoda.putExtra("voted", RodaDetailMoreActivity.fromRodaDetailActivity.getBoolean("voted"));
+                                toCreateRoda.putExtra("voted", RodaDetailMoreActivity.fromRodaDetailActivity.getInt("voted"));
                                 toCreateRoda.putExtra("isOwner", RodaDetailMoreActivity.fromRodaDetailActivity.getBoolean("isOwner"));
                                 toCreateRoda.putExtra("date", RodaDetailMoreActivity.fromRodaDetailActivity.getString("date"));
                                 RodaDetailMoreActivity.startActivity(toCreateRoda);
@@ -134,14 +132,14 @@ public class RodaDetailMoreServer {
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(RodaDetailMoreActivity, "TU comentario se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.commentSent, Toast.LENGTH_SHORT).show();
                         RodaDetailMoreActivity.killFragment();
                         RodaDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(RodaDetailMoreActivity, "TU comentario no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.commentNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(RodaDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RodaDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -159,16 +157,16 @@ public class RodaDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(RodaDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         RodaDetailMoreActivity.getIntent().removeExtra("member");
                         RodaDetailMoreActivity.getIntent().putExtra("member", true);
                         RodaDetailMoreActivity.killFragment();
                         RodaDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(RodaDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(RodaDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RodaDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -187,13 +185,13 @@ public class RodaDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(RodaDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         RodaDetailMoreActivity.getIntent().removeExtra("member");
                         RodaDetailMoreActivity.getIntent().putExtra("member", false);
                         RodaDetailMoreActivity.killFragment();
                         RodaDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(RodaDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(RodaDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
@@ -216,14 +214,14 @@ public class RodaDetailMoreServer {
                     serveRodaRatedByUserResponse = response.body();
                     assert serveRodaRatedByUserResponse != null;
                     if (serveRodaRatedByUserResponse.isOk()) {
-                        Toast.makeText(RodaDetailMoreActivity, "Has dado " + stars + " estrellas a este grupo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.youHaveGiven + stars + R.string.starsToThisRoda, Toast.LENGTH_SHORT).show();
                         RodaDetailMoreActivity.killFragment();
                         RodaDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(RodaDetailMoreActivity, "Ya valoraste este grupo con " + stars + " estrellas", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RodaDetailMoreActivity, R.string.youAlreadyRatedRoda + stars + R.string.stars, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(RodaDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RodaDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

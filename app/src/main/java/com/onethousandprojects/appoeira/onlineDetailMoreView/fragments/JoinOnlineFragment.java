@@ -73,7 +73,7 @@ public class JoinOnlineFragment extends DialogFragment {
                 if (!member) {
                     if (roleId > 0) {
                         onlineDetailMoreActivity.onlineDetailMoreServer.joinOnline(onlineDetailMoreActivity,
-                                onlineDetailMoreActivity.fromOnlineDetailActivity.getInt("id"),
+                                onlineDetailMoreActivity.fromOnlineDetailActivity.getInt("onlineId"),
                                 roleId);
                         onlineDetailMoreActivity.refreshActivity();
                         onlineDetailMoreActivity.killFragment();
@@ -82,7 +82,7 @@ public class JoinOnlineFragment extends DialogFragment {
                     }
                 } else {
                     onlineDetailMoreActivity.onlineDetailMoreServer.leaveOnline(onlineDetailMoreActivity,
-                            onlineDetailMoreActivity.fromOnlineDetailActivity.getInt("id"));
+                            onlineDetailMoreActivity.fromOnlineDetailActivity.getInt("onlineId"));
                 }
             }
         });

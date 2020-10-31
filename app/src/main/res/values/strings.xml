@@ -249,6 +249,8 @@
     <string name="joinedOnline">Se unió a la clase online:</string>
     <string name="requestSent">Tu petición se envió correctamente</string>
     <string name="requestNotSaved">Tu petición no pudo guardarse</string>
+    <string name="commentSent">Tu comentario se envió correctamente</string>
+    <string name="commentNotSaved">Tu comentario no pudo guardarse</string>
     <string name="participants"><u>Participantes</u></string>
     <string name="searchUserButton">Personas</string>
     <string name="searcGroupButton">Grupos</string>
@@ -308,4 +310,25 @@
     <string name="carefulBeforDelete">"¡Cuidado! Estás a punto de eliminar de manera permanente. "</string>
     <string name="rodaDeleted">Roda eliminada</string>
     <string name="onlineDeleted">Evento online eliminado</string>
+    <string name="eventDeleted">Evento eliminado</string>
+    <string name="groupDeleted">El grupo se ha eliminado</string>
+    <string name="searchFrontlineTitle">Busca tu línea de frente</string>
+    <string name="verifyEmailDescription">Necesitas verificar tu email para continuar. Consulta tu bandeja de correo. Si no lo has recibido o no encuentras el correo, pulsa el siguiente botón</string>
+    <string name="SendConfirmationMail">Enviar email de confirmación</string>
+    <string name="sendEmail">"Enviar email a "</string>
+    <string name="youHaveGiven">"Has dado "</string>
+    <string name="starsToThisGroup">" estrellas a este grupo"</string>
+    <string name="starsToThisEvent">" estrellas a este evento"</string>
+    <string name="starsToThisRoda">" estrellas a esta roda"</string>
+    <string name="starsToThisOnline">" estrellas a este evento online"</string>
+    <string name="youAlreadyRatedGroup">"Ya valoraste este grupo con "</string>
+    <string name="youAlreadyRatedEvent">"Ya valoraste este evento con "</string>
+    <string name="youAlreadyRatedRoda">"Ya valoraste esta roda con "</string>
+    <string name="youAlreadyRatedOnline">"Ya valoraste este evento online con "</string>
+    <string name="stars">" estrellas"</string>
+    <string name="searchStudentsTitle">Busca a los alumnos de tu grupo</string>
+    <string name="deleteRoda">Eliminar Roda</string>
+    <string name="deleteOnline">Eliminar</string>
+    <string name="delete">Eliminar</string>
+
 </resources>

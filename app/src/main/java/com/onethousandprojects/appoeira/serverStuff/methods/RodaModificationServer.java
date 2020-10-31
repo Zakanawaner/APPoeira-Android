@@ -96,7 +96,7 @@ public class RodaModificationServer {
                         RodaModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaMembersInvitedFragment(), "UserListFragment").commit();
                     } else {
                         RodaModificationActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(RodaModificationActivity.getSupportFragmentManager().findFragmentByTag("UserListFragment"))).commit();
-                        if (serverSearchResponse.getUserResponses().get(0).getId() != null) {
+                        if (serverSearchResponse.getUserResponses().size() > 0) {
                             RodaModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new RodaMembersInvitedFragment(), "UserListFragment").commit();
                         } else {
                             createdFragment = false;

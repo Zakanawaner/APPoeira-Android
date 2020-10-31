@@ -3,6 +3,7 @@ package com.onethousandprojects.appoeira.userModificationView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -110,6 +111,15 @@ public class ProfileModificationActivity extends AppCompatActivity {
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(ProfileModificationActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).fit().into(ivUserAvatar);

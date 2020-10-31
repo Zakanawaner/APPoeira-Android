@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActivity;
-import com.onethousandprojects.appoeira.eventDetailMoreView.adapter.MyEventMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.eventDetailMoreView.content.EventMembersContent;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.OnlineDetailMoreActivity;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.adapter.MyOnlineMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.onlineDetailMoreView.content.OnlineMembersContent;
-import com.onethousandprojects.appoeira.serverStuff.eventDetailMore.ServerEventDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetailMore.ServerOnlineDetailMoreResponse;
 
 import java.util.ArrayList;

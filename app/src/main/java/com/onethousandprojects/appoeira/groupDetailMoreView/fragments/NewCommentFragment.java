@@ -47,7 +47,7 @@ public class NewCommentFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 groupDetailMoreActivity.groupDetailMoreServer.postComment(groupDetailMoreActivity,
-                        groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"),
+                        groupDetailMoreActivity.fromGroupDetailActivity.getInt("groupId"),
                         String.valueOf(etComment.getText()));
                 groupDetailMoreActivity.refreshActivity();
                 groupDetailMoreActivity.killFragment();

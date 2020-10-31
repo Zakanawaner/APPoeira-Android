@@ -15,7 +15,7 @@ import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.eventModificationView.adapters.MyEventModificationConvideMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.searchView.content.SearchContent;
-import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
+import com.onethousandprojects.appoeira.serverStuff.eventDetailMore.ServerEventDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 
 import java.util.ArrayList;
@@ -55,29 +55,60 @@ public class EventMembersConvidedFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         EventModificationActivity activity = (EventModificationActivity) getActivity();
-        List<ServerSearchUserResponse> myResponseFromActivity = activity.eventModificationServer.getSearchResponse().getUserResponses();
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        assert activity != null;
+        if (activity.fromEventDetail.getBoolean("modification") && !activity.flagSecondFragment) {
+            activity.flagSecondFragment = true;
+            List<ServerEventDetailMoreResponse> myResponseFromActivity = activity.eventModificationServer.getMyResponse();
+            // Set the adapter
+            if (view instanceof RecyclerView) {
+                Context context = view.getContext();
+                recyclerView = (RecyclerView) view;
+                if (mColumnCount <= 1) {
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                } else {
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                }
+                // Lista de miembros del grupo
+                MemberList = new ArrayList<>();
+                for (int i = 0; i < myResponseFromActivity.size(); i++) {
+                    if (String.valueOf(myResponseFromActivity.get(i).getUserGroupRole()).equals("invited")) {
+                        MemberList.add(new SearchContent(1,
+                                myResponseFromActivity.get(i).getUserId(),
+                                String.valueOf(myResponseFromActivity.get(i).getUserApelhido()),
+                                String.valueOf(myResponseFromActivity.get(i).getUserPicUrl()),
+                                false,
+                                String.valueOf(myResponseFromActivity.get(i).getUserRank()),
+                                null, null, null));
+                    }
+                }
+                adapterGroupDetail = new MyEventModificationConvideMembersRecyclerViewAdapter(getActivity(), MemberList, (EventModificationActivity) getActivity());
+                recyclerView.setAdapter(adapterGroupDetail);
             }
-            // Lista de miembros del grupo
-            MemberList = new ArrayList<>();
-            for (int i = 0; i < myResponseFromActivity.size(); i++) {
-                MemberList.add(new SearchContent(1,
-                        myResponseFromActivity.get(i).getId(),
-                        String.valueOf(myResponseFromActivity.get(i).getApelhido()),
-                        String.valueOf(myResponseFromActivity.get(i).getPicUrl()),
-                        myResponseFromActivity.get(i).isPremium(),
-                        String.valueOf(myResponseFromActivity.get(i).getRank()),
-                        null, null, null));
+        } else {
+            List<ServerSearchUserResponse> myResponseFromActivity = activity.eventModificationServer.getSearchResponse().getUserResponses();
+            // Set the adapter
+            if (view instanceof RecyclerView) {
+                Context context = view.getContext();
+                recyclerView = (RecyclerView) view;
+                if (mColumnCount <= 1) {
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                } else {
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                }
+                // Lista de miembros del grupo
+                MemberList = new ArrayList<>();
+                for (int i = 0; i < myResponseFromActivity.size(); i++) {
+                    MemberList.add(new SearchContent(1,
+                            myResponseFromActivity.get(i).getId(),
+                            String.valueOf(myResponseFromActivity.get(i).getApelhido()),
+                            String.valueOf(myResponseFromActivity.get(i).getPicUrl()),
+                            myResponseFromActivity.get(i).isPremium(),
+                            String.valueOf(myResponseFromActivity.get(i).getRank()),
+                            null, null, null));
+                }
+                adapterGroupDetail = new MyEventModificationConvideMembersRecyclerViewAdapter(getActivity(), MemberList, (EventModificationActivity) getActivity());
+                recyclerView.setAdapter(adapterGroupDetail);
             }
-            adapterGroupDetail = new MyEventModificationConvideMembersRecyclerViewAdapter(getActivity(), MemberList, (EventModificationActivity) getActivity());
-            recyclerView.setAdapter(adapterGroupDetail);
         }
         return view;
     }

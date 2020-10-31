@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
-import com.onethousandprojects.appoeira.groupDetailMoreView.adapter.MyGroupMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.groupDetailMoreView.content.GroupMembersContent;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.RodaDetailMoreActivity;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.content.RodaMembersContent;
-import com.onethousandprojects.appoeira.serverStuff.groupDetailMore.ServerGroupDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 
 import java.util.ArrayList;
@@ -58,6 +54,7 @@ public class RodaMemberOwnersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         RodaDetailMoreActivity activity = (RodaDetailMoreActivity) getActivity();
+        assert activity != null;
         List<ServerRodaDetailMoreResponse> myResponseFromActivity = activity.rodaDetailMoreServer.getMyResponse();
         // Set the adapter
         if (view instanceof RecyclerView) {

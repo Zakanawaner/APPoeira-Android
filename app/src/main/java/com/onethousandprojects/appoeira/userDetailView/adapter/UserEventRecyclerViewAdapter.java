@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.userDetailView.content.UserEventContent;
-import com.onethousandprojects.appoeira.userDetailView.content.UserGroupContent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -81,7 +80,6 @@ public class UserEventRecyclerViewAdapter extends RecyclerView.Adapter<UserEvent
             onEventDetailListener.OnEventDetailClick(mItem.getId());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnEventDetailListener {
         void OnEventDetailClick(int position);
     }

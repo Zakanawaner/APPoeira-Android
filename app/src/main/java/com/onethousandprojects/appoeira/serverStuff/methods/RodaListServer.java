@@ -10,16 +10,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.onethousandprojects.appoeira.R;
+import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
 import com.onethousandprojects.appoeira.rodaListView.fragments.RodaFragment;
 import com.onethousandprojects.appoeira.rodaListView.fragments.RodaMapsFragment;
 import com.onethousandprojects.appoeira.serverStuff.rodaList.ClientLocationRodasRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaList.ServerLocationRodaResponse;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ClientSendEmailRequest;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ServerSendEmailResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +32,7 @@ import retrofit2.Response;
 public class RodaListServer {
     private List<ServerLocationRodaResponse> serverLocationRodaResponse;
     private List<ServerLocationRodaResponse> serverLocationRodaMapsResponse;
+    private ServerSendEmailResponse serverSendEmailResponse;
     private boolean createdFragment = false;
     Client Client;
     Server Server;
@@ -58,7 +61,7 @@ public class RodaListServer {
                     }
                     RodaListActivity.srRodaList.setRefreshing(false);
                 } else {
-                    Toast.makeText(RodaListActivity,"Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RodaListActivity,R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -78,9 +81,10 @@ public class RodaListServer {
         Call<List<ServerLocationRodaResponse>> call = Server.post_location_rodas(clientLocationRodasRequest);
         call.enqueue(new Callback<List<ServerLocationRodaResponse>>() {
             @Override
-            public void onResponse(Call<List<ServerLocationRodaResponse>> call, Response<List<ServerLocationRodaResponse>> response) {
+            public void onResponse(@NonNull Call<List<ServerLocationRodaResponse>> call, @NonNull Response<List<ServerLocationRodaResponse>> response) {
                 if (response.isSuccessful()){
                     serverLocationRodaMapsResponse = response.body();
+                    assert serverLocationRodaMapsResponse != null;
                     for(int i = 0; i < serverLocationRodaMapsResponse.size(); i++) {
                         // googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(image)).position(marker).title(myResponse.get(i).getName()));
                         Marker marker = rodaMapsFragment.rodasMap.addMarker(new MarkerOptions().position(new LatLng(serverLocationRodaMapsResponse.get(i).getLatitude(), serverLocationRodaMapsResponse.get(i).getLongitude())).title(serverLocationRodaMapsResponse.get(i).getName()));
@@ -90,11 +94,36 @@ public class RodaListServer {
                 }
             }
             @Override
-            public void onFailure(Call<List<ServerLocationRodaResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ServerLocationRodaResponse>> call, @NonNull Throwable t) {
             }
         });
     }
     public List<ServerLocationRodaResponse> getServerLocationRodaMapsResponse() {
         return serverLocationRodaMapsResponse;
+    }
+    public void sendVerificationEmail(RodaListActivity RodaListActivity, Integer type, Integer firstId, Integer secondId) {
+        ClientSendEmailRequest clientSendEmailRequest = new ClientSendEmailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), type, firstId, secondId);
+        Call<ServerSendEmailResponse> call = Server.post_send_email(clientSendEmailRequest);
+        call.enqueue(new Callback<ServerSendEmailResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerSendEmailResponse> call, @NonNull Response<ServerSendEmailResponse> response) {
+                if (response.isSuccessful()){
+                    serverSendEmailResponse = response.body();
+                    assert serverSendEmailResponse != null;
+                    if (serverSendEmailResponse.isOk()) {
+                        Toast.makeText(RodaListActivity,R.string.checkYourEmail, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(RodaListActivity,R.string.failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerSendEmailResponse> call,
+                                  @NonNull Throwable t) {
+                Toast.makeText(RodaListActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 }

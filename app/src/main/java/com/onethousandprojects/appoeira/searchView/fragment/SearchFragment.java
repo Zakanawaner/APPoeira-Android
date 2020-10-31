@@ -16,7 +16,6 @@ import com.onethousandprojects.appoeira.searchView.SearchActivity;
 import com.onethousandprojects.appoeira.searchView.adapters.MySearchRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.searchView.content.SearchContent;
 import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
-import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 
 import java.util.ArrayList;
 import java.util.List;

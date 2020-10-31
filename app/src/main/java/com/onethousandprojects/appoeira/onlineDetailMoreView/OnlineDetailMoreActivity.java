@@ -1,11 +1,14 @@
 package com.onethousandprojects.appoeira.onlineDetailMoreView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -148,6 +151,7 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,11 +184,10 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
         ivOnlineStar5 = findViewById(R.id.groupDetailMoreStar5);
 
         groupComments.setVisibility(View.GONE);
-        if (!fromOnlineDetailActivity.getString("image").equals("")) {
+        if (!Objects.equals(fromOnlineDetailActivity.getString("image"), "")) {
             Picasso.with(this).load(fromOnlineDetailActivity.getString("image")).fit().into(ivOnlineAvatar);
         }
         tvOnlineName.setText(fromOnlineDetailActivity.getString("name"));
-        String u = fromOnlineDetailActivity.getString("description");
         tvOnlineAbout.setText(fromOnlineDetailActivity.getString("description"));
         tvStudentsTitle.setVisibility(View.GONE);
         rlStudentsFragment.setVisibility(View.GONE);
@@ -241,6 +244,15 @@ public class OnlineDetailMoreActivity extends AppCompatActivity implements MyOnl
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(OnlineDetailMoreActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
     }
     @Override

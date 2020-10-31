@@ -73,7 +73,7 @@ public class JoinEventFragment extends DialogFragment {
                 if (!member) {
                     if (roleId > 0) {
                         eventDetailMoreActivity.eventDetailMoreServer.joinEvent(eventDetailMoreActivity,
-                                eventDetailMoreActivity.fromEventDetailActivity.getInt("id"),
+                                eventDetailMoreActivity.fromEventDetailActivity.getInt("eventId"),
                                 roleId);
                         eventDetailMoreActivity.refreshActivity();
                         eventDetailMoreActivity.killFragment();
@@ -82,7 +82,7 @@ public class JoinEventFragment extends DialogFragment {
                     }
                 } else {
                     eventDetailMoreActivity.eventDetailMoreServer.leaveEvent(eventDetailMoreActivity,
-                            eventDetailMoreActivity.fromEventDetailActivity.getInt("id"));
+                            eventDetailMoreActivity.fromEventDetailActivity.getInt("eventId"));
                 }
             }
         });

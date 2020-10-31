@@ -100,7 +100,7 @@ public class JoinGroupFragment extends DialogFragment {
                 if (!member) {
                     if (roleId > 0) {
                         groupDetailMoreActivity.groupDetailMoreServer.joinGroup(groupDetailMoreActivity,
-                                groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"),
+                                groupDetailMoreActivity.fromGroupDetailActivity.getInt("groupId"),
                                 roleId);
                         groupDetailMoreActivity.refreshActivity();
                         groupDetailMoreActivity.killFragment();
@@ -109,7 +109,7 @@ public class JoinGroupFragment extends DialogFragment {
                     }
                 } else {
                     groupDetailMoreActivity.groupDetailMoreServer.leaveGroup(groupDetailMoreActivity,
-                            groupDetailMoreActivity.fromGroupDetailActivity.getInt("id"));
+                            groupDetailMoreActivity.fromGroupDetailActivity.getInt("groupId"));
                 }
             }
         });

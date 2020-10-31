@@ -47,7 +47,7 @@ public class NewCommentFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 eventDetailMoreActivity.eventDetailMoreServer.postComment(eventDetailMoreActivity,
-                        eventDetailMoreActivity.fromEventDetailActivity.getInt("id"),
+                        eventDetailMoreActivity.fromEventDetailActivity.getInt("eventId"),
                         String.valueOf(etComment.getText()));
                 eventDetailMoreActivity.refreshActivity();
                 eventDetailMoreActivity.killFragment();

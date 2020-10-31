@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.authView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
@@ -121,7 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
                         Call<ServerSignupResponse> call = Server.post_sign_up(clientSignupRequest);
                         call.enqueue(new Callback<ServerSignupResponse>() {
                             @Override
-                            public void onResponse(Call<ServerSignupResponse> call, Response<ServerSignupResponse> response) {
+                            public void onResponse(@NonNull Call<ServerSignupResponse> call, @NonNull Response<ServerSignupResponse> response) {
                                 if (response.isSuccessful()) {
                                     assert response.body() != null;
                                     if (response.body().getToken() == null) {
@@ -135,7 +136,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 }
                             }
                             @Override
-                            public void onFailure(Call<ServerSignupResponse> call, Throwable t) {
+                            public void onFailure(@NonNull Call<ServerSignupResponse> call, @NonNull Throwable t) {
                                 Toast.makeText(SignUpActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });

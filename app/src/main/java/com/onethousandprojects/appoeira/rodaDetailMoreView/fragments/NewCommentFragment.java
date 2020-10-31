@@ -47,7 +47,7 @@ public class NewCommentFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 rodaDetailMoreActivity.rodaDetailMoreServer.postComment(rodaDetailMoreActivity,
-                        rodaDetailMoreActivity.fromRodaDetailActivity.getInt("id"),
+                        rodaDetailMoreActivity.fromRodaDetailActivity.getInt("rodaId"),
                         String.valueOf(etComment.getText()));
                 rodaDetailMoreActivity.refreshActivity();
                 rodaDetailMoreActivity.killFragment();

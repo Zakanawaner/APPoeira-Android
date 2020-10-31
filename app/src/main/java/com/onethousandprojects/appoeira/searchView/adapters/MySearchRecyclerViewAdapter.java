@@ -4,21 +4,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
-import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.searchView.content.SearchContent;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -122,7 +117,6 @@ public class MySearchRecyclerViewAdapter extends RecyclerView.Adapter<MySearchRe
             onSearchListener.OnSearchClick(mValues.get(getAdapterPosition()).getId(), mValues.get(getAdapterPosition()).getType());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnSearchListener {
         void OnSearchClick(int id, int type);
     }

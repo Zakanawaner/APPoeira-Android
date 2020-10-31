@@ -1,12 +1,14 @@
 package com.onethousandprojects.appoeira.rodaDetailMoreView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +28,6 @@ import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaComment
 import com.onethousandprojects.appoeira.rodaDetailMoreView.adapter.MyRodaMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.BeenHereRatingRoda;
 import com.onethousandprojects.appoeira.rodaDetailMoreView.fragments.JoinRodaFragment;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.methods.RodaDetailMoreServer;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -95,7 +96,8 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
                 onComments = false;
                 String numComments = "(" + NUM_PAGES + ")";
                 tvNumberCommentsNum.setText(numComments);
-                tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);if (fromRodaDetailActivity.getBoolean("member")) {
+                tvNumberComments.setText(R.string.groupDetailMoreNumberOfComments);
+                if (fromRodaDetailActivity.getBoolean("member")) {
                     tvJoinRoda.setText(R.string.groupDetailMoreLeaveRoda);
                 } else {
                     tvJoinRoda.setText(R.string.groupDetailMoreJoinRoda);
@@ -128,21 +130,14 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
     private View.OnClickListener groupDetailVerification = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            killFragment();
             BeenHereRatingRoda beenHereRatingRoda = new BeenHereRatingRoda();
             getSupportFragmentManager().beginTransaction().add(R.id.beenHereFragment, beenHereRatingRoda, "BeenHereFragment").commit();
             groupDetails.setVisibility(View.GONE);
             groupComments.setVisibility(View.GONE);
         }
     };
-    public View.OnClickListener groupModificationListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent toRodaModification = new Intent(RodaDetailMoreActivity.this, RodaModificationActivity.class);
-            toRodaModification.putExtra("details", fromRodaDetailActivity);
-            toRodaModification.putExtra("users", (Parcelable) rodaDetailMoreServer.getMyResponse());
-            startActivity(toRodaModification);
-        }
-    };
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +170,7 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
         ivRodaStar5 = findViewById(R.id.groupDetailMoreStar5);
 
         groupComments.setVisibility(View.GONE);
-        if (!fromRodaDetailActivity.getString("image").equals("")) {
+        if (!Objects.equals(fromRodaDetailActivity.getString("image"), "")) {
             Picasso.with(this).load(fromRodaDetailActivity.getString("image")).fit().into(ivRodaAvatar);
         }
         tvRodaName.setText(fromRodaDetailActivity.getString("name"));
@@ -235,6 +230,15 @@ public class RodaDetailMoreActivity extends AppCompatActivity implements MyRodaM
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(RodaDetailMoreActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
     }
     @Override

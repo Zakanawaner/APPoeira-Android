@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -61,6 +62,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -185,6 +188,26 @@ public class CommonMethods {
     }
     public static boolean AmIVerified() {
         return SharedPreferencesManager.getBooleanValue(Constants.EMAIL_VERIFIED);
+    }
+    public static void PeriodicalRequests() {
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask doAsynchronousTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            BackGroundTask backGroundTask = new BackGroundTask();
+                            backGroundTask.doInBackground(null);
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(doAsynchronousTask, 0, 10000);
     }
     public static BottomNavigationView.OnNavigationItemSelectedListener BottomNavigationMenuHandler(String origin, NavParams activities) {
         GroupListActivity groupListActivity;

@@ -1,5 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.serverAndClient;
 
+import com.onethousandprojects.appoeira.serverStuff.amIVerified.ClientAmIVerifiedRequest;
+import com.onethousandprojects.appoeira.serverStuff.amIVerified.ServerAmIVerifiedResponse;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ClientEventDetailRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventDetail.ServerEventDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.eventDetailMore.ClientEventDetailMoreRequest;
@@ -46,6 +48,8 @@ import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ClientRodaDet
 import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ClientRodaModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.rodaModification.ServerRodaModificationResponse;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ClientSendEmailRequest;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ServerSendEmailResponse;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ClientUserModificationRequest;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ServerUserModificationResponse;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
@@ -228,4 +232,10 @@ public interface Server {
 
     @POST("/online-delete")
     Call<ServerDeleteResponse> post_online_delete(@Body ClientDeleteRequest clientDeleteRequest);
+
+    @POST("/send-email")
+    Call<ServerSendEmailResponse> post_send_email(@Body ClientSendEmailRequest clientSendEmailRequest);
+
+    @POST("/am-i-verified")
+    Call<ServerAmIVerifiedResponse> post_am_i_verified(@Body ClientAmIVerifiedRequest clientAmIVerifiedRequest);
 }

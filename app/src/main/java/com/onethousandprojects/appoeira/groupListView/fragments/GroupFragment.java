@@ -19,7 +19,6 @@ import com.onethousandprojects.appoeira.groupListView.adapter.MyGroupListRecycle
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GroupFragment extends Fragment {

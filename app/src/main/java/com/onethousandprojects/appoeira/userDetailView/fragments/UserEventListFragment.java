@@ -13,12 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailEventResponse.ServerUserDetailEventsResponse;
-import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailGroupResponse.ServerUserDetailGroupsResponse;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.onethousandprojects.appoeira.userDetailView.adapter.UserEventRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.userDetailView.adapter.UserGroupRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.userDetailView.content.UserEventContent;
-import com.onethousandprojects.appoeira.userDetailView.content.UserGroupContent;
 
 import java.util.ArrayList;
 import java.util.List;

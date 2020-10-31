@@ -15,7 +15,6 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.onethousandprojects.appoeira.userDetailView.content.UserActivityContent;
-import com.onethousandprojects.appoeira.userDetailView.content.UserEventContent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -120,7 +119,6 @@ public class UserActivityRecyclerViewAdapter extends RecyclerView.Adapter<UserAc
             onActivityDetailListener.OnActivityDetailClick(mItem.getId(), mItem.getType());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnActivityDetailListener {
         void OnActivityDetailClick(int id, int type);
     }

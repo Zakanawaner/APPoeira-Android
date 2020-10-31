@@ -3,6 +3,7 @@ package com.onethousandprojects.appoeira.serverStuff.groupModification;
 import java.util.List;
 
 public class ClientGroupModificationRequest {
+
     private String token;
     private List<Integer> owners;
     private String name;
@@ -10,10 +11,15 @@ public class ClientGroupModificationRequest {
     private Double latitude;
     private Double longitude;
     private String phone;
+    private List<Integer> frontline;
+    private List<Integer> students;
+    private String url;
+    private Integer id;
 
     public ClientGroupModificationRequest(String token, List<Integer> owners, String name,
                                           String description, Double latitude, Double longitude,
-                                          String phone) {
+                                          String phone, List<Integer> frontline, List<Integer> students,
+                                          String url, Integer id) {
         super();
         this.token = token;
         this.owners = owners;
@@ -22,6 +28,10 @@ public class ClientGroupModificationRequest {
         this.latitude = latitude;
         this.longitude = longitude;
         this.phone = phone;
+        this.frontline = frontline;
+        this.students = students;
+        this.url = url;
+        this.id = id;
     }
 
     public String getToken() { return token; }
@@ -75,4 +85,37 @@ public class ClientGroupModificationRequest {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public List<Integer> getFrontline() {
+        return frontline;
+    }
+
+    public void setFrontline(List<Integer> frontline) {
+        this.frontline = frontline;
+    }
+
+    public List<Integer> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Integer> students) {
+        this.students = students;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
 }

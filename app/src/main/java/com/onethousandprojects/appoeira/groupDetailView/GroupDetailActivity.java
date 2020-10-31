@@ -3,6 +3,7 @@ package com.onethousandprojects.appoeira.groupDetailView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.authView.LoginActivity;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
@@ -27,9 +29,7 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
-import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
-import com.onethousandprojects.appoeira.rodaDetailMoreView.RodaDetailMoreActivity;
-import com.onethousandprojects.appoeira.rodaDetailView.RodaDetailActivity;
+import com.onethousandprojects.appoeira.groupModificationView.GroupModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 import com.onethousandprojects.appoeira.serverStuff.groupDetail.ClientGroupDetailRequest;
@@ -46,6 +46,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
     public Double latitude;
     public Double longitude;
     public Bundle fromGroupListActivity;
+    public FloatingActionButton fbtnAdd;
     ImageView ivGroupStar1;
     ImageView ivGroupStar2;
     ImageView ivGroupStar3;
@@ -99,6 +100,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
         TextView tvVotes = findViewById(R.id.detailVotes);
         TextView tvMore = findViewById(R.id.detailMore);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivGroupStar1 = findViewById(R.id.detailStar1);
         ivGroupStar2 = findViewById(R.id.detailStar2);
@@ -108,7 +110,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
 
-        ClientGroupDetailRequest clientGroupDetailRequest = new ClientGroupDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromGroupListActivity.getInt("id"), SharedPreferencesManager.getIntegerValue(Constants.ID));
+        ClientGroupDetailRequest clientGroupDetailRequest = new ClientGroupDetailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), fromGroupListActivity.getInt("groupId"), SharedPreferencesManager.getIntegerValue(Constants.ID));
         Call<ServerGroupDetailResponse> call = Server.post_group_detail(clientGroupDetailRequest);
         call.enqueue(new Callback<ServerGroupDetailResponse>() {
             @Override
@@ -122,6 +124,29 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
                         tvGroupUrl.setText(myResponse.getUrl());
                         tvGroupPhone.setText(myResponse.getPhone());
                         tvGroupAddress.setText(myResponse.getAddress());
+                        if (myResponse.getIsOwner()) {
+                            fbtnAdd.setImageResource(R.drawable.ic_edit);
+                            fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent toCreateGroup = new Intent(GroupDetailActivity.this, GroupModificationActivity.class);
+                                    toCreateGroup.putExtra("groupId", myResponse.getId());
+                                    toCreateGroup.putExtra("modification", true);
+                                    toCreateGroup.putExtra("name", myResponse.getName());
+                                    toCreateGroup.putExtra("image", myResponse.getPicUrl());
+                                    toCreateGroup.putExtra("url", myResponse.getUrl());
+                                    toCreateGroup.putExtra("phone", myResponse.getPhone());
+                                    toCreateGroup.putExtra("about", myResponse.getAbout());
+                                    toCreateGroup.putExtra("address", myResponse.getAddress());
+                                    toCreateGroup.putExtra("city", myResponse.getCity());
+                                    toCreateGroup.putExtra("country", myResponse.getCountry());
+                                    toCreateGroup.putExtra("latitude", myResponse.getLatitude());
+                                    toCreateGroup.putExtra("longitude", myResponse.getLongitude());
+                                    toCreateGroup.putExtra("member", myResponse.getIsMember());
+                                    startActivity(toCreateGroup);
+                                }
+                            });
+                        }
 
                         if (myResponse.getVerified()) {
                             ivVerifiedGroup.setImageResource(R.drawable.verified);
@@ -170,7 +195,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onClick(View view) {
                 Intent goToDetailMore = new Intent(GroupDetailActivity.this, GroupDetailMoreActivity.class);
-                goToDetailMore.putExtra("id", myResponse.getId());
+                goToDetailMore.putExtra("groupId", myResponse.getId());
                 goToDetailMore.putExtra("name", myResponse.getName());
                 goToDetailMore.putExtra("image", myResponse.getPicUrl());
                 goToDetailMore.putExtra("url", myResponse.getUrl());
@@ -190,6 +215,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
                 goToDetailMore.putExtra("member", myResponse.getIsMember());
                 goToDetailMore.putExtra("voted", myResponse.getHasVoted());
                 goToDetailMore.putExtra("comment", myResponse.getComment());
+                goToDetailMore.putExtra("isOwner", myResponse.getIsOwner());
                 startActivity(goToDetailMore);
             }
         });
@@ -204,6 +230,15 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(GroupDetailActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
     }
 

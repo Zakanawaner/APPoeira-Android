@@ -1,5 +1,7 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
+import android.content.Intent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,7 +14,7 @@ import com.onethousandprojects.appoeira.eventDetailMoreView.fragments.EventMembe
 import com.onethousandprojects.appoeira.eventDetailMoreView.fragments.EventMemberMembersFragment;
 import com.onethousandprojects.appoeira.eventDetailMoreView.fragments.EventMemberOwnersFragment;
 import com.onethousandprojects.appoeira.eventDetailMoreView.fragments.CommentFragment;
-import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
+import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientCommentsRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ClientNewCommentRequest;
 import com.onethousandprojects.appoeira.serverStuff.comments.ServerCommentsResponse;
@@ -53,6 +55,35 @@ public class EventDetailMoreServer {
                 if (response.isSuccessful()){
                     serverEventDetailMoreResponse = response.body();
                     assert serverEventDetailMoreResponse != null;
+                    if (EventDetailMoreActivity.fromEventDetailActivity.getBoolean("isOwner")) {
+                        EventDetailMoreActivity.fbtnAdd.setImageResource(R.drawable.ic_edit);
+                        EventDetailMoreActivity.fbtnAdd.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent toCreateEvent = new Intent(EventDetailMoreActivity, EventModificationActivity.class);
+                                toCreateEvent.putExtra("eventId", EventDetailMoreActivity.fromEventDetailActivity.getInt("eventId"));
+                                toCreateEvent.putExtra("modification", true);
+                                toCreateEvent.putExtra("name", EventDetailMoreActivity.fromEventDetailActivity.getString("name"));
+                                toCreateEvent.putExtra("image", EventDetailMoreActivity.fromEventDetailActivity.getString("image"));
+                                toCreateEvent.putExtra("description", EventDetailMoreActivity.fromEventDetailActivity.getString("description"));
+                                toCreateEvent.putExtra("phone", EventDetailMoreActivity.fromEventDetailActivity.getString("phone"));
+                                toCreateEvent.putExtra("verified", EventDetailMoreActivity.fromEventDetailActivity.getBoolean("verified"));
+                                toCreateEvent.putExtra("rating", EventDetailMoreActivity.fromEventDetailActivity.getDouble("rating"));
+                                toCreateEvent.putExtra("votes", EventDetailMoreActivity.fromEventDetailActivity.getInt("votes"));
+                                toCreateEvent.putExtra("address", EventDetailMoreActivity.fromEventDetailActivity.getString("address"));
+                                toCreateEvent.putExtra("city", EventDetailMoreActivity.fromEventDetailActivity.getString("city"));
+                                toCreateEvent.putExtra("country", EventDetailMoreActivity.fromEventDetailActivity.getString("country"));
+                                toCreateEvent.putExtra("latitude", EventDetailMoreActivity.fromEventDetailActivity.getDouble("latitude"));
+                                toCreateEvent.putExtra("longitude", EventDetailMoreActivity.fromEventDetailActivity.getDouble("longitude"));
+                                toCreateEvent.putExtra("member", EventDetailMoreActivity.fromEventDetailActivity.getBoolean("member"));
+                                toCreateEvent.putExtra("voted", EventDetailMoreActivity.fromEventDetailActivity.getInt("voted"));
+                                toCreateEvent.putExtra("isOwner", EventDetailMoreActivity.fromEventDetailActivity.getBoolean("isOwner"));
+                                toCreateEvent.putExtra("platform", EventDetailMoreActivity.fromEventDetailActivity.getString("platform"));
+                                toCreateEvent.putExtra("date", EventDetailMoreActivity.fromEventDetailActivity.getString("date"));
+                                EventDetailMoreActivity.startActivity(toCreateEvent);
+                            }
+                        });
+                    }
                     EventDetailMoreActivity.NUM_MEMBERS = serverEventDetailMoreResponse.size();
                     EventDetailMoreActivity.getSupportFragmentManager().beginTransaction().add(R.id.groupDetailOwnerLayout, new EventMemberOwnersFragment(), "EventMemberOwnersFragment").commit();
                     EventDetailMoreActivity.getSupportFragmentManager().beginTransaction().add(R.id.groupDetailFrontlineLayout, new EventMemberConvidedFragment(), "EventMemberInvitedFragment").commit();
@@ -104,14 +135,14 @@ public class EventDetailMoreServer {
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(EventDetailMoreActivity, "TU comentario se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.commentSent, Toast.LENGTH_SHORT).show();
                         EventDetailMoreActivity.killFragment();
                         EventDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(EventDetailMoreActivity, "TU comentario no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.commentNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(EventDetailMoreActivity, "Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -129,13 +160,13 @@ public class EventDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(EventDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         EventDetailMoreActivity.getIntent().removeExtra("member");
                         EventDetailMoreActivity.getIntent().putExtra("member", true);
                         EventDetailMoreActivity.killFragment();
                         EventDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(EventDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(EventDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
@@ -157,13 +188,13 @@ public class EventDetailMoreServer {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     if (response.body().isOk()) {
-                        Toast.makeText(EventDetailMoreActivity, "Tu petición se envió correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.requestSent, Toast.LENGTH_SHORT).show();
                         EventDetailMoreActivity.getIntent().removeExtra("member");
                         EventDetailMoreActivity.getIntent().putExtra("member", false);
                         EventDetailMoreActivity.killFragment();
                         EventDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(EventDetailMoreActivity, "Tu petición no pudo guardarse", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.requestNotSaved, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(EventDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();
@@ -186,11 +217,11 @@ public class EventDetailMoreServer {
                     serveEventRatedByUserResponse = response.body();
                     assert serveEventRatedByUserResponse != null;
                     if (serveEventRatedByUserResponse.isOk()) {
-                        Toast.makeText(EventDetailMoreActivity, "Has dado " + serveEventRatedByUserResponse.getStars() + " estrellas a este grupo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.youHaveGiven + serveEventRatedByUserResponse.getStars() + R.string.starsToThisEvent, Toast.LENGTH_SHORT).show();
                         EventDetailMoreActivity.killFragment();
                         EventDetailMoreActivity.refreshActivity();
                     } else {
-                        Toast.makeText(EventDetailMoreActivity, "Ya valoraste este grupo con " + serveEventRatedByUserResponse.getStars() + " estrellas", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventDetailMoreActivity, R.string.youAlreadyRatedEvent + serveEventRatedByUserResponse.getStars() + R.string.stars, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(EventDetailMoreActivity, R.string.failed, Toast.LENGTH_SHORT).show();

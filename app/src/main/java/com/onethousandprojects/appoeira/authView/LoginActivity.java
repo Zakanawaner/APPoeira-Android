@@ -1,5 +1,6 @@
 package com.onethousandprojects.appoeira.authView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 
@@ -17,7 +18,6 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
-import com.onethousandprojects.appoeira.helpView.HelpActivity;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 import com.onethousandprojects.appoeira.serverStuff.loginTransaction.ClientLoginRequest;
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
         Call<ServerLoginResponse> call = Server.post_login(clientLoginRequest);
         call.enqueue(new Callback<ServerLoginResponse>() {
             @Override
-            public void onResponse(Call<ServerLoginResponse> call, Response<ServerLoginResponse> response) {
+            public void onResponse(@NonNull Call<ServerLoginResponse> call, @NonNull Response<ServerLoginResponse> response) {
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     if (response.body().getId() != null) {
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<ServerLoginResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ServerLoginResponse> call, @NonNull Throwable t) {
                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

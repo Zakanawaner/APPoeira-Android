@@ -58,6 +58,20 @@
         app:layout_constraintTop_toBottomOf="@+id/name"/>
 
     <EditText
+        android:id="@+id/groupUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="14"
+        android:layout_marginTop="10dp"
+        android:hint="@string/rodaModifDescription"
+        android:inputType="textUri"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/description"
+        app:layout_constraintStart_toStartOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/description"/>
+
+    <EditText
         android:id="@+id/phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,9 +79,9 @@
         android:hint="@string/rodaModifPhone"
         android:inputType="phone"
         android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/description"
-        app:layout_constraintStart_toStartOf="@+id/description"
-        app:layout_constraintTop_toBottomOf="@+id/description"/>
+        app:layout_constraintEnd_toEndOf="@+id/groupUrl"
+        app:layout_constraintStart_toStartOf="@+id/groupUrl"
+        app:layout_constraintTop_toBottomOf="@+id/groupUrl"/>
 
     <EditText
         android:id="@+id/key"

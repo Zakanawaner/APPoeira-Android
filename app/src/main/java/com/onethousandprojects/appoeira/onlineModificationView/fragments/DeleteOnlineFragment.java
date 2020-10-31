@@ -13,7 +13,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
 
 public class DeleteOnlineFragment extends DialogFragment {
     @Override

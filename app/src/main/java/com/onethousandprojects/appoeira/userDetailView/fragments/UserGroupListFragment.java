@@ -12,11 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
-import com.onethousandprojects.appoeira.groupDetailMoreView.adapter.MyGroupMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.groupDetailMoreView.content.GroupMembersContent;
-import com.onethousandprojects.appoeira.serverStuff.groupDetailMore.ServerGroupDetailMoreResponse;
-import com.onethousandprojects.appoeira.serverStuff.userDetail.ServerUserDetailResponse;
 import com.onethousandprojects.appoeira.serverStuff.userDetail.userDetailGroupResponse.ServerUserDetailGroupsResponse;
 import com.onethousandprojects.appoeira.userDetailView.UserDetailActivity;
 import com.onethousandprojects.appoeira.userDetailView.adapter.UserGroupRecyclerViewAdapter;

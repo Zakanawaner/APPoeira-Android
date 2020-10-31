@@ -3,8 +3,11 @@ package com.onethousandprojects.appoeira.eventModificationView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,22 +34,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.CustomScrollView;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventDetailMoreView.EventDetailMoreActivity;
+import com.onethousandprojects.appoeira.eventListView.EventListActivity;
 import com.onethousandprojects.appoeira.eventModificationView.adapters.MyEventModificationConvideMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.eventModificationView.adapters.MyEventModificationInviteMembersRecyclerViewAdapter;
+import com.onethousandprojects.appoeira.eventModificationView.fragments.DeleteEventFragment;
 import com.onethousandprojects.appoeira.eventModificationView.fragments.ModifyEventAvatarFragment;
-import com.onethousandprojects.appoeira.groupModificationView.GroupModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.rodaModificationView.fragments.ModifyRodaAvatarFragment;
 import com.onethousandprojects.appoeira.serverStuff.methods.EventModificationServer;
-import com.onethousandprojects.appoeira.serverStuff.methods.RodaModificationServer;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -59,14 +60,18 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         OnMapReadyCallback {
     private ModifyEventAvatarFragment modifyEventAvatarFragment;
     public ImageView ivAvatar;
+    public Bundle fromEventDetail;
     public Bitmap imageBitmap;
     public Integer eventId;
-    private Button btnSave;
+    public Boolean flagFirstFragment = false;
+    public Boolean flagSecondFragment = false;
+    private DeleteEventFragment deleteEventFragment;
+    public FloatingActionButton fbtnAdd;
     private CustomScrollView nsvModifView;
     public EventModificationServer eventModificationServer = new EventModificationServer();
     private List<Integer> ownerMembers = new ArrayList<>();
-    private List<Integer> invitedMembers = new ArrayList<>();
-    private List<Integer> convidedMembers = new ArrayList<>();
+    public List<Integer> invitedMembers = new ArrayList<>();
+    public List<Integer> convidedMembers = new ArrayList<>();
     private LinearLayout llMapFragment;
     private Double latitude, longitude;
     private TextView address;
@@ -116,11 +121,12 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavListener = CommonMethods.BottomNavigationMenuHandler(origin, navParams);
     private MaterialToolbar.OnMenuItemClickListener topNavListener = CommonMethods.TopNavigationMenuHandler(origin, navParams);
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_modification);
-        Bundle fromEventDetail = getIntent().getExtras();
+        fromEventDetail = getIntent().getExtras();
 
         assert fromEventDetail != null;
         eventId = fromEventDetail.getInt("eventId");
@@ -144,7 +150,8 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         address = findViewById(R.id.locationAddress);
-        btnSave = findViewById(R.id.modifySave);
+        fbtnAdd = findViewById(R.id.addButton);
+        Button btnDelete = findViewById(R.id.modifySave);
 
         llMapFragment.setVisibility(View.GONE);
 
@@ -152,6 +159,26 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
         geocoder = new Geocoder(this, Locale.getDefault());
 
         ivAvatar.setImageResource(R.drawable.ic_add_plus);
+
+        if (fromEventDetail.getBoolean("modification")) {
+            if (!Objects.equals(fromEventDetail.getString("image"), "")) {
+                Picasso.with(this).load(fromEventDetail.getString("image")).into(ivAvatar);
+            }
+            etName.setText(fromEventDetail.getString("name"));
+            etDescription.setText(fromEventDetail.getString("description"));
+            etPhone.setText(fromEventDetail.getString("phone"));
+            String[] dateHour = Objects.requireNonNull(fromEventDetail.getString("date")).split(" ");
+            String[] date = dateHour[0].split("-");
+            String[] hour = dateHour[1].split(":");
+            dpDate.updateDate(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]));
+            tpTime.setCurrentHour(Integer.parseInt(hour[0]));
+            tpTime.setCurrentMinute(Integer.parseInt(hour[1]));
+            spinner.setSelection(CommonMethods.fromPlatformNameToPlatformId(Objects.requireNonNull(fromEventDetail.getString("platform")), EventModificationActivity.this));
+            if (CommonMethods.fromPlatformNameToPlatformId(Objects.requireNonNull(fromEventDetail.getString("platform")), EventModificationActivity.this).equals(6)) {
+                llMapFragment.setVisibility(View.VISIBLE);
+            }
+            eventModificationServer.getEventDetailMore(this, fromEventDetail.getInt("eventId"));
+        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.addItem);
@@ -165,6 +192,15 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).
                     transform(new CommonMethods.CircleTransform()).
                     into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(EventModificationActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         tvModifyAvatar.setOnClickListener(new View.OnClickListener() {
@@ -172,8 +208,11 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
             public void onClick(View view) {
                 if (modifyEventAvatarFragment==null) {
                     modifyEventAvatarFragment = new ModifyEventAvatarFragment();
-                    btnSave.setVisibility(View.GONE);
                     getSupportFragmentManager().beginTransaction().add(R.id.modifyAvatarFragment, modifyEventAvatarFragment, "ModifyAvatarFragment").commit();
+                }
+                if (deleteEventFragment != null) {
+                    getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("DeleteFragment"))).commit();
+                    deleteEventFragment = null;
                 }
             }
         });
@@ -215,14 +254,18 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
                 return false;
             }
         });
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        fbtnAdd.setImageResource(R.drawable.ic_check);
+        fbtnAdd.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
+                if (fromEventDetail.getBoolean("modification")) {
+                    imageBitmap = ((BitmapDrawable)ivAvatar.getDrawable()).getBitmap();
+                }
                 if (imageBitmap != null) {
                     if (!String.valueOf(etName.getText()).equals("")) {
                         if (platform > 0) {
-                            if (platform == 6 && latitude != null) {
+                            if ((platform == 6 && latitude != null) || platform < 6) {
                                 if (!String.valueOf(etPhone.getText()).equals("")) {
                                     ownerMembers.clear();
                                     ownerMembers.add(SharedPreferencesManager.getIntegerValue(Constants.ID));
@@ -252,11 +295,25 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
                 }
             }
         });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (deleteEventFragment==null) {
+                    deleteEventFragment = new DeleteEventFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.deleteFragment, deleteEventFragment, "DeleteFragment").commit();
+                }
+            }
+        });
     }
     public void killAvatarFragment() {
-        getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyAvatarFragment"))).commit();
-        modifyEventAvatarFragment = null;
-        btnSave.setVisibility(View.VISIBLE);
+        if (modifyEventAvatarFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("ModifyAvatarFragment"))).commit();
+            modifyEventAvatarFragment = null;
+        }
+        if (deleteEventFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("DeleteFragment"))).commit();
+            deleteEventFragment = null;
+        }
     }
     private String createDate(Integer year, Integer month, Integer day, Integer hour, Integer minute) {
         return year + "-" + month + "-" + day + "-" + hour + "-" + minute;
@@ -310,6 +367,7 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
             return false;
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         myGoogleMap = googleMap;
@@ -342,5 +400,22 @@ public class EventModificationActivity extends AppCompatActivity implements MyEv
                 nsvModifView.setEnableScrolling(true);
             }
         });
+        if (fromEventDetail.getBoolean("modification") && !Objects.equals(fromEventDetail.getString("address"), "")) {
+            latitude = fromEventDetail.getDouble("latitude");
+            longitude = fromEventDetail.getDouble("longitude");
+            myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My roda"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
+            try {
+                List<Address> addressesToModify = geocoder.getFromLocation(latitude, longitude, 1);
+                address.setText(addressesToModify.get(0).getAddressLine(0));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void toEventList() {
+        Intent toEventList = new Intent(EventModificationActivity.this, EventListActivity.class);
+        startActivity(toEventList);
+        finish();
     }
 }

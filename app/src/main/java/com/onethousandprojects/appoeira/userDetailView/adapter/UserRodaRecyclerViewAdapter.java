@@ -80,7 +80,6 @@ public class UserRodaRecyclerViewAdapter extends RecyclerView.Adapter<UserRodaRe
             onRodaDetailListener.OnRodaDetailClick(mItem.getId());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnRodaDetailListener {
         void OnRodaDetailClick(int position);
     }

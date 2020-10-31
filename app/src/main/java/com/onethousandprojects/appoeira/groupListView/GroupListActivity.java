@@ -34,20 +34,23 @@ import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.groupDetailMoreView.GroupDetailMoreActivity;
+import com.onethousandprojects.appoeira.groupListView.fragments.VerifyEmailFragment;
 import com.onethousandprojects.appoeira.groupDetailView.GroupDetailActivity;
 import com.onethousandprojects.appoeira.groupListView.adapter.MyGroupListRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.groupModificationView.GroupModificationActivity;
 import com.onethousandprojects.appoeira.serverStuff.methods.GroupListServer;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
-import com.onethousandprojects.appoeira.serverStuff.methods.NewsServer;
+import com.onethousandprojects.appoeira.serverStuff.methods.PeriodicalRequests;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 public class GroupListActivity extends AppCompatActivity implements MyGroupListRecyclerViewAdapter.OnGroupListener {
     private FusedLocationProviderClient fusedLocationClient;
     public GroupListServer groupListServer = new GroupListServer();
-    public NewsServer newsServer = new NewsServer();
+    private VerifyEmailFragment verifyEmailFragment;
+    public PeriodicalRequests periodicalRequests = new PeriodicalRequests();
     public SwipeRefreshLayout srGroupList;
     public SeekBar sbDistance;
     public FloatingActionButton fbtnDistance, fbtnAdd;
@@ -93,6 +96,8 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_list);
 
+        CommonMethods.PeriodicalRequests();
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         sbDistance = findViewById(R.id.distanceBar);
@@ -130,7 +135,8 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
                     }
                 }
             });
-            newsServer.sendNewsRequest();
+            periodicalRequests.sendNewsRequest();
+            periodicalRequests.checkForVerifiedEmail();
         }
 
         fbtnDistance = findViewById(R.id.distanceButton);
@@ -171,9 +177,23 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
         fbtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toCreateGroup = new Intent(GroupListActivity.this, GroupModificationActivity.class);
-                toCreateGroup.putExtra("groupId", 0);
-                startActivity(toCreateGroup);
+                if (CommonMethods.AmILogged()) {
+                    if (CommonMethods.AmIVerified()) {
+                        Intent toCreateGroup = new Intent(GroupListActivity.this, GroupModificationActivity.class);
+                        toCreateGroup.putExtra("groupId", 0);
+                        startActivity(toCreateGroup);
+                    } else {
+                        if (verifyEmailFragment==null) {
+                            fbtnDistance.setVisibility(View.GONE);
+                            sbDistance.setVisibility(View.GONE);
+                            verifyEmailFragment = new VerifyEmailFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                        }
+                    }
+                } else {
+                    Intent toLogin = new Intent(GroupListActivity.this, LoginActivity.class);
+                    startActivity(toLogin);
+                }
             }
         });
         srGroupList = findViewById(R.id.swipeRefreshList);
@@ -222,13 +242,29 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
     @Override
     public void OnGroupClick(int position) {
         if (CommonMethods.AmILogged()) {
-            ServerLocationGroupResponse group = groupListServer.getServerLocationGroupResponse().get(position);
-            Intent toGroupDetailActivity = new Intent(this, GroupDetailActivity.class);
-            toGroupDetailActivity.putExtra("id", group.getId());
-            startActivity(toGroupDetailActivity);
+            if (CommonMethods.AmIVerified()) {
+                ServerLocationGroupResponse group = groupListServer.getServerLocationGroupResponse().get(position);
+                Intent toGroupDetailActivity = new Intent(this, GroupDetailActivity.class);
+                toGroupDetailActivity.putExtra("groupId", group.getId());
+                startActivity(toGroupDetailActivity);
+            } else {
+                if (verifyEmailFragment==null) {
+                    fbtnDistance.setVisibility(View.GONE);
+                    sbDistance.setVisibility(View.GONE);
+                    verifyEmailFragment = new VerifyEmailFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                }
+            }
         } else {
             Intent toLogin = new Intent(this, LoginActivity.class);
             startActivity(toLogin);
         }
+    }
+    public void killVerifyFragment() {
+        if (verifyEmailFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("VerifyEmailFragment"))).commit();
+        }
+        verifyEmailFragment = null;
+        fbtnDistance.setVisibility(View.VISIBLE);
     }
 }

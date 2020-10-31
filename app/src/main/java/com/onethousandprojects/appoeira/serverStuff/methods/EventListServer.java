@@ -1,21 +1,22 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
 import android.location.Location;
-import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.onethousandprojects.appoeira.R;
+import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.eventListView.EventListActivity;
 import com.onethousandprojects.appoeira.eventListView.fragments.EventFragment;
 import com.onethousandprojects.appoeira.serverStuff.eventList.ClientLocationEventRequest;
 import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ClientSendEmailRequest;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ServerSendEmailResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ import retrofit2.Response;
 
 public class EventListServer {
     private List<ServerLocationEventResponse> serverLocationEventResponse;
+    private ServerSendEmailResponse serverSendEmailResponse;
     private boolean createdFragment = false;
     Client Client;
     Server Server;
@@ -53,7 +55,7 @@ public class EventListServer {
                     }
                     EventListActivity.srEventList.setRefreshing(false);
                 } else {
-                    Toast.makeText(EventListActivity,"Algo fue mal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventListActivity,R.string.failed, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -67,5 +69,30 @@ public class EventListServer {
     }
     public List<ServerLocationEventResponse> getServerLocationEventResponse() {
         return serverLocationEventResponse;
+    }
+    public void sendVerificationEmail(EventListActivity EventListActivity, Integer type, Integer firstId, Integer secondId) {
+        ClientSendEmailRequest clientSendEmailRequest = new ClientSendEmailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), type, firstId, secondId);
+        Call<ServerSendEmailResponse> call = Server.post_send_email(clientSendEmailRequest);
+        call.enqueue(new Callback<ServerSendEmailResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerSendEmailResponse> call, @NonNull Response<ServerSendEmailResponse> response) {
+                if (response.isSuccessful()){
+                    serverSendEmailResponse = response.body();
+                    assert serverSendEmailResponse != null;
+                    if (serverSendEmailResponse.isOk()) {
+                        Toast.makeText(EventListActivity,R.string.checkYourEmail, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(EventListActivity,R.string.failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerSendEmailResponse> call,
+                                  @NonNull Throwable t) {
+                Toast.makeText(EventListActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 }

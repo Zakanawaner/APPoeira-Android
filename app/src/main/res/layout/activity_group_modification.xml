@@ -84,48 +84,66 @@
 
             <include layout="@layout/common_object_modification_header"/>
 
-            <TextView
-                android:id="@+id/locationTitle"
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/locationTitle"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000"
+                android:id="@+id/modificationDatesConstraint"
                 app:layout_constraintTop_toBottomOf="@+id/modificationHeaderConstraint"
-                app:layout_constraintEnd_toEndOf="@+id/modificationHeaderConstraint"
-                app:layout_constraintStart_toStartOf="@+id/modificationHeaderConstraint"/>
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <fragment
-                android:id="@+id/detailMap"
-                android:name="com.google.android.gms.maps.MapFragment"
+            <include layout="@layout/common_search_user"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchConvidedLauyout"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/locationTitle" />
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/searchUserLayout"
+                app:layout_constraintEnd_toEndOf="@+id/searchUserLayout"
+                app:layout_constraintStart_toStartOf="@+id/searchUserLayout">
 
-            <TextView
-                android:id="@+id/locationAddress"
+                <TextView
+                    android:id="@+id/searchConvidedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/searchFrontlineTitle"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="#000000"/>
+
+                <SearchView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchConvided"
+                    android:autofillHints="@string/searchFrontlineTitle"/>
+
+                <RelativeLayout
+                    android:id="@+id/ListConvidedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+
+            <View
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="#000000"
-                app:layout_constraintTop_toBottomOf="@+id/detailMap"
-                app:layout_constraintEnd_toEndOf="@+id/detailMap"
-                app:layout_constraintStart_toStartOf="@+id/detailMap"/>
+                android:id="@+id/platformSpinner"
+                app:layout_constraintTop_toBottomOf="@+id/searchConvidedLauyout"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <include layout="@layout/common_object_modification_map_selection"/>
 
             <Button
                 android:id="@+id/modifySave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_group"
+                android:text="@string/delete"
                 android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@+id/locationAddress"
-                app:layout_constraintEnd_toEndOf="@+id/locationAddress"
-                app:layout_constraintStart_toStartOf="@+id/locationAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/mapFragmentLayout"
+                app:layout_constraintEnd_toEndOf="@+id/mapFragmentLayout"
+                app:layout_constraintStart_toStartOf="@+id/mapFragmentLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,6 +151,15 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/modifyAvatarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/deleteFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

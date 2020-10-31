@@ -3,6 +3,7 @@ package com.onethousandprojects.appoeira.rodaModificationView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,8 +37,6 @@ import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.CustomScrollView;
 import com.onethousandprojects.appoeira.commonThings.NavParams;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
-import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
 import com.onethousandprojects.appoeira.rodaListView.RodaListActivity;
 import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.rodaModificationView.fragments.DeleteRodaFragment;
@@ -56,7 +55,6 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
     private ModifyRodaAvatarFragment modifyRodaAvatarFragment;
     private DeleteRodaFragment deleteRodaFragment;
     public FloatingActionButton fbtnAdd;
-    private Button btnDelete;
     public ImageView ivAvatar;
     public Bitmap imageBitmap;
     public Integer rodaId;
@@ -119,7 +117,7 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detailMap);
         address = findViewById(R.id.locationAddress);
         fbtnAdd = findViewById(R.id.addButton);
-        btnDelete = findViewById(R.id.modifySave);
+        Button btnDelete = findViewById(R.id.modifySave);
 
         mapFragment.getMapAsync(RodaModificationActivity.this);
         geocoder = new Geocoder(this, Locale.getDefault());
@@ -152,6 +150,15 @@ public class RodaModificationActivity extends AppCompatActivity implements MyRod
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(RodaModificationActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
         tvModifyAvatar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,11 +1,13 @@
 package com.onethousandprojects.appoeira.eventDetailMoreView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
@@ -35,6 +38,7 @@ import java.util.Objects;
 public class EventDetailMoreActivity extends AppCompatActivity implements MyEventMembersRecyclerViewAdapter.OnEventDetailListener,
                                                                           MyEventCommentsRecyclerViewAdapter.OnEventDetailListener{
 
+    public FloatingActionButton fbtnAdd;
     public EventDetailMoreServer eventDetailMoreServer = new EventDetailMoreServer();
     public Bundle fromEventDetailActivity;
     ImageView ivEventStar1;
@@ -135,6 +139,7 @@ public class EventDetailMoreActivity extends AppCompatActivity implements MyEven
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +161,7 @@ public class EventDetailMoreActivity extends AppCompatActivity implements MyEven
         TextView tvStudentsTitle = findViewById(R.id.groupDetailMoreStudents);
         TextView tvFriendsTitle = findViewById(R.id.groupDetailMoreFriends);
         RelativeLayout rlFriendsFragment = findViewById(R.id.groupDetailFriendsLayout);
+        fbtnAdd = findViewById(R.id.addButton);
 
         ivEventStar1 = findViewById(R.id.groupDetailMoreStar1);
         ivEventStar2 = findViewById(R.id.groupDetailMoreStar2);
@@ -164,11 +170,10 @@ public class EventDetailMoreActivity extends AppCompatActivity implements MyEven
         ivEventStar5 = findViewById(R.id.groupDetailMoreStar5);
 
         groupComments.setVisibility(View.GONE);
-        if (!fromEventDetailActivity.getString("image").equals("")) {
+        if (!Objects.equals(fromEventDetailActivity.getString("image"), "")) {
             Picasso.with(this).load(fromEventDetailActivity.getString("image")).fit().into(ivEventAvatar);
         }
         tvEventName.setText(fromEventDetailActivity.getString("name"));
-        String u = fromEventDetailActivity.getString("description");
         tvEventAbout.setText(fromEventDetailActivity.getString("description"));
         tvFriendsTitle.setVisibility(View.GONE);
         rlFriendsFragment.setVisibility(View.GONE);
@@ -211,9 +216,8 @@ public class EventDetailMoreActivity extends AppCompatActivity implements MyEven
             tvEventDate.setText(fromEventDetailActivity.getString("date"));
         }
 
-        eventDetailMoreServer.getEventDetailMore(EventDetailMoreActivity.this, fromEventDetailActivity.getInt("id"));
-        eventDetailMoreServer.serverEventCommentsResponse(EventDetailMoreActivity.this, fromEventDetailActivity.getInt("id"));
-
+        eventDetailMoreServer.getEventDetailMore(EventDetailMoreActivity.this, fromEventDetailActivity.getInt("eventId"));
+        eventDetailMoreServer.serverEventCommentsResponse(EventDetailMoreActivity.this, fromEventDetailActivity.getInt("eventId"));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.addItem);
@@ -225,6 +229,16 @@ public class EventDetailMoreActivity extends AppCompatActivity implements MyEven
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(EventDetailMoreActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
     }
     @Override

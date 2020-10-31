@@ -14,11 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.onlineModificationView.OnlineModificationActivity;
 import com.onethousandprojects.appoeira.onlineModificationView.adapters.MyOnlineModificationInviteMembersRecyclerViewAdapter;
-import com.onethousandprojects.appoeira.rodaModificationView.RodaModificationActivity;
-import com.onethousandprojects.appoeira.rodaModificationView.adapters.MyRodaModificationInviteMembersRecyclerViewAdapter;
 import com.onethousandprojects.appoeira.searchView.content.SearchContent;
 import com.onethousandprojects.appoeira.serverStuff.onlineDetailMore.ServerOnlineDetailMoreResponse;
-import com.onethousandprojects.appoeira.serverStuff.rodaDetailMore.ServerRodaDetailMoreResponse;
 import com.onethousandprojects.appoeira.serverStuff.search.objects.ServerSearchUserResponse;
 
 import java.util.ArrayList;

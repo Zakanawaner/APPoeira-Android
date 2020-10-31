@@ -35,15 +35,19 @@ import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
 import com.onethousandprojects.appoeira.eventListView.adapter.MyEventListRecyclerViewAdapter;
+import com.onethousandprojects.appoeira.eventListView.fragments.VerifyEmailFragment;
 import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
 import com.onethousandprojects.appoeira.getPermissionsView.GetPermissionsActivity;
 import com.onethousandprojects.appoeira.serverStuff.eventList.ServerLocationEventResponse;
 import com.onethousandprojects.appoeira.serverStuff.methods.EventListServer;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 public class EventListActivity extends AppCompatActivity implements MyEventListRecyclerViewAdapter.OnEventListener {
     private FusedLocationProviderClient fusedLocationClient;
     public EventListServer eventListServer = new EventListServer();
+    private VerifyEmailFragment verifyEmailFragment;
     public SwipeRefreshLayout srEventList;
     public SeekBar sbDistance;
     public FloatingActionButton fbtnDistance, fbtnAdd;
@@ -113,6 +117,15 @@ public class EventListActivity extends AppCompatActivity implements MyEventListR
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(EventListActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -158,9 +171,23 @@ public class EventListActivity extends AppCompatActivity implements MyEventListR
         fbtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toNewEventActivity = new Intent(EventListActivity.this, EventModificationActivity.class);
-                toNewEventActivity.putExtra("eventId", 0);
-                startActivity(toNewEventActivity);
+                if (CommonMethods.AmILogged()) {
+                    if (CommonMethods.AmIVerified()) {
+                        Intent toNewEventActivity = new Intent(EventListActivity.this, EventModificationActivity.class);
+                        toNewEventActivity.putExtra("eventId", 0);
+                        startActivity(toNewEventActivity);
+                    } else {
+                        if (verifyEmailFragment==null) {
+                            fbtnDistance.setVisibility(View.GONE);
+                            sbDistance.setVisibility(View.GONE);
+                            verifyEmailFragment = new VerifyEmailFragment();
+                            getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                        }
+                    }
+                } else {
+                    Intent toLogin = new Intent(EventListActivity.this, LoginActivity.class);
+                    startActivity(toLogin);
+                }
             }
         });
         srEventList = findViewById(R.id.swipeRefreshList);
@@ -209,17 +236,33 @@ public class EventListActivity extends AppCompatActivity implements MyEventListR
     @Override
     public void OnEventClick(int position) {
         if (CommonMethods.AmILogged()) {
-            ServerLocationEventResponse event = eventListServer.getServerLocationEventResponse().get(position);
-            Intent toEventDetailActivity = new Intent(this, EventDetailActivity.class);
-            toEventDetailActivity.putExtra("id", event.getId());
-            toEventDetailActivity.putExtra("date", event.getDate());
-            toEventDetailActivity.putExtra("owner", event.getOwnerApelhido());
-            toEventDetailActivity.putExtra("ownerRank", event.getOwnerRank());
-
-            startActivity(toEventDetailActivity);
+            if (CommonMethods.AmIVerified()) {
+                ServerLocationEventResponse event = eventListServer.getServerLocationEventResponse().get(position);
+                Intent toEventDetailActivity = new Intent(this, EventDetailActivity.class);
+                toEventDetailActivity.putExtra("eventId", event.getId());
+                toEventDetailActivity.putExtra("date", event.getDate());
+                toEventDetailActivity.putExtra("owner", event.getOwnerApelhido());
+                toEventDetailActivity.putExtra("ownerRank", event.getOwnerRank());
+                startActivity(toEventDetailActivity);
+            } else {
+                if (verifyEmailFragment==null) {
+                    fbtnDistance.setVisibility(View.GONE);
+                    sbDistance.setVisibility(View.GONE);
+                    verifyEmailFragment = new VerifyEmailFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.veryfyEmailFragment, verifyEmailFragment, "VerifyEmailFragment").commit();
+                }
+            }
         } else {
             Intent toLogin = new Intent(this, LoginActivity.class);
             startActivity(toLogin);
         }
     }
+    public void killVerifyFragment() {
+        if (verifyEmailFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("VerifyEmailFragment"))).commit();
+        }
+        verifyEmailFragment = null;
+        fbtnDistance.setVisibility(View.VISIBLE);
+    }
+
 }

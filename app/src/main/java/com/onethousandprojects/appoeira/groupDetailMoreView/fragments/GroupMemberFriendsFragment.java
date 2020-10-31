@@ -54,6 +54,7 @@ public class GroupMemberFriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_detail_item_list, container, false);
         GroupDetailMoreActivity activity = (GroupDetailMoreActivity) getActivity();
+        assert activity != null;
         List<ServerGroupDetailMoreResponse> myResponseFromActivity = activity.groupDetailMoreServer.getMyResponse();
         // Set the adapter
         if (view instanceof RecyclerView) {

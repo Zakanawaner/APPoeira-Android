@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ClientEventModificationRequest {
     private String token;
+    private Integer eventId;
     private List<Integer> owners;
     private String name;
     private String description;
@@ -16,13 +17,14 @@ public class ClientEventModificationRequest {
     private String key;
     private Integer platform;
 
-    public ClientEventModificationRequest(String token, List<Integer> owners, String name,
-                                          String description, String date,
+    public ClientEventModificationRequest(String token, Integer eventId, List<Integer> owners,
+                                          String name, String description, String date,
                                           List<Integer> invited, Double latitude, Double longitude,
                                           String phone, List<Integer> convided, String key,
                                           Integer platform) {
         super();
         this.token = token;
+        this.eventId = eventId;
         this.owners = owners;
         this.name = name;
         this.description = description;
@@ -39,6 +41,14 @@ public class ClientEventModificationRequest {
     public String getToken() { return token; }
 
     public void setToken(String token) { this.token = token; }
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
 
     public List<Integer> getOwners() {
         return owners;

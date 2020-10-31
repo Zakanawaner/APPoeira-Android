@@ -76,7 +76,6 @@ public class MyGroupCommentsRecyclerViewAdapter extends RecyclerView.Adapter<MyG
             onGroupDetailListener.OnGroupDetailClick(mItem.getUserId());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnGroupDetailListener {
         void OnGroupDetailClick(int position);
     }

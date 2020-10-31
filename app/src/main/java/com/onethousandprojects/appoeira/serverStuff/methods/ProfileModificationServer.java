@@ -1,6 +1,5 @@
 package com.onethousandprojects.appoeira.serverStuff.methods;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
@@ -10,14 +9,6 @@ import com.onethousandprojects.appoeira.R;
 import com.onethousandprojects.appoeira.commonThings.CommonMethods;
 import com.onethousandprojects.appoeira.commonThings.Constants;
 import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
-import com.onethousandprojects.appoeira.eventDetailView.EventDetailActivity;
-import com.onethousandprojects.appoeira.eventModificationView.EventModificationActivity;
-import com.onethousandprojects.appoeira.eventModificationView.fragments.EventMembersConvidedFragment;
-import com.onethousandprojects.appoeira.eventModificationView.fragments.EventMembersInvitedFragment;
-import com.onethousandprojects.appoeira.serverStuff.eventModification.ClientEventModificationRequest;
-import com.onethousandprojects.appoeira.serverStuff.eventModification.ServerEventModificationResponse;
-import com.onethousandprojects.appoeira.serverStuff.search.ClientSearchRequest;
-import com.onethousandprojects.appoeira.serverStuff.search.ServerSearchResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 import com.onethousandprojects.appoeira.serverStuff.userModification.ClientUserModificationRequest;
@@ -25,8 +16,6 @@ import com.onethousandprojects.appoeira.serverStuff.userModification.ServerUserM
 import com.onethousandprojects.appoeira.userModificationView.ProfileModificationActivity;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;

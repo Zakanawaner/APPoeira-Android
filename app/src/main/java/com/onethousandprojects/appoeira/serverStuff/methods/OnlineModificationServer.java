@@ -96,7 +96,7 @@ public class OnlineModificationServer {
                         OnlineModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new OnlineMembersInvitedFragment(), "UserListFragment").commit();
                     } else {
                         OnlineModificationActivity.getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(OnlineModificationActivity.getSupportFragmentManager().findFragmentByTag("UserListFragment"))).commit();
-                        if (serverSearchResponse.getUserResponses().get(0).getId() != null) {
+                        if (serverSearchResponse.getUserResponses().size() > 0) {
                             OnlineModificationActivity.getSupportFragmentManager().beginTransaction().add(R.id.ListLayout, new OnlineMembersInvitedFragment(), "UserListFragment").commit();
                         } else {
                             createdFragment = false;

@@ -1,5 +1,7 @@
 package com.onethousandprojects.appoeira.commonThings;
 
+import com.onethousandprojects.appoeira.serverStuff.methods.PeriodicalRequests;
+
 public class Constants {
     public static final String API_APPOEIRA_BASE_URL = "https://234bf21550ef.ngrok.io/";
     public static final String PERF_TOKEN = "PERF_TOKEN";
@@ -21,5 +23,6 @@ public class Constants {
     public static final int GALLERY_REQUEST_CODE_INTENT = 1013;
 
     public static CommonMethods.NewsVariable newsVariable = new CommonMethods.NewsVariable(false);
+    public static PeriodicalRequests periodicalRequests = new PeriodicalRequests();
 
 }

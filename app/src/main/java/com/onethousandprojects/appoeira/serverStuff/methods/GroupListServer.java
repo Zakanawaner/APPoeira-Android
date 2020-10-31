@@ -10,11 +10,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.onethousandprojects.appoeira.R;
+import com.onethousandprojects.appoeira.commonThings.Constants;
+import com.onethousandprojects.appoeira.commonThings.SharedPreferencesManager;
 import com.onethousandprojects.appoeira.groupListView.GroupListActivity;
 import com.onethousandprojects.appoeira.groupListView.fragments.GroupFragment;
 import com.onethousandprojects.appoeira.groupListView.fragments.GroupMapsFragment;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ClientLocationGroupsRequest;
 import com.onethousandprojects.appoeira.serverStuff.groupList.ServerLocationGroupResponse;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ClientSendEmailRequest;
+import com.onethousandprojects.appoeira.serverStuff.sendEmail.ServerSendEmailResponse;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Client;
 import com.onethousandprojects.appoeira.serverStuff.serverAndClient.Server;
 
@@ -28,6 +32,7 @@ import retrofit2.Response;
 public class GroupListServer {
     private List<ServerLocationGroupResponse> serverLocationGroupResponse;
     private List<ServerLocationGroupResponse> serverLocationGroupMapsResponse;
+    private ServerSendEmailResponse serverSendEmailResponse;
     private boolean createdFragment = false;
     Client Client;
     Server Server;
@@ -95,5 +100,30 @@ public class GroupListServer {
     }
     public List<ServerLocationGroupResponse> getServerLocationGroupMapsResponse() {
         return serverLocationGroupMapsResponse;
+    }
+    public void sendVerificationEmail(GroupListActivity GroupListActivity, Integer type, Integer firstId, Integer secondId) {
+        ClientSendEmailRequest clientSendEmailRequest = new ClientSendEmailRequest(SharedPreferencesManager.getStringValue(Constants.PERF_TOKEN), type, firstId, secondId);
+        Call<ServerSendEmailResponse> call = Server.post_send_email(clientSendEmailRequest);
+        call.enqueue(new Callback<ServerSendEmailResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ServerSendEmailResponse> call, @NonNull Response<ServerSendEmailResponse> response) {
+                if (response.isSuccessful()){
+                    serverSendEmailResponse = response.body();
+                    assert serverSendEmailResponse != null;
+                    if (serverSendEmailResponse.isOk()) {
+                        Toast.makeText(GroupListActivity,R.string.checkYourEmail, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(GroupListActivity,R.string.failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ServerSendEmailResponse> call,
+                                  @NonNull Throwable t) {
+                Toast.makeText(GroupListActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 }

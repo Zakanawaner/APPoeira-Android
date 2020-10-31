@@ -3,6 +3,7 @@ package com.onethousandprojects.appoeira.onlineModificationView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -47,7 +48,6 @@ public class OnlineModificationActivity extends AppCompatActivity implements MyO
     private DeleteOnlineFragment deleteOnlineFragment;
     public FloatingActionButton fbtnAdd;
     public Bundle fromOnlineDetail;
-    private Button btnDelete;
     public ImageView ivAvatar;
     public Bitmap imageBitmap;
     public Integer onlineId;
@@ -119,7 +119,7 @@ public class OnlineModificationActivity extends AppCompatActivity implements MyO
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         fbtnAdd = findViewById(R.id.addButton);
-        btnDelete = findViewById(R.id.modifySave);
+        Button btnDelete = findViewById(R.id.modifySave);
 
         ivAvatar.setImageResource(R.drawable.ic_add_plus);
 
@@ -150,6 +150,15 @@ public class OnlineModificationActivity extends AppCompatActivity implements MyO
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
+            CommonMethods.NewsVariable bv = Constants.newsVariable;
+            bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
+                @Override
+                public void onChange() {
+                    if (bv.gotNews) {
+                        topNavigationView.getMenu().getItem(2).setIcon(ContextCompat.getDrawable(OnlineModificationActivity.this, R.drawable.ic_circle));
+                    }
+                }
+            });
         }
 
         tvModifyAvatar.setOnClickListener(new View.OnClickListener() {

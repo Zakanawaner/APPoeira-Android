@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.onethousandprojects.appoeira.R;
-import com.onethousandprojects.appoeira.userDetailView.content.UserGroupContent;
 import com.onethousandprojects.appoeira.userDetailView.content.UserOnlineContent;
 import com.squareup.picasso.Picasso;
 
@@ -81,7 +80,6 @@ public class UserOnlineRecyclerViewAdapter extends RecyclerView.Adapter<UserOnli
             onOnlineDetailListener.OnOnlineDetailClick(mItem.getId());
         }
     }
-    // https://www.youtube.com/watch?v=69C1ljfDvl0
     public interface OnOnlineDetailListener {
         void OnOnlineDetailClick(int position);
     }
