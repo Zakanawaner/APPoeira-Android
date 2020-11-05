@@ -3,7 +3,7 @@ package com.onethousandprojects.appoeira.commonThings;
 import com.onethousandprojects.appoeira.serverStuff.methods.PeriodicalRequests;
 
 public class Constants {
-    public static final String API_APPOEIRA_BASE_URL = "https://234bf21550ef.ngrok.io/";
+    public static final String API_APPOEIRA_BASE_URL = "https://7394e12b510b.ngrok.io/";
     public static final String PERF_TOKEN = "PERF_TOKEN";
     public static final String ID = "ID";
     public static final String APELHIDO = "APELHIDO";

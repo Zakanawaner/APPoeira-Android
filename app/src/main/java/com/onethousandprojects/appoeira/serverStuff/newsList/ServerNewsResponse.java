@@ -1,30 +1,35 @@
 package com.onethousandprojects.appoeira.serverStuff.newsList;
 
 public class ServerNewsResponse {
-    // te siguió
-    // siguió a
-    // se unió a
-    // creó
-    // modificó
-    // te invitó
-    // hay es el día de,
+
     private Integer originId;
+    private String originName;
     private Integer originType;
     private Integer mediumId;
+    private String mediumName;
     private Integer mediumType;
     private Integer destinationId;
+    private String destinationName;
     private Integer destinationType;
+    private Integer newsType;
+    private String newsDate;
 
-
-    public ServerNewsResponse(Integer originId, Integer originType, Integer mediumId,
-                              Integer mediumType, Integer destinationId, Integer destinationType) {
+    public ServerNewsResponse(Integer originId, String originName, Integer originType,
+                              Integer mediumId, String mediumName, Integer mediumType,
+                              Integer destinationId, String destinationName, Integer destinationType,
+                              Integer newsType, String newsDate) {
         super();
         this.originId = originId;
+        this.originName = originName;
         this.originType = originType;
         this.mediumId = mediumId;
+        this.mediumName = mediumName;
         this.mediumType = mediumType;
         this.destinationId = destinationId;
+        this.destinationName = destinationName;
         this.destinationType = destinationType;
+        this.newsType = newsType;
+        this.newsDate = newsDate;
     }
 
     public Integer getOriginId() {
@@ -33,6 +38,14 @@ public class ServerNewsResponse {
 
     public void setOriginId(Integer originId) {
         this.originId = originId;
+    }
+
+    public String getOriginName() {
+        return originName;
+    }
+
+    public void setOriginName(String originName) {
+        this.originName = originName;
     }
 
     public Integer getOriginType() {
@@ -51,6 +64,14 @@ public class ServerNewsResponse {
         this.mediumId = mediumId;
     }
 
+    public String getMediumName() {
+        return mediumName;
+    }
+
+    public void setMediumName(String mediumName) {
+        this.mediumName = mediumName;
+    }
+
     public Integer getMediumType() {
         return mediumType;
     }
@@ -67,11 +88,35 @@ public class ServerNewsResponse {
         this.destinationId = destinationId;
     }
 
+    public String getDestinationName() {
+        return destinationName;
+    }
+
+    public void setDestinationName(String destinationName) {
+        this.destinationName = destinationName;
+    }
+
     public Integer getDestinationType() {
         return destinationType;
     }
 
     public void setDestinationType(Integer destinationType) {
         this.destinationType = destinationType;
+    }
+
+    public Integer getNewsType() {
+        return newsType;
+    }
+
+    public void setNewsType(Integer newsType) {
+        this.newsType = newsType;
+    }
+
+    public String getNewsDate() {
+        return newsDate;
+    }
+
+    public void setNewsDate(String newsDate) {
+        this.newsDate = newsDate;
     }
 }
