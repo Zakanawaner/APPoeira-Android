@@ -99,6 +99,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
         TextView tvMore = findViewById(R.id.detailMore);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
         fbtnAdd = findViewById(R.id.addButton);
+        tvMore.setVisibility(View.GONE);
 
         ivRodaStar1 = findViewById(R.id.detailStar1);
         ivRodaStar2 = findViewById(R.id.detailStar2);
@@ -125,6 +126,7 @@ public class RodaDetailActivity extends AppCompatActivity implements OnMapReadyC
                         tvRodaUrl.setText(url);
                         tvRodaPhone.setText(myResponse.getPhone());
                         tvRodaAddress.setText(myResponse.getAddress());
+                        tvMore.setVisibility(View.VISIBLE);
                         if (myResponse.isOwner()) {
                             fbtnAdd.setImageResource(R.drawable.ic_edit);
                             fbtnAdd.setOnClickListener(new View.OnClickListener() {

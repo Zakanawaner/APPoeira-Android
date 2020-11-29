@@ -103,6 +103,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         ivPlatform = findViewById(R.id.detailPlatform);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
         fbtnAdd = findViewById(R.id.addButton);
+        tvMore.setVisibility(View.GONE);
 
         ivEventStar1 = findViewById(R.id.detailStar1);
         ivEventStar2 = findViewById(R.id.detailStar2);
@@ -129,6 +130,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                         tvEventUrl.setText(eventUrl);
                         tvEventPhone.setText(myResponse.getPhone());
                         tvEventAddress.setText(myResponse.getAddress());
+                        tvMore.setVisibility(View.VISIBLE);
                         if (myResponse.isOwner()) {
                             fbtnAdd.setImageResource(R.drawable.ic_edit);
                             fbtnAdd.setOnClickListener(new View.OnClickListener() {

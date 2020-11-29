@@ -24,7 +24,7 @@
         android:layout_alignBottom="@+id/swipeRefreshList"
         android:layout_alignParentEnd="true"
         android:backgroundTint="@color/colorWhite"
-        android:src="@drawable/ic_road"
+        android:src="@drawable/ic_7_distancia"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

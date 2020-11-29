@@ -28,12 +28,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorWhite"
+        app:menu="@menu/bottom_navigation_menu"
         app:itemIconTint="@drawable/ic_menu_bottm_color_selector"
         app:itemTextColor="@drawable/ic_menu_bottm_color_selector"
-        app:menu="@menu/bottom_navigation_menu" >
+        app:labelVisibilityMode="labeled">
+        
+    <include layout="@layout/common_add_button"/>
 
-        <include layout="@layout/common_add_button"/>
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+</com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>

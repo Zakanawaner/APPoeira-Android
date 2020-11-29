@@ -3,7 +3,7 @@ package com.onethousandprojects.appoeira.commonThings;
 import com.onethousandprojects.appoeira.serverStuff.methods.PeriodicalRequests;
 
 public class Constants {
-    public static final String API_APPOEIRA_BASE_URL = "https://7394e12b510b.ngrok.io/";
+    public static final String API_APPOEIRA_BASE_URL = "https://appoeira.pythonanywhere.com/";
     public static final String PERF_TOKEN = "PERF_TOKEN";
     public static final String ID = "ID";
     public static final String APELHIDO = "APELHIDO";
@@ -16,7 +16,6 @@ public class Constants {
     public static final String EMAIL_VERIFIED = "EMAIL_VERIFIED";
     public static final Integer LOCATION_REQUEST_CODE = 1001;
     public static final String TAG = "MyLogTag";
-    public static final String CUSTOM_GROUP_URL = "https://image.flaticon.com/icons/png/512/33/33887.png";
     public static final Integer CAMERA_REQUEST_CODE = 1002;
     public static final Integer GALLERY_REQUEST_CODE = 1003;
     public static final int CAMERA_REQUEST_CODE_INTENT = 1012;

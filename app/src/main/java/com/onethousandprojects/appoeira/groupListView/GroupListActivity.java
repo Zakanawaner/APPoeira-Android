@@ -200,7 +200,8 @@ public class GroupListActivity extends AppCompatActivity implements MyGroupListR
         srGroupList.setOnRefreshListener(onRefreshListener);
     }
     private void get_location() {
-        @SuppressLint("MissingPermission") Task<Location> locationTask = fusedLocationClient.getLastLocation();
+        //@SuppressLint("MissingPermission")
+        Task<Location> locationTask = fusedLocationClient.getLastLocation();
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {

@@ -95,6 +95,7 @@ public class OnlineDetailActivity extends AppCompatActivity {
         ivPlatform = findViewById(R.id.detailPlatform);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
         fbtnAdd = findViewById(R.id.addButton);
+        tvMore.setVisibility(View.GONE);
 
         ivOnlineStar1 = findViewById(R.id.detailStar1);
         ivOnlineStar2 = findViewById(R.id.detailStar2);
@@ -118,6 +119,7 @@ public class OnlineDetailActivity extends AppCompatActivity {
                         String onlineUrl = fromOnlineListActivity.getString("ownerRank") + " " + fromOnlineListActivity.getString("owner");
                         tvOnlineUrl.setText(onlineUrl);
                         tvOnlinePhone.setText(myResponse.getPhone());
+                        tvMore.setVisibility(View.VISIBLE);
                         if (myResponse.isOwner()) {
                             fbtnAdd.setImageResource(R.drawable.ic_edit);
                             fbtnAdd.setOnClickListener(new View.OnClickListener() {

@@ -101,6 +101,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
         TextView tvMore = findViewById(R.id.detailMore);
         LinearLayout llDetailRating = findViewById(R.id.detailRating);
         fbtnAdd = findViewById(R.id.addButton);
+        tvMore.setVisibility(View.GONE);
 
         ivGroupStar1 = findViewById(R.id.detailStar1);
         ivGroupStar2 = findViewById(R.id.detailStar2);
@@ -124,6 +125,7 @@ public class GroupDetailActivity extends AppCompatActivity implements OnMapReady
                         tvGroupUrl.setText(myResponse.getUrl());
                         tvGroupPhone.setText(myResponse.getPhone());
                         tvGroupAddress.setText(myResponse.getAddress());
+                        tvMore.setVisibility(View.VISIBLE);
                         if (myResponse.getIsOwner()) {
                             fbtnAdd.setImageResource(R.drawable.ic_edit);
                             fbtnAdd.setOnClickListener(new View.OnClickListener() {

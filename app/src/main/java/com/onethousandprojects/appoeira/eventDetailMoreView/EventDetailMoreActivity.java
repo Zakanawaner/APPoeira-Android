@@ -229,7 +229,6 @@ public class EventDetailMoreActivity extends AppCompatActivity implements MyEven
         topNavigationView.setOnMenuItemClickListener(topNavListener);
         if (CommonMethods.AmILogged()) {
             Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
-            Picasso.with(this).load(SharedPreferencesManager.getStringValue(Constants.PIC_URL)).transform(new CommonMethods.CircleTransform()).into(CommonMethods.GetTarGetForAvatar(ivTopMenuLogin));
             CommonMethods.NewsVariable bv = Constants.newsVariable;
             bv.setListener(new CommonMethods.NewsVariable.ChangeListener() {
                 @Override

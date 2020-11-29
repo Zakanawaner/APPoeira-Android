@@ -9,9 +9,9 @@ public class BackGroundTask extends AsyncTask {
         if (CommonMethods.AmILogged() && !CommonMethods.AmIVerified()) {
             Constants.periodicalRequests.checkForVerifiedEmail();
         }
-        if (CommonMethods.AmILogged()) {
+        /*if (CommonMethods.AmILogged()) {
             Constants.periodicalRequests.sendNewsRequest();
-        }
+        }*/
         return null;
     }
 }
